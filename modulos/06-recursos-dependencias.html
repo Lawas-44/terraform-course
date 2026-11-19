@@ -8,54 +8,127 @@
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/styles.css">
 <script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
-    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
-    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
-  </div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
 </header>
-<main id="contenido">
-<div class="wrap narrow">
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 16 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
+<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html" aria-current="page"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#lo-que-escribes-y-lo-que-recibes">Lo que escribes y lo que recibes</a></li><li><a href="#consultar-cosas-que-ya-existen-data">Consultar cosas que ya existen: data</a></li><li><a href="#el-orden-lo-decide-terraform">El orden lo decide Terraform</a></li><li><a href="#practica-un-servidor-web">Práctica: un servidor web</a></li><li><a href="#modificar-o-recrear">Modificar o recrear</a></li><li><a href="#ver-lo-que-se-ha-creado">Ver lo que se ha creado</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
 <nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 06</nav>
 <header class="mod-head">
   <p class="eyebrow">Módulo 06</p>
   <h1>Recursos, data sources y dependencias</h1>
   <p class="lead">Construir una pequeña red y un servidor en AWS entendiendo el grafo de dependencias.</p>
-  <div class="chips"><span class="chip nivel-básico">Básico</span><span class="chip">⏱ 2,5 h</span><span class="chip">📝 6 preguntas</span><span class="chip">🏋️ 2 retos</span></div>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 2,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span></div>
 </header>
-<nav class="toc" aria-label="En esta página"><strong>En esta página</strong><a href="#objetivos">Objetivos</a><a href="#leccion">Lección</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#test">Test</a><a href="#retos">Retos</a></nav>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Referenciar atributos de un recurso desde otro.</li><li>Distinguir <code>resource</code> (crea) de <code>data</code> (lee).</li><li>Entender el grafo de dependencias y el paralelismo.</li><li>Desplegar una EC2 con un servidor web accesible.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="lo-que-escribes-y-lo-que-recibes">Lo que escribes y lo que recibes</h3>
+<p>Cada recurso tiene dos clases de datos:</p>
+<ul><li><strong>Argumentos</strong>: lo que tú escribes. Por ejemplo, el tamaño del servidor: <code>instance_type = "t3.micro"</code>.</li><li><strong>Atributos</strong>: lo que AWS te devuelve al crearlo. Por ejemplo, su IP pública: <code>public_ip</code>.</li></ul>
+<p>Por eso en el plan algunos valores aparecen como <code>(known after apply)</code>: AWS los decide al crear el recurso.</p>
+<div class="callout "><span class="k">Nota</span>En este módulo creamos un servidor pequeño (<code>t3.micro</code>), gratis en la capa gratuita de AWS. Bórralo siempre al terminar.</div>
+<h3 id="consultar-cosas-que-ya-existen-data">Consultar cosas que ya existen: data</h3>
+<p>Un bloque <code>data</code> <strong>no crea nada</strong>: solo busca información. Por ejemplo, la imagen de sistema operativo más reciente para un servidor:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">data.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["amazon"]
 
-<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Referenciar atributos de un recurso desde otro.</li><li>Distinguir <code>resource</code> (crea) de <code>data</code> (lee).</li><li>Entender el grafo de dependencias y el paralelismo.</li><li>Desplegar una EC2 con un servidor web accesible.</li></ul></section>
-<section id="leccion" class="leccion"><h2>📚 Lección</h2><nav class="indice" aria-label="Índice de la lección"><strong>Índice de la lección</strong><ol><li><a href="#argumentos-y-atributos">Argumentos y atributos</a></li><li><a href="#data-sources-leer-lo-que-ya-existe">Data sources: leer lo que ya existe</a></li><li><a href="#dependencias-implicitas-y-el-grafo">Dependencias implícitas y el grafo</a></li><li><a href="#dependencias-explicitas-depends-on">Dependencias explícitas: depends_on</a></li><li><a href="#practica-un-servidor-web-en-ec2">Práctica: un servidor web en EC2</a></li><li><a href="#actualizar-o-reemplazar">¿Actualizar o reemplazar?</a></li><li><a href="#leer-el-estado-de-un-recurso">Leer el estado de un recurso</a></li></ol></nav><h3 id="argumentos-y-atributos">Argumentos y atributos</h3>
-<p>Cada recurso tiene dos tipos de datos:</p>
-<ul><li><strong>Argumentos</strong>: lo que tú escribes (<code>instance_type = "t3.micro"</code>).</li><li><strong>Atributos</strong>: lo que el recurso expone después de crearse, incluidos los argumentos y valores calculados por la nube (<code>id</code>, <code>arn</code>, <code>public_ip</code>…).</li></ul>
-<p>Los atributos calculados aparecen en el plan como <code>(known after apply)</code> porque AWS los asigna en el momento de crear el recurso.</p>
-<div class="callout "><strong>ℹ️ Nota.</strong> Este módulo crea una instancia EC2 <code>t3.micro</code>, incluida en la capa gratuita de AWS en la mayoría de cuentas nuevas. Fuera de ella cuesta unos céntimos por hora. <strong>Destruye todo al terminar.</strong></div>
-<h3 id="data-sources-leer-lo-que-ya-existe">Data sources: leer lo que ya existe</h3>
-<p>Un bloque <code>data</code> <strong>no crea nada</strong>: consulta información que ya existe (en AWS o donde sea) para usarla en tu configuración. Se referencia con el prefijo <code>data.</code>:</p>
-<figure class="code"><figcaption><span>data.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># ¿Quién soy? (cuenta y usuario actual)
-data "aws_caller_identity" "actual" {}
-
-# ¿En qué región estoy?
-data "aws_region" "actual" {}
-
-# Zonas de disponibilidad de la región
-data "aws_availability_zones" "disponibles" {
-  state = "available"
+  filter {
+    name   = "name"
+    values = ["al2023-ami-2023.*-x86_64"]
+  }
+}</code></pre></figure>
+<p>Se usa con el prefijo <code>data.</code>: <code>data.aws_ami.amazon_linux.id</code>.</p>
+<p>¿Por qué no escribir el código de la imagen directamente? Porque cambia según la región y cada pocas semanas sale una versión nueva. Así siempre usas la correcta.</p>
+<h3 id="el-orden-lo-decide-terraform">El orden lo decide Terraform</h3>
+<p>Cuando un recurso usa datos de otro, Terraform sabe que debe crearlo después. Con eso calcula el orden y crea <strong>a la vez</strong> lo que no depende entre sí.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">orden en el ejemplo de este módulo</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">imagen (data)  ──────┐
+                     ├──&gt;  servidor
+firewall  ───────────┘
+   └──&gt; reglas del firewall</code></pre></figure>
+<p>Al borrar, el orden es el contrario: primero el servidor y después el firewall.</p>
+<p>Si hay una dependencia que Terraform no puede ver (porque no hay ninguna referencia), puedes indicarla con <code>depends_on</code>. Úsalo solo cuando sea necesario:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">depends_on</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "aws_instance" "app" {
+  # ...
+  depends_on = [aws_s3_bucket.logs]
+}</code></pre></figure>
+<h3 id="practica-un-servidor-web">Práctica: un servidor web</h3>
+<p>Vamos a crear un servidor con una página web. Necesitamos tres cosas: la imagen del sistema, un <strong>firewall</strong> (en AWS se llama <em>security group</em>) y el <strong>servidor</strong> (en AWS, <em>instancia EC2</em>).</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">provider "aws" {
+  region = "eu-west-1"
 }
 
-# La VPC por defecto que AWS crea en cada región
-data "aws_vpc" "default" {
-  default = true
-}
-
-# La imagen (AMI) más reciente de Amazon Linux 2023
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["amazon"]
@@ -66,80 +139,13 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-output "info" {
-  value = {
-    cuenta = data.aws_caller_identity.actual.account_id
-    region = data.aws_region.actual.region
-    zonas  = data.aws_availability_zones.disponibles.names
-    ami    = data.aws_ami.amazon_linux.id
-  }
-}</code></pre></figure>
-<p>¿Por qué no escribir el ID de la AMI directamente? Porque cambia en cada región y Amazon publica versiones nuevas cada pocas semanas. Con el data source siempre obtienes la correcta.</p>
-<div class="callout tip"><strong>💡 Consejo.</strong> En el plan, los data sources aparecen con <code>&lt;=</code> (<em>read</em>). Puedes probarlos con <code>terraform apply</code> sin crear ningún recurso.</div>
-<h3 id="dependencias-implicitas-y-el-grafo">Dependencias implícitas y el grafo</h3>
-<p>Cuando un recurso hace referencia a otro, Terraform crea una <strong>dependencia implícita</strong>. Con todas ellas construye un <strong>grafo</strong> que decide el orden y qué puede hacerse en paralelo (por defecto, hasta 10 operaciones a la vez).</p>
-<figure class="code"><figcaption><span>grafo del ejemplo de este módulo</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">data.aws_ami.amazon_linux ──────────────┐
-                                        ▼
-aws_security_group.web ──────────► aws_instance.web
-        │
-        ├──► aws_vpc_security_group_ingress_rule.http
-        └──► aws_vpc_security_group_egress_rule.todo</code></pre></figure>
-<p>El security group y la AMI no dependen entre sí, así que se procesan <strong>a la vez</strong>. La instancia espera a ambos. Al destruir, el orden se invierte.</p>
-<figure class="code"><figcaption><span>ver el grafo</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash"># Necesita Graphviz: brew install graphviz / sudo apt install graphviz
-terraform graph | dot -Tsvg &gt; grafo.svg</code></pre></figure>
-<h3 id="dependencias-explicitas-depends-on">Dependencias explícitas: depends_on</h3>
-<p>A veces existe una dependencia que Terraform no puede ver porque no hay referencia directa. Por ejemplo, una aplicación que necesita que exista una política IAM aunque no la nombre. Para eso está <code>depends_on</code>:</p>
-<figure class="code"><figcaption><span>depends_on</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "aws_s3_bucket" "logs" {
-  bucket_prefix = "logs-"
-}
-
-resource "aws_instance" "app" {
-  ami           = data.aws_ami.amazon_linux.id
-  instance_type = "t3.micro"
-
-  # la app escribe en el bucket al arrancar, pero no lo referenciamos
-  depends_on = [aws_s3_bucket.logs]
-}</code></pre></figure>
-<div class="callout aviso"><strong>⚠️ Cuidado.</strong> Usa <code>depends_on</code> solo como último recurso. Si puedes pasar un valor de un recurso a otro, hazlo: la dependencia queda clara y Terraform optimiza mejor.</div>
-<h3 id="practica-un-servidor-web-en-ec2">Práctica: un servidor web en EC2</h3>
-<p>Vamos a desplegar un servidor web accesible desde Internet en la VPC por defecto. Necesitamos tres piezas: la imagen (AMI), un <strong>security group</strong> (el firewall) y la <strong>instancia</strong>.</p>
-<figure class="code"><figcaption><span>versions.tf + providers.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
-  required_version = "&gt;= 1.10"
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~&gt; 6.0"
-    }
-  }
-}
-
-provider "aws" {
-  region = var.region
-  default_tags {
-    tags = { Gestion = "terraform", Curso = "modulo-06" }
-  }
-}
-
-variable "region" {
-  type    = string
-  default = "eu-west-1"
-}</code></pre></figure>
-<figure class="code"><figcaption><span>main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">data "aws_ami" "amazon_linux" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["al2023-ami-2023.*-x86_64"]
-  }
-}
-
-# Firewall: permite HTTP de entrada y todo de salida
+# Firewall
 resource "aws_security_group" "web" {
   name_prefix = "web-"
-  description = "Permite HTTP desde Internet"
+  description = "Permite HTTP"
 }
 
+# Regla: dejar entrar visitas web (puerto 80)
 resource "aws_vpc_security_group_ingress_rule" "http" {
   security_group_id = aws_security_group.web.id
   cidr_ipv4         = "0.0.0.0/0"
@@ -148,83 +154,73 @@ resource "aws_vpc_security_group_ingress_rule" "http" {
   ip_protocol       = "tcp"
 }
 
+# Regla: dejar salir todo (para descargar programas)
 resource "aws_vpc_security_group_egress_rule" "todo" {
   security_group_id = aws_security_group.web.id
   cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "-1" # todos los protocolos
+  ip_protocol       = "-1"
 }
 
+# Servidor
 resource "aws_instance" "web" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.web.id]
 
-  # Script que se ejecuta en el primer arranque
+  # Script que se ejecuta al arrancar: instala un servidor web
   user_data = &lt;&lt;-EOF
     #!/bin/bash
     dnf install -y nginx
-    echo "&lt;h1&gt;Hola desde Terraform&lt;/h1&gt;&lt;p&gt;Servidor: $(hostname)&lt;/p&gt;" \
-      &gt; /usr/share/nginx/html/index.html
+    echo "&lt;h1&gt;Hola desde Terraform&lt;/h1&gt;" &gt; /usr/share/nginx/html/index.html
     systemctl enable --now nginx
   EOF
 
-  # Si cambia user_data, recrear la instancia para que se vuelva a ejecutar
   user_data_replace_on_change = true
 
   tags = {
     Name = "web-curso-terraform"
   }
-}</code></pre></figure>
-<figure class="code"><figcaption><span>outputs.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">output "ip_publica" {
-  value = aws_instance.web.public_ip
 }
 
 output "url" {
   value = "http://${aws_instance.web.public_ip}"
 }</code></pre></figure>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform apply
-...
-Plan: 4 to add, 0 to change, 0 to destroy.
-...
-aws_security_group.web: Creating...
-aws_security_group.web: Creation complete after 2s [id=sg-0a1b2c3d4e5f]
-aws_vpc_security_group_egress_rule.todo: Creating...
-aws_vpc_security_group_ingress_rule.http: Creating...
-aws_instance.web: Creating...
-aws_instance.web: Still creating... [10s elapsed]
-aws_instance.web: Creation complete after 13s [id=i-0123456789abcdef0]
-
-Outputs:
-ip_publica = "54.170.10.20"
-url = "http://54.170.10.20"
-
-$ curl $(terraform output -raw url)     # espera 1-2 minutos a que arranque nginx
-&lt;h1&gt;Hola desde Terraform&lt;/h1&gt;&lt;p&gt;Servidor: ip-172-31-5-10...&lt;/p&gt;</code></pre></figure>
-<div class="callout "><strong>ℹ️ Nota.</strong> Para entrar al servidor por terminal sin abrir el puerto 22, AWS ofrece <em>Session Manager</em> y <em>EC2 Instance Connect</em>. Lo veremos más adelante; de momento no abras SSH a todo Internet.</div>
-<h3 id="actualizar-o-reemplazar">¿Actualizar o reemplazar?</h3>
-<p>Haz pequeños cambios y observa el plan antes de aplicarlos:</p>
-<div class="table-wrap"><table class="data"><thead><tr><th>Cambio</th><th>Resultado en el plan</th></tr></thead><tbody><tr><td>Cambiar el tag <code>Name</code></td><td><code>~</code> update in-place (instantáneo)</td></tr><tr><td>Cambiar <code>instance_type</code> a <code>t3.small</code></td><td><code>~</code> update in-place (AWS para y arranca la instancia)</td></tr><tr><td>Cambiar <code>user_data</code></td><td><code>-/+</code> reemplazo (por <code>user_data_replace_on_change</code>)</td></tr><tr><td>Cambiar la <code>ami</code></td><td><code>-/+</code> reemplazo: la máquina se destruye y se crea otra</td></tr><tr><td>Cambiar la <code>description</code> del security group</td><td><code>-/+</code> reemplazo</td></tr></tbody></table></div>
-<div class="callout aviso"><strong>⚠️ Cuidado.</strong> Un reemplazo de un servidor significa una IP pública nueva y perder todo lo que hubiera en su disco. Por eso en infraestructura moderna los servidores se tratan como desechables (<em>cattle, not pets</em>) y los datos se guardan fuera (S3, bases de datos).</div>
-<h3 id="leer-el-estado-de-un-recurso">Leer el estado de un recurso</h3>
-<figure class="code"><figcaption><span>inspección</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform state list
-# data.aws_ami.amazon_linux
-# aws_instance.web
-# aws_security_group.web
-# ...
-
-terraform state show aws_instance.web   # todos los atributos
-terraform console
-&gt; aws_instance.web.availability_zone
-"eu-west-1b"
-&gt; data.aws_ami.amazon_linux.name
-"al2023-ami-2023.6.20261110.0-kernel-6.1-x86_64"</code></pre></figure>
-<p>Y al terminar, siempre:</p>
-<figure class="code"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform destroy</code></pre></figure></section>
-<section id="practica"><h2>🛠 Práctica guiada: Servidor web en EC2</h2><ol class="pasos"><li>Despliega el ejemplo en la VPC por defecto y abre la URL del output.</li><li>Genera el grafo con <code>terraform graph | dot -Tsvg &gt; grafo.svg</code> y analízalo.</li><li>Cambia <code>user_data</code> y observa en el plan si actualiza o reemplaza.</li><li>Reto: crea tu propia VPC con una subnet pública e internet gateway.</li><li>Destruye todo al terminar.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
-<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform graph | dot -Tsvg &gt; grafo.svg</code></td><td>Dibuja el grafo de dependencias (requiere Graphviz).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform graph | dot -Tsvg &gt; grafo.svg" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform apply -parallelism=5</code></td><td>Limita las operaciones simultáneas.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply -parallelism=5" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state list</code></td><td>Lista los recursos gestionados.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state list" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state show aws_instance.web</code></td><td>Muestra todos los atributos de un recurso.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state show aws_instance.web" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
-<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt>La web no carga</dt><dd>Revisa reglas del security group, IP pública y espera a que termine <code>user_data</code>.</dd></div><div><dt><code>depends_on</code> en todas partes</dt><dd>Úsalo solo si no hay referencia directa; las referencias ya crean la dependencia.</dd></div></dl></section>
-<section id="test"><h2>✅ Test de autoevaluación</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="06" data-total="6"><fieldset class="q" data-ok="1"><legend><span class="qn">1</span><span class="txt">¿Qué diferencia hay entre <code>resource</code> y <code>data</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">resource solo lee</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">resource crea y gestiona; data solo lee información existente</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Ninguna</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">data crea recursos más baratos</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los data sources consultan; nunca crean, modifican ni destruyen nada.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">2</span><span class="txt">¿Cómo se referencia el ID de <code>data "aws_ami" "linux"</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">data.linux.id</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">var.aws_ami.linux</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">aws_ami.linux.id</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">data.aws_ami.linux.id</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los data sources llevan el prefijo <code>data.</code>.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">3</span><span class="txt">¿Cuándo necesitas <code>depends_on</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Nunca, está obsoleto</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para acelerar el apply</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Cuando hay una dependencia real que no se expresa con ninguna referencia</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Siempre que un recurso use otro</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Las referencias ya crean dependencias implícitas; <code>depends_on</code> es para las ocultas.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">4</span><span class="txt">El security group y la AMI no se referencian entre sí. ¿Cómo los procesa Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Uno detrás de otro, por orden alfabético</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Da error</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">En paralelo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Primero el que esté antes en el archivo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los nodos independientes del grafo se ejecutan en paralelo (hasta <code>-parallelism</code>, 10 por defecto).</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">5</span><span class="txt">¿Por qué usar un data source para la AMI en lugar de escribir su ID?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Porque los IDs cambian por región y por versión</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Porque es más barato</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Porque es obligatorio</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Porque así la instancia es más rápida</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El data source busca la imagen adecuada en cada región y momento.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">6</span><span class="txt">En el plan ves <code>~ instance_type = "t3.micro" -&gt; "t3.small"</code>. ¿Qué pasará?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Se crea una segunda instancia</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Se destruye la instancia</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">No pasa nada</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Se modifica la instancia existente</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>~</code> es update in-place: AWS cambia el tamaño parando y arrancando la misma instancia.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
-<section id="retos"><h2>🏋️ Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1: Abre HTTPS y saca más outputs</h3><p>Añade una regla de entrada para el puerto 443 y outputs con el ID de la instancia, su zona de disponibilidad y el nombre de la AMI usada.</p><details><summary>💡 Ver pista</summary><p>Copia la regla <code>http</code> cambiando nombre y puertos. La AMI expone el atributo <code>name</code>.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "aws_vpc_security_group_ingress_rule" "https" {
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform init
+terraform apply
+curl http://54.170.10.20">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform init</span>
+<span class="prompt">$ </span><span class="cmdline">terraform apply</span>
+<span class="out">...</span>
+<span class="out">Plan: 4 to add, 0 to change, 0 to destroy.</span>
+<span class="out">...</span>
+<span class="out">aws_security_group.web: Creation complete after 2s</span>
+<span class="out">aws_instance.web: Creation complete after 13s</span>
+<span class="out"></span>
+<span class="out">Outputs:</span>
+<span class="out">url = "http://54.170.10.20"</span>
+<span class="out"></span>
+<span class="prompt">$ </span><span class="cmdline">curl http://54.170.10.20</span>
+<span class="out">&lt;h1&gt;Hola desde Terraform&lt;/h1&gt;</span></code></pre></figure>
+<div class="callout tip"><span class="k">Consejo</span>El servidor tarda uno o dos minutos en instalar la web. Si al principio no carga, espera un poco.</div>
+<h3 id="modificar-o-recrear">Modificar o recrear</h3>
+<p>Cambia algo y mira el plan antes de aplicar. Algunos cambios se hacen sobre el mismo recurso (<code>~</code>) y otros obligan a borrarlo y crearlo de nuevo (<code>-/+</code>):</p>
+<div class="table-wrap"><table><thead><tr><th>Cambio</th><th>Qué pasa</th></tr></thead><tbody><tr><td>Cambiar la etiqueta <code>Name</code></td><td>Se modifica (<code>~</code>)</td></tr><tr><td>Cambiar <code>instance_type</code> a <code>t3.small</code></td><td>Se modifica (<code>~</code>); el servidor se reinicia</td></tr><tr><td>Cambiar <code>user_data</code></td><td>Se borra y se crea de nuevo (<code>-/+</code>)</td></tr><tr><td>Cambiar la imagen (<code>ami</code>)</td><td>Se borra y se crea de nuevo (<code>-/+</code>)</td></tr></tbody></table></div>
+<div class="callout aviso"><span class="k">Importante</span>Si un servidor se recrea, pierde todo lo que tenía en su disco y cambia de IP.</div>
+<h3 id="ver-lo-que-se-ha-creado">Ver lo que se ha creado</h3>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform state list
+terraform state show aws_instance.web">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform state list</span>
+<span class="out">data.aws_ami.amazon_linux</span>
+<span class="out">aws_instance.web</span>
+<span class="out">aws_security_group.web</span>
+<span class="out">aws_vpc_security_group_egress_rule.todo</span>
+<span class="out">aws_vpc_security_group_ingress_rule.http</span>
+<span class="prompt">$ </span><span class="cmdline">terraform state show aws_instance.web</span></code></pre></figure>
+<p>Cuando termines, borra todo:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform destroy">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform destroy</span></code></pre></figure></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Servidor web en EC2</strong></p><ol class="pasos"><li>Despliega el ejemplo en la VPC por defecto y abre la URL del output.</li><li>Genera el grafo con <code>terraform graph | dot -Tsvg &gt; grafo.svg</code> y analízalo.</li><li>Cambia <code>user_data</code> y observa en el plan si actualiza o reemplaza.</li><li>Reto: crea tu propia VPC con una subnet pública e internet gateway.</li><li>Destruye todo al terminar.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform graph | dot -Tsvg &gt; grafo.svg</code></td><td>Dibuja el grafo de dependencias (requiere Graphviz).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform graph | dot -Tsvg &gt; grafo.svg" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform apply -parallelism=5</code></td><td>Limita las operaciones simultáneas.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply -parallelism=5" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state list</code></td><td>Lista los recursos gestionados.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state list" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state show aws_instance.web</code></td><td>Muestra todos los atributos de un recurso.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state show aws_instance.web" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt>La web no carga</dt><dd>Revisa reglas del security group, IP pública y espera a que termine <code>user_data</code>.</dd></div><div><dt><code>depends_on</code> en todas partes</dt><dd>Úsalo solo si no hay referencia directa; las referencias ya crean la dependencia.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="06" data-total="6"><fieldset class="q" data-ok="1"><legend><span class="qn">01</span><span class="txt">¿Qué diferencia hay entre <code>resource</code> y <code>data</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">resource solo lee</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">resource crea y gestiona; data solo lee información existente</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Ninguna</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">data crea recursos más baratos</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los data sources consultan; nunca crean, modifican ni destruyen nada.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">02</span><span class="txt">¿Cómo se referencia el ID de <code>data "aws_ami" "linux"</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">data.linux.id</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">var.aws_ami.linux</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">aws_ami.linux.id</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">data.aws_ami.linux.id</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los data sources llevan el prefijo <code>data.</code>.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">03</span><span class="txt">¿Cuándo necesitas <code>depends_on</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Nunca, está obsoleto</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para acelerar el apply</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Cuando hay una dependencia real que no se expresa con ninguna referencia</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Siempre que un recurso use otro</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Las referencias ya crean dependencias implícitas; <code>depends_on</code> es para las ocultas.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">04</span><span class="txt">El security group y la AMI no se referencian entre sí. ¿Cómo los procesa Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Uno detrás de otro, por orden alfabético</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Da error</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">En paralelo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Primero el que esté antes en el archivo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los nodos independientes del grafo se ejecutan en paralelo (hasta <code>-parallelism</code>, 10 por defecto).</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">05</span><span class="txt">¿Por qué usar un data source para la AMI en lugar de escribir su ID?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Porque los IDs cambian por región y por versión</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Porque es más barato</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Porque es obligatorio</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Porque así la instancia es más rápida</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El data source busca la imagen adecuada en cada región y momento.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">06</span><span class="txt">En el plan ves <code>~ instance_type = "t3.micro" -&gt; "t3.small"</code>. ¿Qué pasará?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Se crea una segunda instancia</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Se destruye la instancia</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">No pasa nada</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Se modifica la instancia existente</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>~</code> es update in-place: AWS cambia el tamaño parando y arrancando la misma instancia.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Abre HTTPS y saca más outputs</h3><p>Añade una regla de entrada para el puerto 443 y outputs con el ID de la instancia, su zona de disponibilidad y el nombre de la AMI usada.</p><details><summary>Ver pista</summary><p>Copia la regla <code>http</code> cambiando nombre y puertos. La AMI expone el atributo <code>name</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "aws_vpc_security_group_ingress_rule" "https" {
   security_group_id = aws_security_group.web.id
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 443
@@ -239,7 +235,7 @@ output "detalles" {
     ami  = data.aws_ami.amazon_linux.name
   }
 }</code></pre></figure></details></article>
-<article class="reto"><h3>Reto 2: Tu propia red (VPC)</h3><p>En vez de la VPC por defecto, crea una VPC <code>10.0.0.0/16</code> con una subred pública <code>10.0.1.0/24</code>, un internet gateway y una tabla de rutas con salida a Internet. Lanza la instancia en esa subred con IP pública.</p><details><summary>💡 Ver pista</summary><p>Recursos: <code>aws_vpc</code>, <code>aws_subnet</code> (con <code>map_public_ip_on_launch = true</code>), <code>aws_internet_gateway</code>, <code>aws_route_table</code>, <code>aws_route_table_association</code>. El security group necesita <code>vpc_id</code>.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "aws_vpc" "main" {
+<article class="reto"><h3>Reto 2. Tu propia red (VPC)</h3><p>En vez de la VPC por defecto, crea una VPC <code>10.0.0.0/16</code> con una subred pública <code>10.0.1.0/24</code>, un internet gateway y una tabla de rutas con salida a Internet. Lanza la instancia en esa subred con IP pública.</p><details><summary>Ver pista</summary><p>Recursos: <code>aws_vpc</code>, <code>aws_subnet</code> (con <code>map_public_ip_on_launch = true</code>), <code>aws_internet_gateway</code>, <code>aws_route_table</code>, <code>aws_route_table_association</code>. El security group necesita <code>vpc_id</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "aws_vpc" "main" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_hostnames = true
   tags                 = { Name = "curso-vpc" }
@@ -278,13 +274,11 @@ data "aws_availability_zones" "disponibles" {
 # En el security group añade:   vpc_id = aws_vpc.main.id
 # En la instancia añade:        subnet_id = aws_subnet.publica.id</code></pre></figure></details></article></section>
 <div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="06"> He completado este módulo</label></div>
-<nav class="pager" aria-label="Módulos"><a class="prev" href="05-providers.html"><small>← Anterior</small>Providers y conexión con la nube</a><a class="next" href="07-meta-argumentos.html"><small>Siguiente →</small>Meta-argumentos: count, for_each y lifecycle</a></nav></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="05-providers.html"><small>Anterior</small>Providers y conexión con la nube</a><a class="next" href="07-meta-argumentos.html"><small>Siguiente</small>Meta-argumentos: count, for_each y lifecycle</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
 </main>
-<footer class="site-footer">
-  <div class="wrap">
-    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
-  </div>
-</footer>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>

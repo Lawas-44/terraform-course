@@ -8,28 +8,88 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/styles.css">
 <script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
-    <nav class="main-nav" aria-label="Principal"><a href="index.html">Inicio</a><a href="index.html#temario">Temario</a><a href="comandos.html">Comandos</a><a href="glosario.html" aria-current="page">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
-    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
-  </div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
 </header>
-<main id="contenido">
-<div class="wrap narrow">
-<header class="mod-head"><p class="eyebrow">Referencia</p><h1>Glosario</h1><p class="lead">Los términos que aparecen en el curso, explicados en una línea.</p></header>
-<dl class="glosario"><div><dt>Apply</dt><dd>Ejecutar los cambios del plan contra la infraestructura real.</dd></div><div><dt>Backend</dt><dd>Lugar donde se guarda el estado (local, S3, HCP Terraform…).</dd></div><div><dt>Bloque</dt><dd>Unidad básica de HCL: tipo + etiquetas + cuerpo entre llaves.</dd></div><div><dt>Child module</dt><dd>Módulo llamado desde otro módulo mediante un bloque <code>module</code>.</dd></div><div><dt>ClickOps</dt><dd>Gestionar infraestructura a mano desde consolas web.</dd></div><div><dt>count</dt><dd>Meta-argumento que crea N copias de un recurso indexadas por número.</dd></div><div><dt>Data source</dt><dd>Bloque <code>data</code> que lee información existente sin crearla.</dd></div><div><dt>Declarativo</dt><dd>Describir el estado final deseado en lugar de los pasos.</dd></div><div><dt>Drift</dt><dd>Diferencia entre el estado y la realidad por cambios hechos fuera de Terraform.</dd></div><div><dt>Dynamic block</dt><dd>Genera bloques anidados repetidos a partir de una colección.</dd></div><div><dt>for_each</dt><dd>Meta-argumento que crea instancias indexadas por clave de un map o set.</dd></div><div><dt>HCL</dt><dd>HashiCorp Configuration Language, el lenguaje de Terraform.</dd></div><div><dt>HCP Terraform</dt><dd>Servicio SaaS de HashiCorp (antes Terraform Cloud) para estado y ejecuciones remotas.</dd></div><div><dt>IaC</dt><dd>Infraestructura como Código.</dd></div><div><dt>Idempotencia</dt><dd>Aplicar lo mismo varias veces produce el mismo resultado.</dd></div><div><dt>Import</dt><dd>Poner bajo gestión de Terraform un recurso que ya existe.</dd></div><div><dt>Lifecycle</dt><dd>Bloque que ajusta cómo se crean, actualizan o destruyen los recursos.</dd></div><div><dt>Local value</dt><dd>Valor con nombre calculado dentro de un módulo (<code>local.x</code>).</dd></div><div><dt>Lock file</dt><dd><code>.terraform.lock.hcl</code>: fija versiones y hashes de providers.</dd></div><div><dt>Meta-argumento</dt><dd>Argumento válido en cualquier recurso: count, for_each, depends_on, provider, lifecycle.</dd></div><div><dt>Módulo</dt><dd>Conjunto de archivos .tf en una carpeta, reutilizable con entradas y salidas.</dd></div><div><dt>OpenTofu</dt><dd>Fork open source de Terraform mantenido por la Linux Foundation.</dd></div><div><dt>Output</dt><dd>Valor que expone un módulo hacia fuera o hacia la terminal.</dd></div><div><dt>Plan</dt><dd>Propuesta de cambios calculada comparando código, estado y realidad.</dd></div><div><dt>Provider</dt><dd>Plugin que permite a Terraform hablar con una API (AWS, Azure, GitHub…).</dd></div><div><dt>Recurso</dt><dd>Bloque <code>resource</code>: un objeto de infraestructura gestionado.</dd></div><div><dt>Registry</dt><dd>registry.terraform.io: catálogo público de providers y módulos.</dd></div><div><dt>Root module</dt><dd>La carpeta donde ejecutas los comandos de Terraform.</dd></div><div><dt>Sensitive</dt><dd>Marca que oculta un valor en la salida (no lo cifra en el estado).</dd></div><div><dt>State</dt><dd>Archivo que mapea tu código con los recursos reales.</dd></div><div><dt>State lock</dt><dd>Bloqueo que impide dos operaciones simultáneas sobre el mismo estado.</dd></div><div><dt>Taint</dt><dd>Marcar un recurso para recrearlo; hoy se usa <code>apply -replace</code>.</dd></div><div><dt>tfvars</dt><dd>Archivo con valores de variables.</dd></div><div><dt>Variable</dt><dd>Parámetro de entrada de un módulo (<code>var.x</code>).</dd></div><div><dt>Workspace</dt><dd>Estado independiente que comparte la misma configuración.</dd></div></dl></div>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 16 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
+<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="02" href="modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="06" href="modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="09" href="modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="glosario.html" aria-current="page"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+<header class="mod-head"><p class="eyebrow">Referencia</p><h1>Glosario</h1><p class="lead">Las palabras del curso, explicadas en una línea.</p></header>
+<dl class="glosario"><div><dt>Apply</dt><dd>Ejecutar los cambios del plan contra la infraestructura real.</dd></div><div><dt>Backend</dt><dd>Lugar donde se guarda el estado (local, S3, HCP Terraform…).</dd></div><div><dt>Bloque</dt><dd>Unidad básica de HCL: tipo + etiquetas + cuerpo entre llaves.</dd></div><div><dt>Child module</dt><dd>Módulo llamado desde otro módulo mediante un bloque <code>module</code>.</dd></div><div><dt>ClickOps</dt><dd>Gestionar infraestructura a mano desde consolas web.</dd></div><div><dt>count</dt><dd>Meta-argumento que crea N copias de un recurso indexadas por número.</dd></div><div><dt>Data source</dt><dd>Bloque <code>data</code> que lee información existente sin crearla.</dd></div><div><dt>Declarativo</dt><dd>Describir el estado final deseado en lugar de los pasos.</dd></div><div><dt>Drift</dt><dd>Diferencia entre el estado y la realidad por cambios hechos fuera de Terraform.</dd></div><div><dt>Dynamic block</dt><dd>Genera bloques anidados repetidos a partir de una colección.</dd></div><div><dt>for_each</dt><dd>Meta-argumento que crea instancias indexadas por clave de un map o set.</dd></div><div><dt>HCL</dt><dd>HashiCorp Configuration Language, el lenguaje de Terraform.</dd></div><div><dt>HCP Terraform</dt><dd>Servicio SaaS de HashiCorp (antes Terraform Cloud) para estado y ejecuciones remotas.</dd></div><div><dt>IaC</dt><dd>Infraestructura como Código.</dd></div><div><dt>Idempotencia</dt><dd>Aplicar lo mismo varias veces produce el mismo resultado.</dd></div><div><dt>Import</dt><dd>Poner bajo gestión de Terraform un recurso que ya existe.</dd></div><div><dt>Lifecycle</dt><dd>Bloque que ajusta cómo se crean, actualizan o destruyen los recursos.</dd></div><div><dt>Local value</dt><dd>Valor con nombre calculado dentro de un módulo (<code>local.x</code>).</dd></div><div><dt>Lock file</dt><dd><code>.terraform.lock.hcl</code>: fija versiones y hashes de providers.</dd></div><div><dt>Meta-argumento</dt><dd>Argumento válido en cualquier recurso: count, for_each, depends_on, provider, lifecycle.</dd></div><div><dt>Módulo</dt><dd>Conjunto de archivos .tf en una carpeta, reutilizable con entradas y salidas.</dd></div><div><dt>OpenTofu</dt><dd>Fork open source de Terraform mantenido por la Linux Foundation.</dd></div><div><dt>Output</dt><dd>Valor que expone un módulo hacia fuera o hacia la terminal.</dd></div><div><dt>Plan</dt><dd>Propuesta de cambios calculada comparando código, estado y realidad.</dd></div><div><dt>Provider</dt><dd>Plugin que permite a Terraform hablar con una API (AWS, Azure, GitHub…).</dd></div><div><dt>Recurso</dt><dd>Bloque <code>resource</code>: un objeto de infraestructura gestionado.</dd></div><div><dt>Registry</dt><dd>registry.terraform.io: catálogo público de providers y módulos.</dd></div><div><dt>Root module</dt><dd>La carpeta donde ejecutas los comandos de Terraform.</dd></div><div><dt>Sensitive</dt><dd>Marca que oculta un valor en la salida (no lo cifra en el estado).</dd></div><div><dt>State</dt><dd>Archivo que mapea tu código con los recursos reales.</dd></div><div><dt>State lock</dt><dd>Bloqueo que impide dos operaciones simultáneas sobre el mismo estado.</dd></div><div><dt>Taint</dt><dd>Marcar un recurso para recrearlo; hoy se usa <code>apply -replace</code>.</dd></div><div><dt>tfvars</dt><dd>Archivo con valores de variables.</dd></div><div><dt>Variable</dt><dd>Parámetro de entrada de un módulo (<code>var.x</code>).</dd></div><div><dt>Workspace</dt><dd>Estado independiente que comparte la misma configuración.</dd></div></dl>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
 </main>
-<footer class="site-footer">
-  <div class="wrap">
-    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
-  </div>
-</footer>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>

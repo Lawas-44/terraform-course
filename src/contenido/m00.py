@@ -3,115 +3,63 @@
 # Formato de bloques: ver src/README.md
 
 LECCION = [
- ("h", "El problema: infraestructura hecha a mano"),
- ("p", "Imagina que trabajas en una empresa que tiene una web. Para que funcione hace falta una red, un par de servidores, una base de datos, un balanceador de carga, reglas de firewall, un dominio y certificados. Alguien entró un día en la consola web del proveedor cloud y lo creó todo **haciendo clic**. A esto se le llama, medio en broma, *ClickOps*."),
- ("p", "Funciona… hasta que aparecen las preguntas incómodas:"),
+ ("h", "El problema: hacerlo todo a mano"),
+ ("p", "Una web necesita varias piezas: servidores, una red, una base de datos, reglas de firewall... Lo habitual al empezar es crearlas **a mano**, haciendo clic en la web del proveedor de nube (AWS, Azure, Google Cloud)."),
+ ("p", "Hacerlo a mano trae problemas:"),
  ("ul", [
-  "**¿Cómo lo repito?** Hay que montar un entorno de pruebas idéntico al de producción. ¿Alguien recuerda los 140 clics exactos?",
-  "**¿Quién cambió esto?** El firewall tiene un puerto abierto que nadie recuerda haber abierto.",
-  "**¿Qué pasa si se borra?** Si alguien elimina el servidor por error, ¿cuánto tardamos en reconstruirlo igual?",
-  "**¿Cuánto tenemos?** Nadie sabe con certeza qué recursos existen ni cuánto cuestan.",
- ]),
- ("p", "La **Infraestructura como Código** (IaC, *Infrastructure as Code*) responde a todas: en lugar de hacer clics, **describes la infraestructura en archivos de texto**. Esos archivos se guardan en Git, se revisan, se comentan y se pueden ejecutar tantas veces como quieras para obtener siempre el mismo resultado."),
- ("table", ["Infraestructura manual", "Infraestructura como Código"], [
-  ["Pasos en la memoria de alguien", "Todo escrito en archivos versionados"],
-  ["Difícil de repetir", "Repetible en segundos: dev, staging, prod…"],
-  ["Sin historial de cambios", "Historial completo en Git (quién, qué, cuándo, por qué)"],
-  ["Los errores se descubren en producción", "Los cambios se revisan antes de aplicarse (plan + Pull Request)"],
-  ["Recuperarse de un desastre lleva días", "Se vuelve a aplicar el código"],
+  "**Es difícil de repetir.** Si necesitas una copia exacta para hacer pruebas, tienes que recordar todos los clics.",
+  "**No queda registro.** Nadie sabe quién cambió algo ni cuándo.",
+  "**Es fácil equivocarse.** Un clic de más y algo deja de funcionar.",
  ]),
 
- ("h", "Declarativo vs imperativo"),
- ("p", "Hay dos formas de dar instrucciones a una máquina. Piensa en pedir un café:"),
+ ("h", "La solución: Infraestructura como Código"),
+ ("p", "La **Infraestructura como Código** (IaC) consiste en describir tus servidores, redes y bases de datos en **archivos de texto**. Una herramienta lee esos archivos y crea todo por ti."),
+ ("p", "Ventajas:"),
  ("ul", [
-  "**Imperativo** (los pasos): «Muele 18 g de café, calienta agua a 92 °C, vierte 36 ml durante 25 segundos, sírvelo en taza pequeña».",
-  "**Declarativo** (el resultado): «Quiero un espresso».",
+  "Puedes repetirlo las veces que quieras y siempre sale igual.",
+  "Guardas los archivos en Git, así que tienes el historial de todos los cambios.",
+  "Otra persona puede revisar los cambios antes de aplicarlos.",
  ]),
- ("p", "Terraform es **declarativo**: tú describes *qué* debe existir y Terraform calcula *cómo* conseguirlo. Si ya existe, no hace nada; si falta algo, lo crea; si sobra, lo elimina; si es distinto, lo modifica."),
- ("code", "bash", "Imperativo (script con la CLI de AWS)", """# Si lo ejecutas dos veces, crea DOS buckets... o falla.
-aws s3api create-bucket --bucket mi-web-fotos --region eu-west-1 \\
-  --create-bucket-configuration LocationConstraint=eu-west-1
-aws s3api put-bucket-versioning --bucket mi-web-fotos \\
-  --versioning-configuration Status=Enabled"""),
- ("code", "hcl", "Declarativo (Terraform)", """# Describe el resultado. Ejecutarlo 1 o 100 veces da lo mismo.
-resource "aws_s3_bucket" "fotos" {
+ ("p", "**Terraform** es la herramienta de IaC más usada."),
+
+ ("h", "Describir el resultado, no los pasos"),
+ ("p", "Terraform es **declarativo**: tú describes **qué quieres tener**, no los pasos para conseguirlo. Es como pedir en un restaurante: dices «quiero un café» y no explicas cómo se hace."),
+ ("p", "Ejemplo: este código dice «quiero un bucket (una carpeta en la nube) llamado mi-web-fotos»:"),
+ ("code", "hcl", "main.tf", """resource "aws_s3_bucket" "fotos" {
   bucket = "mi-web-fotos"
-}
-
-resource "aws_s3_bucket_versioning" "fotos" {
-  bucket = aws_s3_bucket.fotos.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
 }"""),
- ("p", "Esa propiedad de «aplicarlo varias veces da el mismo resultado» se llama **idempotencia**, y es la clave de por qué la IaC es tan segura de usar."),
- ("tip", "No te preocupes si aún no entiendes la sintaxis del ejemplo. En el módulo 3 la veremos línea a línea."),
+ ("p", "Si el bucket no existe, Terraform lo crea. Si ya existe, no hace nada. Puedes ejecutarlo muchas veces y el resultado es el mismo. A esto se le llama **idempotencia**."),
+ ("info", "No te preocupes si aún no entiendes el código. Lo veremos paso a paso en los próximos módulos."),
 
- ("h", "¿Dónde encaja Terraform? Tipos de herramientas"),
- ("p", "En el mundo IaC hay dos grandes familias de herramientas, y a menudo se usan juntas:"),
- ("table", ["Familia", "Para qué sirve", "Ejemplos"], [
-  ["Aprovisionamiento", "Crear la infraestructura: redes, servidores, bases de datos, DNS…", "Terraform, OpenTofu, CloudFormation, Pulumi, Bicep"],
-  ["Gestión de configuración", "Configurar lo que hay *dentro* de los servidores: paquetes, usuarios, archivos", "Ansible, Chef, Puppet, Salt"],
+ ("h", "Terraform y otras herramientas"),
+ ("p", "Hay otras herramientas parecidas. Esta es la diferencia principal:"),
+ ("table", ["Herramienta", "Para qué sirve"], [
+  ["Terraform", "Crear infraestructura en cualquier nube (AWS, Azure, Google Cloud...) con el mismo lenguaje"],
+  ["OpenTofu", "Una copia libre de Terraform. Funciona casi igual"],
+  ["CloudFormation", "Lo mismo que Terraform, pero solo para AWS"],
+  ["Ansible", "Configurar lo que hay **dentro** de los servidores (instalar programas, crear usuarios)"],
  ]),
- ("p", "Comparación rápida de las herramientas de aprovisionamiento más conocidas:"),
- ("table", ["Herramienta", "Lenguaje", "Nubes", "Comentario"], [
-  ["Terraform", "HCL", "Todas (miles de providers)", "El estándar de facto; enorme comunidad"],
-  ["OpenTofu", "HCL", "Todas", "Fork libre de Terraform; casi 100 % compatible"],
-  ["AWS CloudFormation", "YAML/JSON", "Solo AWS", "Integrado en AWS, sin estado que gestionar"],
-  ["Azure Bicep", "Bicep", "Solo Azure", "Equivalente de CloudFormation en Azure"],
-  ["Pulumi", "TypeScript, Python, Go…", "Todas", "Usa lenguajes de programación generales"],
- ]),
- ("p", "La gran ventaja de Terraform es que **un único lenguaje y un único flujo de trabajo** sirven para AWS, Azure, Google Cloud, Kubernetes, GitHub, Cloudflare, Datadog y cientos de servicios más."),
+ ("p", "En resumen: Terraform **crea** las piezas; herramientas como Ansible **configuran** lo que hay dentro."),
 
- ("h", "Terraform y OpenTofu"),
- ("p", "Terraform lo creó HashiCorp en 2014 con licencia de código abierto. En agosto de 2023 HashiCorp cambió la licencia a **BSL** (Business Source License), que limita a otras empresas usarlo para crear productos competidores. Como respuesta, la comunidad creó **OpenTofu**, un fork gestionado por la Linux Foundation."),
- ("ul", [
-  "Para aprender y para usarlo en tu empresa, la licencia de Terraform **no te afecta**.",
-  "OpenTofu usa los mismos archivos `.tf` y los mismos comandos cambiando `terraform` por `tofu`.",
-  "Todo lo de este curso funciona en ambos (las pocas diferencias se indican cuando aparecen).",
- ]),
-
- ("h", "Cómo funciona Terraform por dentro"),
- ("p", "Terraform tiene tres piezas que conviene tener claras desde el principio:"),
+ ("h", "Las tres piezas de Terraform"),
  ("ol", [
-  "**Terraform Core**: el programa `terraform` que instalas. Lee tus archivos, calcula qué hay que cambiar y coordina todo.",
-  "**Providers**: plugins que saben hablar con una API concreta (AWS, Azure, Docker, GitHub…). Se descargan automáticamente del **Terraform Registry**.",
-  "**Estado (state)**: un archivo JSON donde Terraform apunta qué recursos ha creado y con qué datos. Es su «memoria».",
+  "**Terraform**: el programa que instalas en tu ordenador.",
+  "**Providers**: complementos que saben hablar con cada servicio (uno para AWS, otro para Azure, otro para GitHub...). Se descargan solos.",
+  "**Estado**: un archivo donde Terraform apunta lo que ha creado. Es su memoria.",
  ]),
- ("code", "text", "Flujo simplificado", """   tus archivos .tf          estado (terraform.tfstate)
-          │                           │
-          └──────────┐   ┌────────────┘
-                     ▼   ▼
-               ┌──────────────┐
-               │Terraform Core│  ── calcula el plan
-               └──────┬───────┘
-                      │
-          ┌───────────┼───────────┐
-          ▼           ▼           ▼
-     provider AWS  provider    provider
-          │        GitHub      Docker
-          ▼           ▼           ▼
-        API AWS   API GitHub  Docker Engine"""),
- ("p", "Y el ciclo de trabajo que repetirás durante todo el curso:"),
- ("table", ["Paso", "Comando", "Qué hace"], [
-  ["1. Escribir", "(tu editor)", "Describes la infraestructura en archivos `.tf`"],
-  ["2. Inicializar", "`terraform init`", "Descarga los providers necesarios"],
-  ["3. Planificar", "`terraform plan`", "Enseña qué va a cambiar, sin tocar nada"],
-  ["4. Aplicar", "`terraform apply`", "Ejecuta los cambios"],
-  ["5. Destruir", "`terraform destroy`", "Elimina todo lo creado (muy útil al aprender)"],
- ]),
- ("info", "Terraform **no** instala software dentro de los servidores ni sustituye a Ansible. Su trabajo es crear, modificar y eliminar recursos a través de APIs."),
 
- ("h", "Casos de uso reales"),
- ("ul", [
-  "Crear entornos completos en la nube (redes, máquinas, bases de datos) para cada equipo o cliente.",
-  "Gestionar clústeres de Kubernetes y lo que corre en ellos.",
-  "Administrar repositorios, equipos y permisos de GitHub o GitLab.",
-  "Configurar DNS, CDN y certificados (Cloudflare, Route 53).",
-  "Definir alertas y dashboards de monitorización (Datadog, Grafana).",
-  "Montar entornos efímeros para pruebas que se destruyen al acabar.",
+ ("h", "Los cinco pasos que repetirás siempre"),
+ ("table", ["Paso", "Comando", "Qué hace"], [
+  ["1. Escribir", "(tu editor)", "Describes lo que quieres en archivos `.tf`"],
+  ["2. Preparar", "`terraform init`", "Descarga los providers"],
+  ["3. Revisar", "`terraform plan`", "Muestra qué va a cambiar, sin tocar nada"],
+  ["4. Aplicar", "`terraform apply`", "Hace los cambios"],
+  ["5. Borrar", "`terraform destroy`", "Elimina todo lo creado"],
  ]),
+ ("term", """$ terraform init
+$ terraform plan
+$ terraform apply
+$ terraform destroy"""),
 ]
 
 TEST = [

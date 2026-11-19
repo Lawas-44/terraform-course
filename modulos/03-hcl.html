@@ -8,170 +8,180 @@
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/styles.css">
 <script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
-    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
-    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
-  </div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
 </header>
-<main id="contenido">
-<div class="wrap narrow">
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 16 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
+<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html" aria-current="page"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#los-bloques">Los bloques</a></li><li><a href="#tipos-de-datos">Tipos de datos</a></li><li><a href="#meter-valores-dentro-de-un-texto">Meter valores dentro de un texto</a></li><li><a href="#usar-datos-de-otro-recurso">Usar datos de otro recurso</a></li><li><a href="#comentarios-y-organizacion">Comentarios y organización</a></li><li><a href="#ordenar-y-comprobar-el-codigo">Ordenar y comprobar el código</a></li><li><a href="#la-consola-de-terraform">La consola de Terraform</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
 <nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 03</nav>
 <header class="mod-head">
   <p class="eyebrow">Módulo 03</p>
   <h1>El lenguaje HCL</h1>
   <p class="lead">Sintaxis, bloques, tipos de datos, referencias y convenciones de estilo.</p>
-  <div class="chips"><span class="chip nivel-básico">Básico</span><span class="chip">⏱ 1,5 h</span><span class="chip">📝 6 preguntas</span><span class="chip">🏋️ 2 retos</span></div>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 1,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span></div>
 </header>
-<nav class="toc" aria-label="En esta página"><strong>En esta página</strong><a href="#objetivos">Objetivos</a><a href="#leccion">Lección</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#test">Test</a><a href="#retos">Retos</a></nav>
-
-<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Reconocer la anatomía de un bloque: tipo, etiquetas y cuerpo.</li><li>Conocer los tipos de datos: string, number, bool, list, set, map, object, tuple.</li><li>Usar interpolación, heredocs y referencias entre recursos.</li><li>Aplicar <code>terraform fmt</code> y <code>terraform validate</code>.</li></ul></section>
-<section id="leccion" class="leccion"><h2>📚 Lección</h2><nav class="indice" aria-label="Índice de la lección"><strong>Índice de la lección</strong><ol><li><a href="#anatomia-de-un-bloque">Anatomía de un bloque</a></li><li><a href="#tipos-de-datos">Tipos de datos</a></li><li><a href="#strings-interpolacion-directivas-y-heredoc">Strings: interpolación, directivas y heredoc</a></li><li><a href="#referencias-entre-bloques">Referencias entre bloques</a></li><li><a href="#comentarios-y-organizacion-de-archivos">Comentarios y organización de archivos</a></li><li><a href="#estilo-fmt-y-validate">Estilo, fmt y validate</a></li><li><a href="#terraform-console-tu-laboratorio-de-expresiones">terraform console: tu laboratorio de expresiones</a></li></ol></nav><h3 id="anatomia-de-un-bloque">Anatomía de un bloque</h3>
-<p>Todo en Terraform se escribe en <strong>HCL</strong> (<em>HashiCorp Configuration Language</em>). Su pieza básica es el <strong>bloque</strong>:</p>
-<figure class="code"><figcaption><span>anatomía</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># TIPO       ETIQUETA 1     ETIQUETA 2
-resource     "local_file"   "saludo"   {
-  # CUERPO: argumentos  nombre = valor
-  filename = "saludo.txt"
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Reconocer la anatomía de un bloque: tipo, etiquetas y cuerpo.</li><li>Conocer los tipos de datos: string, number, bool, list, set, map, object, tuple.</li><li>Usar interpolación, heredocs y referencias entre recursos.</li><li>Aplicar <code>terraform fmt</code> y <code>terraform validate</code>.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="los-bloques">Los bloques</h3>
+<p>El lenguaje de Terraform se llama <strong>HCL</strong>. Todo se escribe en <strong>bloques</strong>. Un bloque tiene un tipo, unas etiquetas entre comillas y un contenido entre llaves <code>{ }</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">anatomía de un bloque</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl"># tipo      etiqueta 1     etiqueta 2
+resource    "local_file"   "saludo" {
+  filename = "saludo.txt"   # argumento: nombre = valor
   content  = "hola"
-
-  # bloque anidado (sin '=')
-  lifecycle {
-    prevent_destroy = false
-  }
 }</code></pre></figure>
-<ul><li><strong>Tipo de bloque</strong>: <code>resource</code>, <code>variable</code>, <code>output</code>… Determina qué significa el bloque.</li><li><strong>Etiquetas</strong>: van entre comillas. Cada tipo de bloque exige un número concreto (<code>resource</code> lleva 2: tipo de recurso y nombre; <code>variable</code> lleva 1; <code>locals</code> ninguna).</li><li><strong>Argumentos</strong>: <code>nombre = valor</code>. Asignan valores.</li><li><strong>Bloques anidados</strong>: bloques dentro de bloques, sin <code>=</code>.</li></ul>
-<p>Los bloques de primer nivel que usarás constantemente:</p>
-<div class="table-wrap"><table class="data"><thead><tr><th>Bloque</th><th>Para qué sirve</th><th>Se referencia como</th></tr></thead><tbody><tr><td><code>terraform</code></td><td>Versión requerida, providers, backend</td><td>—</td></tr><tr><td><code>provider</code></td><td>Configura un provider (región, credenciales…)</td><td>—</td></tr><tr><td><code>resource</code></td><td>Algo que Terraform crea y gestiona</td><td><code>TIPO.NOMBRE</code></td></tr><tr><td><code>data</code></td><td>Algo que existe y Terraform solo lee</td><td><code>data.TIPO.NOMBRE</code></td></tr><tr><td><code>variable</code></td><td>Parámetro de entrada</td><td><code>var.NOMBRE</code></td></tr><tr><td><code>output</code></td><td>Valor de salida</td><td><code>module.X.NOMBRE</code> (desde fuera)</td></tr><tr><td><code>locals</code></td><td>Valores calculados internos</td><td><code>local.NOMBRE</code></td></tr><tr><td><code>module</code></td><td>Llama a otro módulo</td><td><code>module.NOMBRE</code></td></tr></tbody></table></div>
+<p>Los bloques que más vas a usar:</p>
+<div class="table-wrap"><table><thead><tr><th>Bloque</th><th>Para qué sirve</th></tr></thead><tbody><tr><td><code>resource</code></td><td>Algo que Terraform crea</td></tr><tr><td><code>data</code></td><td>Algo que ya existe y Terraform solo consulta</td></tr><tr><td><code>variable</code></td><td>Un dato de entrada que se puede cambiar</td></tr><tr><td><code>output</code></td><td>Un dato que se muestra al terminar</td></tr><tr><td><code>locals</code></td><td>Valores de ayuda para no repetir</td></tr><tr><td><code>provider</code></td><td>Configura un provider (por ejemplo, la región de AWS)</td></tr><tr><td><code>terraform</code></td><td>Ajustes de Terraform (versiones y providers)</td></tr></tbody></table></div>
 <h3 id="tipos-de-datos">Tipos de datos</h3>
-<p>HCL tiene tipos <strong>primitivos</strong> y <strong>complejos</strong>:</p>
-<figure class="code"><figcaption><span>tipos.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">locals {
-  # Primitivos
-  texto  = "hola"           # string (siempre comillas DOBLES)
-  numero = 42               # number (enteros y decimales: 3.14)
-  activo = true             # bool (true / false, sin comillas)
-
-  # Colecciones (todos los elementos del mismo tipo)
-  lista = ["a", "b", "c"]               # list: ordenada, admite repetidos
-  mapa  = { entorno = "dev", equipo = "web" } # map: clave → valor
-  # set: como list pero sin orden ni repetidos; se crea con toset()
-  conjunto = toset(["a", "b", "a"])     # → ["a", "b"]
-
-  # Estructurales (pueden mezclar tipos)
-  objeto = {
-    nombre  = "web"
-    puertos = [80, 443]
-    publico = true
-  }
-  tupla = ["web", 80, true]
-
-  # Ausencia de valor
-  nada = null
+<p>Los valores pueden ser de varios tipos:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">tipos.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">locals {
+  texto  = "hola"                        # texto, siempre con comillas dobles
+  numero = 42                            # número
+  activo = true                          # verdadero o falso
+  lista  = ["a", "b", "c"]               # lista de valores
+  mapa   = { entorno = "dev", equipo = "web" }  # pares nombre = valor
+  grupo  = toset(["a", "b", "a"])        # conjunto: sin orden y sin repetidos -&gt; ["a", "b"]
 }</code></pre></figure>
-<p>Para leer elementos de una colección:</p>
-<figure class="code"><figcaption><span>acceso</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">local.lista[0]            # "a"  (los índices empiezan en 0)
-local.mapa["entorno"]     # "dev"
-local.mapa.entorno        # "dev" (forma corta)
-local.objeto.puertos[1]   # 443</code></pre></figure>
-<div class="callout tip"><strong>💡 Consejo.</strong> Terraform convierte tipos automáticamente cuando puede: <code>"5"</code> se convierte a <code>5</code> si se espera un número, y <code>true</code> a <code>"true"</code> si se espera un string.</div>
-<h3 id="strings-interpolacion-directivas-y-heredoc">Strings: interpolación, directivas y heredoc</h3>
-<p>Dentro de un string puedes insertar expresiones con <code>${ ... }</code>:</p>
-<figure class="code"><figcaption><span>interpolación</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">locals {
+<p>Para leer un elemento:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">leer valores</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">local.lista[0]       # "a"  (se empieza a contar desde 0)
+local.mapa.entorno   # "dev"</code></pre></figure>
+<div class="callout aviso"><span class="k">Importante</span>Usa siempre comillas dobles. <code>'hola'</code> con comillas simples da error.</div>
+<h3 id="meter-valores-dentro-de-un-texto">Meter valores dentro de un texto</h3>
+<p>Con <code>${ }</code> puedes meter un valor dentro de un texto:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">interpolación</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">locals {
   proyecto = "tienda"
   entorno  = "dev"
   nombre   = "${local.proyecto}-${local.entorno}"   # "tienda-dev"
-  saludo   = "Hay ${length(local.lista)} elementos" # "Hay 3 elementos"
 }</code></pre></figure>
-<p>Para textos de varias líneas se usa <strong>heredoc</strong>. Con <code>&lt;&lt;-</code> (con guion) se elimina la sangría común, lo que permite indentarlo bonito:</p>
-<figure class="code"><figcaption><span>heredoc</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "local_file" "config" {
-  filename = "${path.module}/app.conf"
+<p>Para textos de varias líneas se usa <code>&lt;&lt;-EOT</code> ... <code>EOT</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">texto de varias líneas</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "local_file" "config" {
+  filename = "app.conf"
   content  = &lt;&lt;-EOT
-    # Configuración generada por Terraform
     proyecto = ${local.proyecto}
     entorno  = ${local.entorno}
   EOT
 }</code></pre></figure>
-<p>Y las <strong>directivas</strong> <code>%{ if }</code> y <code>%{ for }</code> permiten lógica dentro del texto:</p>
-<figure class="code"><figcaption><span>directivas</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">locals {
-  servidores = ["web1", "web2", "web3"]
-
-  inventario = &lt;&lt;-EOT
-    [web]
-    %{ for s in local.servidores ~}
-    ${s}.ejemplo.com
-    %{ endfor ~}
-  EOT
-}</code></pre></figure>
-<div class="callout "><strong>ℹ️ Nota.</strong> El <code>~</code> elimina el salto de línea junto a la directiva, para que no queden líneas en blanco.</div>
-<h3 id="referencias-entre-bloques">Referencias entre bloques</h3>
-<p>Cada recurso expone <strong>atributos</strong> que otros pueden usar. La sintaxis es <code>TIPO.NOMBRE.ATRIBUTO</code>:</p>
-<figure class="code"><figcaption><span>referencias.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "random_integer" "puerto" {
+<h3 id="usar-datos-de-otro-recurso">Usar datos de otro recurso</h3>
+<p>Un recurso puede usar datos de otro. Se escribe <code>TIPO.NOMBRE.DATO</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">referencias.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "random_integer" "puerto" {
   min = 8000
   max = 8999
 }
 
 resource "local_file" "env" {
-  filename = "${path.module}/.env"
-  content  = "PORT=${random_integer.puerto.result}\n"
+  filename = ".env"
+  content  = "PORT=${random_integer.puerto.result}"
 }</code></pre></figure>
-<p>¿Cómo sabes qué atributos tiene un recurso? En la documentación del Registry, cada recurso tiene una sección <strong>Argument Reference</strong> (lo que tú escribes) y <strong>Attribute Reference</strong> (lo que puedes leer después).</p>
-<h3 id="comentarios-y-organizacion-de-archivos">Comentarios y organización de archivos</h3>
-<figure class="code"><figcaption><span>comentarios</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># Comentario de una línea (el más habitual)
-// También vale, pero menos común
-/*
-  Comentario
-  de varias líneas
-*/</code></pre></figure>
-<p>Terraform carga <strong>todos</strong> los <code>.tf</code> de la carpeta y los une; el orden de los archivos y de los bloques da igual. Por convención se reparten así:</p>
-<figure class="code"><figcaption><span>estructura recomendada</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">mi-proyecto/
-├── versions.tf    # bloque terraform {} (versiones y providers)
-├── providers.tf   # bloques provider {}
-├── main.tf        # recursos principales
-├── variables.tf   # bloques variable {}
-├── outputs.tf     # bloques output {}
-└── locals.tf      # bloque locals {} (opcional)</code></pre></figure>
-<h3 id="estilo-fmt-y-validate">Estilo, fmt y validate</h3>
-<p>La comunidad sigue un estilo común: 2 espacios de sangría, signos <code>=</code> alineados en argumentos consecutivos, nombres en <code>snake_case</code> y sin repetir el tipo en el nombre (<code>aws_instance.web</code>, no <code>aws_instance.web_instance</code>). No hace falta hacerlo a mano:</p>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform fmt
-main.tf
-$ terraform fmt -check -recursive   # en CI: falla si algo no está formateado
-$ terraform validate
-Success! The configuration is valid.</code></pre></figure>
-<p><code>validate</code> detecta errores de sintaxis, argumentos que no existen, referencias rotas y tipos incorrectos, <strong>sin conectarse a ninguna nube</strong>. Ejemplo de error típico:</p>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform validate
-╷
-│ Error: Unsupported argument
-│
-│   on main.tf line 3, in resource "local_file" "saludo":
-│    3:   file_name = "saludo.txt"
-│
-│ An argument named "file_name" is not expected here. Did you mean "filename"?
-╵</code></pre></figure>
-<div class="callout tip"><strong>💡 Consejo.</strong> Lee siempre los errores de abajo a arriba: archivo, línea y una sugerencia. Terraform suele decirte exactamente qué falla.</div>
-<h3 id="terraform-console-tu-laboratorio-de-expresiones">terraform console: tu laboratorio de expresiones</h3>
-<p><code>terraform console</code> abre una consola donde puedes evaluar cualquier expresión con los <code>locals</code>, variables y recursos de tu proyecto. Ideal para experimentar:</p>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform console
-&gt; local.lista
-[
-  "a",
-  "b",
-  "c",
-]
-&gt; upper(local.texto)
-"HOLA"
-&gt; local.objeto.puertos[0] + 1
-81
-&gt; exit</code></pre></figure></section>
-<section id="practica"><h2>🛠 Práctica guiada: Explora tipos con la consola</h2><ol class="pasos"><li>Pega los <code>locals</code> del ejemplo en un proyecto vacío.</li><li>Abre <code>terraform console</code> y evalúa <code>local.lista[1]</code>, <code>local.mapa["equipo"]</code>, <code>local.mensaje</code>.</li><li>Desordena la indentación a propósito y ejecuta <code>terraform fmt -diff</code>.</li><li>Introduce un error de sintaxis y lee el mensaje de <code>terraform validate</code>.</li></ol></section>
-<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform fmt</code></td><td>Formatea los .tf del directorio actual.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform fmt -recursive -diff</code></td><td>Formatea subcarpetas y muestra los cambios.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt -recursive -diff" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform fmt -check</code></td><td>Falla si algo no está formateado (útil en CI).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt -check" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform validate</code></td><td>Valida sintaxis y coherencia interna.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform validate" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform console</code></td><td>Consola interactiva para probar expresiones.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform console" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
-<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt><code>Error: Unsupported argument</code></dt><dd>Argumento mal escrito o que no existe en ese recurso. Revisa la documentación del provider.</dd></div><div><dt>Usar comillas simples <code>'texto'</code></dt><dd>HCL solo acepta comillas dobles.</dd></div></dl></section>
-<section id="test"><h2>✅ Test de autoevaluación</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="03" data-total="6"><fieldset class="q" data-ok="0"><legend><span class="qn">1</span><span class="txt">¿Cuántas etiquetas lleva un bloque <code>resource</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Dos: tipo de recurso y nombre local</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Ninguna</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Una</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Tres</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Por ejemplo <code>resource "local_file" "saludo"</code>.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">2</span><span class="txt">¿Cuál es una forma válida de escribir un string en HCL?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">'hola'</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">"hola"</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">hola</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt"><code>hola</code></span></button></div><p class="exp" hidden><strong class="verdict"></strong> HCL solo admite comillas dobles.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">3</span><span class="txt">¿Qué diferencia a un <code>set</code> de una <code>list</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">La list no tiene orden</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">No hay diferencia</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">El set no tiene orden ni elementos repetidos</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">El set admite tipos mezclados</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Un set elimina duplicados y no garantiza orden; por eso no se accede por índice.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">4</span><span class="txt">¿Cómo se referencia el atributo <code>result</code> del recurso <code>random_integer.puerto</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">random_integer.puerto.result</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">resource.random_integer.puerto.result</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">var.puerto.result</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">${puerto.result}</span></button></div><p class="exp" hidden><strong class="verdict"></strong> La sintaxis es TIPO.NOMBRE.ATRIBUTO. La interpolación <code>${}</code> solo es necesaria dentro de strings.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">5</span><span class="txt">Tienes <code>main.tf</code> y <code>zzz.tf</code> en la misma carpeta. ¿En qué orden los procesa Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Primero main.tf</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Los une todos; el orden no importa</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Alfabético</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Solo lee main.tf</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Terraform construye un único grafo con todos los archivos .tf de la carpeta.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">6</span><span class="txt">¿Qué hace <code>terraform fmt -check</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Formatea los archivos</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Valida la sintaxis</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Comprueba las credenciales</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Devuelve error si algún archivo no está bien formateado, sin modificarlo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Muy útil en CI para exigir código formateado.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
-<section id="retos"><h2>🏋️ Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1: Genera un inventario</h3><p>Crea un <code>locals</code> con un objeto <code>app</code> que tenga <code>nombre</code>, <code>version</code> (number) y una lista <code>servidores</code>. Genera con <code>local_file</code> un archivo <code>inventario.txt</code> que contenga una línea de cabecera con nombre y versión y después un servidor por línea.</p><details><summary>💡 Ver pista</summary><p>Combina un heredoc <code>&lt;&lt;-EOT</code> con una directiva <code>%{ for ~}</code>.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">locals {
+<p>Aquí <code>local_file.env</code> usa el número que ha generado <code>random_integer.puerto</code>. Terraform entiende que primero tiene que crear el número.</p>
+<div class="callout tip"><span class="k">Consejo</span>¿Qué datos tiene cada recurso? Búscalo en registry.terraform.io, en la página del recurso, en el apartado <em>Attribute Reference</em>.</div>
+<h3 id="comentarios-y-organizacion">Comentarios y organización</h3>
+<p>Los comentarios empiezan por <code>#</code>. Terraform los ignora; sirven para explicar el código.</p>
+<p>Terraform junta todos los <code>.tf</code> de la carpeta, así que puedes repartir el código en varios archivos. Lo habitual es:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">estructura</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">mi-proyecto/
+├── main.tf        # recursos
+├── variables.tf   # variables
+├── outputs.tf     # outputs
+└── versions.tf    # bloque terraform { }</code></pre></figure>
+<h3 id="ordenar-y-comprobar-el-codigo">Ordenar y comprobar el código</h3>
+<p>Dos comandos te ayudan a tener el código limpio y sin errores:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform fmt
+terraform validate">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform fmt</span>
+<span class="out">main.tf</span>
+<span class="prompt">$ </span><span class="cmdline">terraform validate</span>
+<span class="out">Success! The configuration is valid.</span></code></pre></figure>
+<ul><li><code>terraform fmt</code> ordena el código (sangría y alineación).</li><li><code>terraform validate</code> busca errores sin crear nada.</li><li><code>terraform fmt -check</code> no cambia nada: solo avisa si hay archivos sin ordenar. Se usa en revisiones automáticas.</li></ul>
+<p>Así se ve un error. Te dice el archivo, la línea y, muchas veces, cómo arreglarlo:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform validate">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform validate</span>
+<span class="out">Error: Unsupported argument</span>
+<span class="out"></span>
+<span class="out">  on main.tf line 3, in resource "local_file" "saludo":</span>
+<span class="out">   3:   file_name = "saludo.txt"</span>
+<span class="out"></span>
+<span class="out">An argument named "file_name" is not expected here. Did you mean "filename"?</span></code></pre></figure>
+<div class="callout tip"><span class="k">Consejo</span>Si un comando falla y necesitas más detalle, activa los registros con la variable de entorno <code>TF_LOG</code>: por ejemplo <code>export TF_LOG=DEBUG</code> antes de ejecutar Terraform.</div>
+<h3 id="la-consola-de-terraform">La consola de Terraform</h3>
+<p><code>terraform console</code> te deja probar valores y operaciones. Muy útil para aprender:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform console">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform console</span>
+<span class="out">&gt; local.lista[1]</span>
+<span class="out">"b"</span>
+<span class="out">&gt; upper("hola")</span>
+<span class="out">"HOLA"</span>
+<span class="out">&gt; exit</span></code></pre></figure></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Explora tipos con la consola</strong></p><ol class="pasos"><li>Pega los <code>locals</code> del ejemplo en un proyecto vacío.</li><li>Abre <code>terraform console</code> y evalúa <code>local.lista[1]</code>, <code>local.mapa["equipo"]</code>, <code>local.mensaje</code>.</li><li>Desordena la indentación a propósito y ejecuta <code>terraform fmt -diff</code>.</li><li>Introduce un error de sintaxis y lee el mensaje de <code>terraform validate</code>.</li></ol></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform fmt</code></td><td>Formatea los .tf del directorio actual.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform fmt -recursive -diff</code></td><td>Formatea subcarpetas y muestra los cambios.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt -recursive -diff" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform fmt -check</code></td><td>Falla si algo no está formateado (útil en CI).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt -check" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform validate</code></td><td>Valida sintaxis y coherencia interna.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform validate" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform console</code></td><td>Consola interactiva para probar expresiones.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform console" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>Error: Unsupported argument</code></dt><dd>Argumento mal escrito o que no existe en ese recurso. Revisa la documentación del provider.</dd></div><div><dt>Usar comillas simples <code>'texto'</code></dt><dd>HCL solo acepta comillas dobles.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="03" data-total="6"><fieldset class="q" data-ok="0"><legend><span class="qn">01</span><span class="txt">¿Cuántas etiquetas lleva un bloque <code>resource</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Dos: tipo de recurso y nombre local</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Ninguna</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Una</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Tres</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Por ejemplo <code>resource "local_file" "saludo"</code>.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">02</span><span class="txt">¿Cuál es una forma válida de escribir un string en HCL?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">'hola'</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">"hola"</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">hola</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt"><code>hola</code></span></button></div><p class="exp" hidden><strong class="verdict"></strong> HCL solo admite comillas dobles.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">03</span><span class="txt">¿Qué diferencia a un <code>set</code> de una <code>list</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">La list no tiene orden</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">No hay diferencia</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">El set no tiene orden ni elementos repetidos</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">El set admite tipos mezclados</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Un set elimina duplicados y no garantiza orden; por eso no se accede por índice.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">04</span><span class="txt">¿Cómo se referencia el atributo <code>result</code> del recurso <code>random_integer.puerto</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">random_integer.puerto.result</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">resource.random_integer.puerto.result</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">var.puerto.result</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">${puerto.result}</span></button></div><p class="exp" hidden><strong class="verdict"></strong> La sintaxis es TIPO.NOMBRE.ATRIBUTO. La interpolación <code>${}</code> solo es necesaria dentro de strings.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">05</span><span class="txt">Tienes <code>main.tf</code> y <code>zzz.tf</code> en la misma carpeta. ¿En qué orden los procesa Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Primero main.tf</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Los une todos; el orden no importa</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Alfabético</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Solo lee main.tf</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Terraform construye un único grafo con todos los archivos .tf de la carpeta.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">06</span><span class="txt">¿Qué hace <code>terraform fmt -check</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Formatea los archivos</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Valida la sintaxis</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Comprueba las credenciales</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Devuelve error si algún archivo no está bien formateado, sin modificarlo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Muy útil en CI para exigir código formateado.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Genera un inventario</h3><p>Crea un <code>locals</code> con un objeto <code>app</code> que tenga <code>nombre</code>, <code>version</code> (number) y una lista <code>servidores</code>. Genera con <code>local_file</code> un archivo <code>inventario.txt</code> que contenga una línea de cabecera con nombre y versión y después un servidor por línea.</p><details><summary>Ver pista</summary><p>Combina un heredoc <code>&lt;&lt;-EOT</code> con una directiva <code>%{ for ~}</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">locals {
   app = {
     nombre     = "tienda"
     version    = 3
@@ -188,10 +198,10 @@ resource "local_file" "inventario" {
     %{ endfor ~}
   EOT
 }</code></pre></figure></details></article>
-<article class="reto"><h3>Reto 2: Caza el error</h3><p>Este código tiene 4 errores. Encuéntralos sin ejecutarlo y luego compruébalo con <code>terraform validate</code>.</p><figure class="code"><figcaption><span>código del reto</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "local_file" {
+<article class="reto"><h3>Reto 2. Caza el error</h3><p>Este código tiene 4 errores. Encuéntralos sin ejecutarlo y luego compruébalo con <code>terraform validate</code>.</p><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">código del reto</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "local_file" {
   filename = 'notas.txt'
   contents = "Hola ${random_pet.mascota.id}"
-}</code></pre></figure><details><summary>💡 Ver pista</summary><p>Fíjate en las etiquetas, las comillas, el nombre de un argumento y una referencia.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># 1. Falta la segunda etiqueta (nombre local)
+}</code></pre></figure><details><summary>Ver pista</summary><p>Fíjate en las etiquetas, las comillas, el nombre de un argumento y una referencia.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl"># 1. Falta la segunda etiqueta (nombre local)
 # 2. Comillas simples → dobles
 # 3. El argumento es "content", no "contents"
 # 4. random_pet.mascota no está declarado
@@ -202,13 +212,11 @@ resource "local_file" "notas" {
   content  = "Hola ${random_pet.mascota.id}"
 }</code></pre></figure></details></article></section>
 <div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="03"> He completado este módulo</label></div>
-<nav class="pager" aria-label="Módulos"><a class="prev" href="02-primer-proyecto.html"><small>← Anterior</small>Tu primer proyecto: el flujo de trabajo</a><a class="next" href="04-variables-outputs-locals.html"><small>Siguiente →</small>Variables, outputs y locals</a></nav></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="02-primer-proyecto.html"><small>Anterior</small>Tu primer proyecto: el flujo de trabajo</a><a class="next" href="04-variables-outputs-locals.html"><small>Siguiente</small>Variables, outputs y locals</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
 </main>
-<footer class="site-footer">
-  <div class="wrap">
-    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
-  </div>
-</footer>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>

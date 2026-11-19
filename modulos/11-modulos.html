@@ -8,84 +8,128 @@
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/styles.css">
 <script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
-    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
-    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
-  </div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
 </header>
-<main id="contenido">
-<div class="wrap narrow">
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 16 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
+<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html" aria-current="page"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#que-es-un-modulo">Qué es un módulo</a></li><li><a href="#crear-un-modulo">Crear un módulo</a></li><li><a href="#usar-el-modulo">Usar el módulo</a></li><li><a href="#reutilizar-el-modulo-varias-veces">Reutilizar el módulo varias veces</a></li><li><a href="#modulos-hechos-por-otros">Módulos hechos por otros</a></li><li><a href="#consejos-para-crear-buenos-modulos">Consejos para crear buenos módulos</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
 <nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 11</nav>
 <header class="mod-head">
   <p class="eyebrow">Módulo 11</p>
   <h1>Módulos</h1>
   <p class="lead">Empaquetar y reutilizar infraestructura: crear, versionar y consumir módulos.</p>
-  <div class="chips"><span class="chip nivel-intermedio">Intermedio</span><span class="chip">⏱ 3 h</span><span class="chip">📝 7 preguntas</span><span class="chip">🏋️ 2 retos</span></div>
+  <div class="meta-row"><span>Nivel: Intermedio</span><span>Duración: 3 h</span><span>Test: 7 preguntas</span><span>Retos: 2</span></div>
 </header>
-<nav class="toc" aria-label="En esta página"><strong>En esta página</strong><a href="#objetivos">Objetivos</a><a href="#leccion">Lección</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#test">Test</a><a href="#retos">Retos</a></nav>
-
-<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Crear un módulo propio con entradas, salidas y documentación.</li><li>Consumir módulos del Terraform Registry fijando versiones.</li><li>Diseñar módulos con una responsabilidad clara.</li></ul></section>
-<section id="leccion" class="leccion"><h2>📚 Lección</h2><nav class="indice" aria-label="Índice de la lección"><strong>Índice de la lección</strong><ol><li><a href="#que-es-un-modulo">Qué es un módulo</a></li><li><a href="#crear-tu-primer-modulo">Crear tu primer módulo</a></li><li><a href="#usar-el-modulo">Usar el módulo</a></li><li><a href="#reutilizar-varias-instancias-del-modulo">Reutilizar: varias instancias del módulo</a></li><li><a href="#modulos-del-terraform-registry">Módulos del Terraform Registry</a></li><li><a href="#fuentes-de-modulos-y-versiones">Fuentes de módulos y versiones</a></li><li><a href="#buenas-practicas-al-disenar-modulos">Buenas prácticas al diseñar módulos</a></li></ol></nav><h3 id="que-es-un-modulo">Qué es un módulo</h3>
-<p>Un <strong>módulo</strong> es una carpeta con archivos <code>.tf</code>. ¡Ya has estado usando uno! La carpeta donde ejecutas Terraform es el <strong>root module</strong>. Cuando desde ella llamas a otra carpeta, esa otra es un <strong>child module</strong>.</p>
-<p>Los módulos son a Terraform lo que las funciones a la programación:</p>
-<div class="table-wrap"><table class="data"><thead><tr><th>Función</th><th>Módulo</th></tr></thead><tbody><tr><td>Parámetros</td><td><code>variable</code></td></tr><tr><td>Cuerpo</td><td><code>resource</code>, <code>data</code>, <code>locals</code></td></tr><tr><td>Valor de retorno</td><td><code>output</code></td></tr><tr><td>Llamada</td><td>bloque <code>module</code></td></tr></tbody></table></div>
-<p>Sirven para <strong>no repetir código</strong>, <strong>encapsular buenas prácticas</strong> (un bucket que siempre está cifrado y sin acceso público) y <strong>dar a otros equipos piezas probadas</strong>.</p>
-<h3 id="crear-tu-primer-modulo">Crear tu primer módulo</h3>
-<p>Vamos a crear un módulo que monta una <strong>web estática en S3</strong>. Estructura:</p>
-<figure class="code"><figcaption><span>estructura</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">11-modulos/
-├── main.tf                    ← root module (lo que ejecutas)
-├── outputs.tf
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Crear un módulo propio con entradas, salidas y documentación.</li><li>Consumir módulos del Terraform Registry fijando versiones.</li><li>Diseñar módulos con una responsabilidad clara.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="que-es-un-modulo">Qué es un módulo</h3>
+<p>Un <strong>módulo</strong> es una carpeta con archivos <code>.tf</code> que puedes <strong>reutilizar</strong>. Es como una receta: la escribes una vez y la usas todas las veces que quieras con ingredientes distintos.</p>
+<ul><li>La carpeta donde ejecutas Terraform se llama <strong>módulo raíz</strong> (<em>root module</em>).</li><li>Las carpetas que llamas desde ella son <strong>módulos hijos</strong> (<em>child modules</em>).</li></ul>
+<div class="table-wrap"><table><thead><tr><th>Parte del módulo</th><th>Para qué sirve</th></tr></thead><tbody><tr><td><code>variable</code></td><td>Los datos que recibe</td></tr><tr><td><code>resource</code></td><td>Lo que crea</td></tr><tr><td><code>output</code></td><td>Los datos que devuelve</td></tr></tbody></table></div>
+<h3 id="crear-un-modulo">Crear un módulo</h3>
+<p>Vamos a crear un módulo que monta una <strong>página web en S3</strong>. La estructura:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">estructura</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">11-modulos/
+├── main.tf                  # módulo raíz: aquí usamos el módulo
 └── modules/
-    └── static-site/           ← child module
-        ├── main.tf
+    └── static-site/         # nuestro módulo
         ├── variables.tf
-        ├── outputs.tf
-        ├── versions.tf
-        └── README.md</code></pre></figure>
-<figure class="code"><figcaption><span>modules/static-site/variables.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "nombre" {
-  description = "Nombre base del sitio (se usa como prefijo del bucket)"
+        ├── main.tf
+        └── outputs.tf</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">modules/static-site/variables.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">variable "nombre" {
+  description = "Nombre de la web"
   type        = string
-}
-
-variable "entorno" {
-  description = "Entorno: dev o prod"
-  type        = string
-  default     = "dev"
 }
 
 variable "index_html" {
-  description = "Contenido HTML de la página principal"
+  description = "Contenido de la página principal"
   type        = string
   default     = "&lt;h1&gt;Funciona&lt;/h1&gt;"
-}
-
-variable "etiquetas" {
-  description = "Etiquetas adicionales"
-  type        = map(string)
-  default     = {}
 }</code></pre></figure>
-<figure class="code"><figcaption><span>modules/static-site/main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "aws_s3_bucket" "this" {
-  bucket_prefix = "${var.nombre}-${var.entorno}-"
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">modules/static-site/main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "aws_s3_bucket" "this" {
+  bucket_prefix = "${var.nombre}-"
   force_destroy = true
-  tags          = merge(var.etiquetas, { Entorno = var.entorno })
 }
 
+# Activar el modo "página web" del bucket
 resource "aws_s3_bucket_website_configuration" "this" {
   bucket = aws_s3_bucket.this.id
-
   index_document {
     suffix = "index.html"
   }
 }
 
-# Para una web pública hay que permitir políticas públicas en este bucket
+# Permitir que la web sea pública
 resource "aws_s3_bucket_public_access_block" "this" {
   bucket                  = aws_s3_bucket.this.id
   block_public_acls       = true
@@ -94,143 +138,94 @@ resource "aws_s3_bucket_public_access_block" "this" {
   restrict_public_buckets = false
 }
 
-resource "aws_s3_bucket_policy" "lectura_publica" {
+resource "aws_s3_bucket_policy" "publica" {
   bucket = aws_s3_bucket.this.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Sid       = "LecturaPublica"
       Effect    = "Allow"
       Principal = "*"
       Action    = "s3:GetObject"
       Resource  = "${aws_s3_bucket.this.arn}/*"
     }]
   })
-
   depends_on = [aws_s3_bucket_public_access_block.this]
 }
 
+# Subir la página
 resource "aws_s3_object" "index" {
   bucket       = aws_s3_bucket.this.id
   key          = "index.html"
   content      = var.index_html
   content_type = "text/html"
 }</code></pre></figure>
-<figure class="code"><figcaption><span>modules/static-site/outputs.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">output "nombre_bucket" {
-  description = "Nombre del bucket creado"
-  value       = aws_s3_bucket.this.bucket
-}
-
-output "url" {
-  description = "URL pública de la web"
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">modules/static-site/outputs.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">output "url" {
+  description = "Dirección de la web"
   value       = "http://${aws_s3_bucket_website_configuration.this.website_endpoint}"
 }</code></pre></figure>
-<figure class="code"><figcaption><span>modules/static-site/versions.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
-  required_version = "&gt;= 1.6"
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "&gt;= 5.0"   # en módulos, restricciones amplias
-    }
-  }
-}</code></pre></figure>
-<div class="callout tip"><strong>💡 Consejo.</strong> Cuando un módulo tiene un recurso «principal» de cada tipo, la convención es llamarlo <code>this</code> (<code>aws_s3_bucket.this</code>).</div>
 <h3 id="usar-el-modulo">Usar el módulo</h3>
-<p>Desde el root module se llama con un bloque <code>module</code>. <code>source</code> indica dónde está; el resto de argumentos son sus variables:</p>
-<figure class="code"><figcaption><span>main.tf (root)</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~&gt; 6.0"
-    }
-  }
-}
-
-provider "aws" {
+<p>Desde el módulo raíz se usa con un bloque <code>module</code>. En <code>source</code> va la carpeta, y después los valores de sus variables:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">provider "aws" {
   region = "eu-west-1"
 }
 
 module "web" {
-  source = "./modules/static-site"
-
+  source     = "./modules/static-site"
   nombre     = "curso"
-  entorno    = "dev"
   index_html = "&lt;h1&gt;Mi primera web con un módulo&lt;/h1&gt;"
-}</code></pre></figure>
-<figure class="code"><figcaption><span>outputs.tf (root)</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">output "url_web" {
-  value = module.web.url   # module.NOMBRE.OUTPUT
-}</code></pre></figure>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform init
-Initializing modules...
-- web in modules/static-site
-...
-$ terraform apply
-...
-Plan: 5 to add, 0 to change, 0 to destroy.
-...
-Outputs:
-url_web = "http://curso-dev-2026111911...s3-website-eu-west-1.amazonaws.com"
+}
 
-$ terraform state list
-module.web.aws_s3_bucket.this
-module.web.aws_s3_bucket_policy.lectura_publica
-module.web.aws_s3_bucket_public_access_block.this
-module.web.aws_s3_bucket_website_configuration.this
-module.web.aws_s3_object.index</code></pre></figure>
-<div class="callout "><strong>ℹ️ Nota.</strong> Cada vez que añades un bloque <code>module</code> nuevo o cambias su <code>source</code>, hay que ejecutar <code>terraform init</code>. Si no, verás <em>Module not installed</em>.</div>
-<p>Los recursos del módulo están <strong>encapsulados</strong>: desde el root no puedes escribir <code>aws_s3_bucket.this</code>; solo puedes acceder a lo que el módulo expone en sus outputs.</p>
-<h3 id="reutilizar-varias-instancias-del-modulo">Reutilizar: varias instancias del módulo</h3>
-<p>Aquí está la magia: con <code>for_each</code> creas tantas webs como quieras con el mismo código:</p>
-<figure class="code"><figcaption><span>main.tf (root)</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "sitios" {
-  default = {
-    dev  = "&lt;h1&gt;Entorno de desarrollo&lt;/h1&gt;"
+output "url_web" {
+  value = module.web.url
+}</code></pre></figure>
+<p>Para leer un output del módulo se escribe <code>module.NOMBRE.OUTPUT</code>, en este caso <code>module.web.url</code>.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform init
+terraform apply">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform init</span>
+<span class="out">Initializing modules...</span>
+<span class="out">- web in modules/static-site</span>
+<span class="prompt">$ </span><span class="cmdline">terraform apply</span>
+<span class="out">...</span>
+<span class="out">Outputs:</span>
+<span class="out">url_web = "http://curso-2026111911...s3-website-eu-west-1.amazonaws.com"</span></code></pre></figure>
+<div class="callout "><span class="k">Nota</span>Cada vez que añades un módulo nuevo hay que ejecutar <code>terraform init</code>.</div>
+<p>Desde fuera del módulo <strong>no puedes</strong> usar directamente sus recursos (por ejemplo <code>aws_s3_bucket.this</code>). Solo puedes usar lo que el módulo devuelve en sus outputs.</p>
+<h3 id="reutilizar-el-modulo-varias-veces">Reutilizar el módulo varias veces</h3>
+<p>Con <code>for_each</code> creas varias webs con el mismo módulo:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">module "web" {
+  source   = "./modules/static-site"
+  for_each = {
+    dev  = "&lt;h1&gt;Desarrollo&lt;/h1&gt;"
     prod = "&lt;h1&gt;Producción&lt;/h1&gt;"
   }
-}
 
-module "web" {
-  source   = "./modules/static-site"
-  for_each = var.sitios
-
-  nombre     = "curso"
-  entorno    = each.key
+  nombre     = "curso-${each.key}"
   index_html = each.value
-}
-
-output "urls" {
-  value = { for k, m in module.web : k =&gt; m.url }
 }</code></pre></figure>
-<h3 id="modulos-del-terraform-registry">Módulos del Terraform Registry</h3>
-<p>No hace falta reinventar la rueda. El Registry tiene miles de módulos públicos. Los de <strong>terraform-aws-modules</strong> son los más usados para AWS. Por ejemplo, una VPC completa con subredes públicas, privadas y NAT en pocas líneas:</p>
-<figure class="code"><figcaption><span>vpc.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">module "vpc" {
+<h3 id="modulos-hechos-por-otros">Módulos hechos por otros</h3>
+<p>En el Terraform Registry hay miles de módulos públicos listos para usar. Por ejemplo, este crea una red completa en AWS:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">vpc.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~&gt; 6.0"   # ¡fija SIEMPRE la versión!
+  version = "~&gt; 6.0"
 
   name = "curso-vpc"
   cidr = "10.0.0.0/16"
 
-  azs             = ["eu-west-1a", "eu-west-1b"]
-  public_subnets  = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_subnets = ["10.0.11.0/24", "10.0.12.0/24"]
-
-  enable_nat_gateway = false   # el NAT Gateway cuesta ~35 €/mes; actívalo solo si lo necesitas
-}
-
-output "subredes_publicas" {
-  value = module.vpc.public_subnets
+  azs            = ["eu-west-1a", "eu-west-1b"]
+  public_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
 }</code></pre></figure>
-<p>Cómo evaluar un módulo público antes de usarlo: número de descargas, fecha de la última versión, issues abiertos, que tenga ejemplos y que su README documente entradas y salidas. Y <strong>lee el código</strong>: es tu infraestructura.</p>
-<h3 id="fuentes-de-modulos-y-versiones">Fuentes de módulos y versiones</h3>
-<div class="table-wrap"><table class="data"><thead><tr><th>Fuente</th><th>Ejemplo de source</th></tr></thead><tbody><tr><td>Carpeta local</td><td><code>./modules/static-site</code></td></tr><tr><td>Terraform Registry</td><td><code>terraform-aws-modules/vpc/aws</code> + <code>version</code></td></tr><tr><td>GitHub</td><td><code>github.com/mi-org/terraform-modulos//static-site?ref=v1.2.0</code></td></tr><tr><td>Git genérico</td><td><code>git::https://gitlab.com/org/modulos.git//red?ref=v2.0.0</code></td></tr><tr><td>Registro privado</td><td><code>app.terraform.io/mi-org/static-site/aws</code> + <code>version</code></td></tr></tbody></table></div>
-<ul><li><code>//</code> separa el repositorio de la subcarpeta del módulo.</li><li><code>?ref=</code> fija una etiqueta, rama o commit de Git. Usa siempre <strong>etiquetas de versión</strong> (<code>v1.2.0</code>), no <code>main</code>.</li><li>Versiona tus módulos con <strong>SemVer</strong>: MAYOR (rompe compatibilidad), MENOR (añade funciones), PARCHE (arreglos).</li></ul>
-<h3 id="buenas-practicas-al-disenar-modulos">Buenas prácticas al diseñar módulos</h3>
-<ul><li><strong>Una responsabilidad clara</strong>: «red», «web estática», «base de datos». No un módulo que lo hace todo.</li><li><strong>No envuelvas un único recurso</strong> sin añadir valor: un módulo que solo crea un <code>aws_s3_bucket</code> con los mismos argumentos no aporta nada.</li><li><strong>No configures providers dentro</strong> de un módulo reutilizable: deja que los herede del root (o pásaselos con <code>providers = { aws = aws.virginia }</code>).</li><li>Todas las variables con <code>description</code> y <code>type</code>; valores por defecto sensatos y seguros.</li><li>Outputs para todo lo que otro pueda necesitar (IDs, ARNs, URLs).</li><li>Un <code>README.md</code> y una carpeta <code>examples/</code> con un uso mínimo.</li><li>Genera la documentación automáticamente con <strong>terraform-docs</strong>:</li></ul>
-<figure class="code"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform-docs markdown table ./modules/static-site &gt; ./modules/static-site/README.md</code></pre></figure></section>
-<section id="practica"><h2>🛠 Práctica guiada: Módulo de web estática</h2><ol class="pasos"><li>Crea <code>modules/static-site</code> con un bucket S3 configurado como web.</li><li>Expón el nombre del bucket y la URL como outputs.</li><li>Instáncialo dos veces (dev y prod) con <code>for_each</code>.</li><li>Sustituye tu VPC manual por el módulo oficial del Registry.</li><li>Genera el README del módulo con <code>terraform-docs markdown table</code>.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
-<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform get -update</code></td><td>Descarga/actualiza los módulos.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform get -update" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform init -upgrade</code></td><td>Actualiza módulos y providers.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -upgrade" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform-docs markdown table ./modules/static-site</code></td><td>Genera documentación de inputs/outputs.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform-docs markdown table ./modules/static-site" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state list module.vpc</code></td><td>Recursos dentro de un módulo.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state list module.vpc" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
-<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt><code>Module not installed</code></dt><dd>Has añadido un módulo nuevo: ejecuta <code>terraform init</code>.</dd></div><div><dt>Módulos sin versión fija</dt><dd>Fija siempre <code>version</code> (Registry) o <code>?ref=</code> (Git) para evitar sorpresas.</dd></div></dl></section>
-<section id="test"><h2>✅ Test de autoevaluación</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="11" data-total="7"><fieldset class="q" data-ok="0"><legend><span class="qn">1</span><span class="txt">¿Qué es el root module?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">La carpeta donde ejecutas los comandos de Terraform</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">El módulo de AWS</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Un módulo del Registry</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Un módulo con permisos de root</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Toda configuración tiene un root module; los demás son child modules.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">2</span><span class="txt">¿Cómo lees el output <code>url</code> de un bloque <code>module "web"</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">var.web.url</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">output.web.url</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">module.web.url</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">web.url</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Sintaxis: module.NOMBRE.OUTPUT.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">3</span><span class="txt">Desde el root, ¿puedes referenciar directamente <code>aws_s3_bucket.this</code> creado dentro de un módulo?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Solo con depends_on</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Sí</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">No, solo los outputs que exponga el módulo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Solo en el mismo archivo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los módulos encapsulan sus recursos; la interfaz son las variables y los outputs.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">4</span><span class="txt">Has añadido un bloque <code>module</code> nuevo. ¿Qué tienes que hacer antes de <code>plan</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform init</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform fmt</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform state push</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Nada</span></button></div><p class="exp" hidden><strong class="verdict"></strong> init descarga o registra los módulos.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">5</span><span class="txt">¿Qué es lo correcto al usar un módulo del Registry?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Usar ?ref=main</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">No poner version para tener siempre la última</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Fijar version (p. ej. "~&gt; 6.0")</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Copiar el código a mano</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Fijar la versión evita cambios inesperados al hacer init.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">6</span><span class="txt">¿Qué indica <code>//modules/red</code> en <code>github.com/org/repo//modules/red?ref=v1.0.0</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Un comentario</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">El provider</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">La rama</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">La subcarpeta del repositorio donde está el módulo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>//</code> separa el repositorio de la ruta del módulo; <code>ref</code> es la versión.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">7</span><span class="txt">¿Por qué no se debe declarar un bloque <code>provider</code> dentro de un módulo reutilizable?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Por rendimiento</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Porque no funciona</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Porque es más caro</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Porque impide al llamante elegir región/cuenta y complica usar count/for_each con el módulo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los módulos deben heredar los providers del root (o recibirlos con el argumento providers).</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
-<section id="retos"><h2>🏋️ Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1: Módulo de etiquetado (sin nube)</h3><p>Crea un módulo <code>modules/etiquetas</code> que reciba <code>proyecto</code>, <code>entorno</code> y <code>extra</code> (map) y devuelva un output <code>todas</code> con las etiquetas combinadas más <code>Gestion = "terraform"</code>, y un output <code>prefijo</code> = <code>proyecto-entorno</code>. Úsalo desde el root y muestra ambos outputs.</p><details><summary>💡 Ver pista</summary><p>Un módulo puede no tener recursos: solo variables, locals y outputs.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># modules/etiquetas/main.tf
+<div class="callout aviso"><span class="k">Importante</span>Indica siempre la versión (<code>version</code>). Si no, un día podrías descargar una versión nueva que cambie cosas sin avisar.</div>
+<p>Un módulo también puede venir de un repositorio de GitHub. En ese caso la versión se indica con <code>?ref=</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">módulo desde GitHub</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">module "red" {
+  source = "github.com/mi-usuario/terraform-modulos//red?ref=v1.0.0"
+}</code></pre></figure>
+<p>La doble barra <code>//</code> separa el repositorio de la carpeta del módulo.</p>
+<h3 id="consejos-para-crear-buenos-modulos">Consejos para crear buenos módulos</h3>
+<ul><li>Que hagan <strong>una sola cosa</strong> clara (una red, una web, una base de datos).</li><li>Variables con <code>description</code> y <code>type</code>.</li><li>Outputs con todo lo que otros puedan necesitar.</li><li>No pongas bloques <code>provider</code> dentro del módulo: deja que los reciba del módulo raíz.</li><li>Añade un <code>README.md</code> explicando cómo usarlo.</li></ul></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Módulo de web estática</strong></p><ol class="pasos"><li>Crea <code>modules/static-site</code> con un bucket S3 configurado como web.</li><li>Expón el nombre del bucket y la URL como outputs.</li><li>Instáncialo dos veces (dev y prod) con <code>for_each</code>.</li><li>Sustituye tu VPC manual por el módulo oficial del Registry.</li><li>Genera el README del módulo con <code>terraform-docs markdown table</code>.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform get -update</code></td><td>Descarga/actualiza los módulos.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform get -update" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform init -upgrade</code></td><td>Actualiza módulos y providers.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -upgrade" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform-docs markdown table ./modules/static-site</code></td><td>Genera documentación de inputs/outputs.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform-docs markdown table ./modules/static-site" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state list module.vpc</code></td><td>Recursos dentro de un módulo.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state list module.vpc" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>Module not installed</code></dt><dd>Has añadido un módulo nuevo: ejecuta <code>terraform init</code>.</dd></div><div><dt>Módulos sin versión fija</dt><dd>Fija siempre <code>version</code> (Registry) o <code>?ref=</code> (Git) para evitar sorpresas.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="11" data-total="7"><fieldset class="q" data-ok="0"><legend><span class="qn">01</span><span class="txt">¿Qué es el root module?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">La carpeta donde ejecutas los comandos de Terraform</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">El módulo de AWS</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Un módulo del Registry</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Un módulo con permisos de root</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Toda configuración tiene un root module; los demás son child modules.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">02</span><span class="txt">¿Cómo lees el output <code>url</code> de un bloque <code>module "web"</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">var.web.url</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">output.web.url</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">module.web.url</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">web.url</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Sintaxis: module.NOMBRE.OUTPUT.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">03</span><span class="txt">Desde el root, ¿puedes referenciar directamente <code>aws_s3_bucket.this</code> creado dentro de un módulo?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Solo con depends_on</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Sí</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">No, solo los outputs que exponga el módulo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Solo en el mismo archivo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los módulos encapsulan sus recursos; la interfaz son las variables y los outputs.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">04</span><span class="txt">Has añadido un bloque <code>module</code> nuevo. ¿Qué tienes que hacer antes de <code>plan</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform init</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform fmt</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform state push</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Nada</span></button></div><p class="exp" hidden><strong class="verdict"></strong> init descarga o registra los módulos.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">05</span><span class="txt">¿Qué es lo correcto al usar un módulo del Registry?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Usar ?ref=main</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">No poner version para tener siempre la última</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Fijar version (p. ej. "~&gt; 6.0")</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Copiar el código a mano</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Fijar la versión evita cambios inesperados al hacer init.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">06</span><span class="txt">¿Qué indica <code>//modules/red</code> en <code>github.com/org/repo//modules/red?ref=v1.0.0</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Un comentario</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">El provider</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">La rama</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">La subcarpeta del repositorio donde está el módulo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>//</code> separa el repositorio de la ruta del módulo; <code>ref</code> es la versión.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">07</span><span class="txt">¿Por qué no se debe declarar un bloque <code>provider</code> dentro de un módulo reutilizable?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Por rendimiento</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Porque no funciona</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Porque es más caro</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Porque impide al llamante elegir región/cuenta y complica usar count/for_each con el módulo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los módulos deben heredar los providers del root (o recibirlos con el argumento providers).</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Módulo de etiquetado (sin nube)</h3><p>Crea un módulo <code>modules/etiquetas</code> que reciba <code>proyecto</code>, <code>entorno</code> y <code>extra</code> (map) y devuelva un output <code>todas</code> con las etiquetas combinadas más <code>Gestion = "terraform"</code>, y un output <code>prefijo</code> = <code>proyecto-entorno</code>. Úsalo desde el root y muestra ambos outputs.</p><details><summary>Ver pista</summary><p>Un módulo puede no tener recursos: solo variables, locals y outputs.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl"># modules/etiquetas/main.tf
 variable "proyecto" { type = string }
 variable "entorno" { type = string }
 variable "extra" {
@@ -261,7 +256,7 @@ module "tags" {
 output "etiquetas" {
   value = module.tags.todas
 }</code></pre></figure></details></article>
-<article class="reto"><h3>Reto 2: Mejora el módulo static-site</h3><p>Añade al módulo una variable opcional <code>error_html</code> que, si se proporciona, cree <code>error.html</code> y lo configure como documento de error. Si es null, no se crea nada.</p><details><summary>💡 Ver pista</summary><p><code>count = var.error_html == null ? 0 : 1</code> en el objeto y un bloque <code>dynamic "error_document"</code> en la configuración web.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "error_html" {
+<article class="reto"><h3>Reto 2. Mejora el módulo static-site</h3><p>Añade al módulo una variable opcional <code>error_html</code> que, si se proporciona, cree <code>error.html</code> y lo configure como documento de error. Si es null, no se crea nada.</p><details><summary>Ver pista</summary><p><code>count = var.error_html == null ? 0 : 1</code> en el objeto y un bloque <code>dynamic "error_document"</code> en la configuración web.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">variable "error_html" {
   type    = string
   default = null
 }
@@ -289,13 +284,11 @@ resource "aws_s3_bucket_website_configuration" "this" {
   }
 }</code></pre></figure></details></article></section>
 <div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="11"> He completado este módulo</label></div>
-<nav class="pager" aria-label="Módulos"><a class="prev" href="10-backends-workspaces.html"><small>← Anterior</small>Backends remotos, bloqueo y workspaces</a><a class="next" href="12-import-refactor.html"><small>Siguiente →</small>Importar y refactorizar</a></nav></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="10-backends-workspaces.html"><small>Anterior</small>Backends remotos, bloqueo y workspaces</a><a class="next" href="12-import-refactor.html"><small>Siguiente</small>Importar y refactorizar</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
 </main>
-<footer class="site-footer">
-  <div class="wrap">
-    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
-  </div>
-</footer>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>

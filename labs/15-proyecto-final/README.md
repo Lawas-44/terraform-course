@@ -8,7 +8,7 @@ modules/web       ALB + Auto Scaling Group + security groups
 envs/dev          Entorno dev (backend S3: cambia el nombre del bucket)
 ```
 
-> ⚠️ El balanceador (ALB) no es gratuito. Despliega, prueba y destruye en la misma sesión.
+> **Importante:** el balanceador (ALB) no es gratuito. Despliega, prueba y destruye en la misma sesión.
 
 ```bash
 cd envs/dev

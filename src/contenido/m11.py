@@ -3,65 +3,50 @@
 
 LECCION = [
  ("h", "Qué es un módulo"),
- ("p", "Un **módulo** es una carpeta con archivos `.tf`. ¡Ya has estado usando uno! La carpeta donde ejecutas Terraform es el **root module**. Cuando desde ella llamas a otra carpeta, esa otra es un **child module**."),
- ("p", "Los módulos son a Terraform lo que las funciones a la programación:"),
- ("table", ["Función", "Módulo"], [
-  ["Parámetros", "`variable`"],
-  ["Cuerpo", "`resource`, `data`, `locals`"],
-  ["Valor de retorno", "`output`"],
-  ["Llamada", "bloque `module`"],
+ ("p", "Un **módulo** es una carpeta con archivos `.tf` que puedes **reutilizar**. Es como una receta: la escribes una vez y la usas todas las veces que quieras con ingredientes distintos."),
+ ("ul", [
+  "La carpeta donde ejecutas Terraform se llama **módulo raíz** (*root module*).",
+  "Las carpetas que llamas desde ella son **módulos hijos** (*child modules*).",
  ]),
- ("p", "Sirven para **no repetir código**, **encapsular buenas prácticas** (un bucket que siempre está cifrado y sin acceso público) y **dar a otros equipos piezas probadas**."),
+ ("table", ["Parte del módulo", "Para qué sirve"], [
+  ["`variable`", "Los datos que recibe"],
+  ["`resource`", "Lo que crea"],
+  ["`output`", "Los datos que devuelve"],
+ ]),
 
- ("h", "Crear tu primer módulo"),
- ("p", "Vamos a crear un módulo que monta una **web estática en S3**. Estructura:"),
+ ("h", "Crear un módulo"),
+ ("p", "Vamos a crear un módulo que monta una **página web en S3**. La estructura:"),
  ("code", "text", "estructura", """11-modulos/
-├── main.tf                    ← root module (lo que ejecutas)
-├── outputs.tf
+├── main.tf                  # módulo raíz: aquí usamos el módulo
 └── modules/
-    └── static-site/           ← child module
-        ├── main.tf
+    └── static-site/         # nuestro módulo
         ├── variables.tf
-        ├── outputs.tf
-        ├── versions.tf
-        └── README.md"""),
+        ├── main.tf
+        └── outputs.tf"""),
  ("code", "hcl", "modules/static-site/variables.tf", """variable "nombre" {
-  description = "Nombre base del sitio (se usa como prefijo del bucket)"
+  description = "Nombre de la web"
   type        = string
-}
-
-variable "entorno" {
-  description = "Entorno: dev o prod"
-  type        = string
-  default     = "dev"
 }
 
 variable "index_html" {
-  description = "Contenido HTML de la página principal"
+  description = "Contenido de la página principal"
   type        = string
   default     = "<h1>Funciona</h1>"
-}
-
-variable "etiquetas" {
-  description = "Etiquetas adicionales"
-  type        = map(string)
-  default     = {}
 }"""),
  ("code", "hcl", "modules/static-site/main.tf", """resource "aws_s3_bucket" "this" {
-  bucket_prefix = "${var.nombre}-${var.entorno}-"
+  bucket_prefix = "${var.nombre}-"
   force_destroy = true
-  tags          = merge(var.etiquetas, { Entorno = var.entorno })
 }
 
+# Activar el modo "página web" del bucket
 resource "aws_s3_bucket_website_configuration" "this" {
   bucket = aws_s3_bucket.this.id
-
   index_document {
     suffix = "index.html"
   }
 }
 
-# Para una web pública hay que permitir políticas públicas en este bucket
+# Permitir que la web sea pública
 resource "aws_s3_bucket_public_access_block" "this" {
   bucket                  = aws_s3_bucket.this.id
   block_public_acls       = true
@@ -70,161 +55,98 @@ resource "aws_s3_bucket_public_access_block" "this" {
   restrict_public_buckets = false
 }
 
-resource "aws_s3_bucket_policy" "lectura_publica" {
+resource "aws_s3_bucket_policy" "publica" {
   bucket = aws_s3_bucket.this.id
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Sid       = "LecturaPublica"
       Effect    = "Allow"
       Principal = "*"
       Action    = "s3:GetObject"
       Resource  = "${aws_s3_bucket.this.arn}/*"
     }]
   })
-
   depends_on = [aws_s3_bucket_public_access_block.this]
 }
 
+# Subir la página
 resource "aws_s3_object" "index" {
   bucket       = aws_s3_bucket.this.id
   key          = "index.html"
   content      = var.index_html
   content_type = "text/html"
 }"""),
- ("code", "hcl", "modules/static-site/outputs.tf", """output "nombre_bucket" {
-  description = "Nombre del bucket creado"
-  value       = aws_s3_bucket.this.bucket
-}
-
-output "url" {
-  description = "URL pública de la web"
+ ("code", "hcl", "modules/static-site/outputs.tf", """output "url" {
+  description = "Dirección de la web"
   value       = "http://${aws_s3_bucket_website_configuration.this.website_endpoint}"
 }"""),
- ("code", "hcl", "modules/static-site/versions.tf", """terraform {
-  required_version = ">= 1.6"
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 5.0"   # en módulos, restricciones amplias
-    }
-  }
-}"""),
- ("tip", "Cuando un módulo tiene un recurso «principal» de cada tipo, la convención es llamarlo `this` (`aws_s3_bucket.this`)."),
 
  ("h", "Usar el módulo"),
- ("p", "Desde el root module se llama con un bloque `module`. `source` indica dónde está; el resto de argumentos son sus variables:"),
- ("code", "hcl", "main.tf (root)", """terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 6.0"
-    }
-  }
-}
-
-provider "aws" {
+ ("p", "Desde el módulo raíz se usa con un bloque `module`. En `source` va la carpeta, y después los valores de sus variables:"),
+ ("code", "hcl", "main.tf", """provider "aws" {
   region = "eu-west-1"
 }
 
 module "web" {
-  source = "./modules/static-site"
-
+  source     = "./modules/static-site"
   nombre     = "curso"
-  entorno    = "dev"
   index_html = "<h1>Mi primera web con un módulo</h1>"
+}
+
+output "url_web" {
+  value = module.web.url
 }"""),
- ("code", "hcl", "outputs.tf (root)", """output "url_web" {
-  value = module.web.url   # module.NOMBRE.OUTPUT
-}"""),
+ ("p", "Para leer un output del módulo se escribe `module.NOMBRE.OUTPUT`, en este caso `module.web.url`."),
  ("term", """$ terraform init
 Initializing modules...
 - web in modules/static-site
-...
 $ terraform apply
 ...
-Plan: 5 to add, 0 to change, 0 to destroy.
-...
 Outputs:
-url_web = "http://curso-dev-2026111911...s3-website-eu-west-1.amazonaws.com"
+url_web = "http://curso-2026111911...s3-website-eu-west-1.amazonaws.com\""""),
+ ("info", "Cada vez que añades un módulo nuevo hay que ejecutar `terraform init`."),
+ ("p", "Desde fuera del módulo **no puedes** usar directamente sus recursos (por ejemplo `aws_s3_bucket.this`). Solo puedes usar lo que el módulo devuelve en sus outputs."),
 
-$ terraform state list
-module.web.aws_s3_bucket.this
-module.web.aws_s3_bucket_policy.lectura_publica
-module.web.aws_s3_bucket_public_access_block.this
-module.web.aws_s3_bucket_website_configuration.this
-module.web.aws_s3_object.index"""),
- ("info", "Cada vez que añades un bloque `module` nuevo o cambias su `source`, hay que ejecutar `terraform init`. Si no, verás *Module not installed*."),
- ("p", "Los recursos del módulo están **encapsulados**: desde el root no puedes escribir `aws_s3_bucket.this`; solo puedes acceder a lo que el módulo expone en sus outputs."),
-
- ("h", "Reutilizar: varias instancias del módulo"),
- ("p", "Aquí está la magia: con `for_each` creas tantas webs como quieras con el mismo código:"),
- ("code", "hcl", "main.tf (root)", """variable "sitios" {
-  default = {
-    dev  = "<h1>Entorno de desarrollo</h1>"
+ ("h", "Reutilizar el módulo varias veces"),
+ ("p", "Con `for_each` creas varias webs con el mismo módulo:"),
+ ("code", "hcl", "main.tf", """module "web" {
+  source   = "./modules/static-site"
+  for_each = {
+    dev  = "<h1>Desarrollo</h1>"
     prod = "<h1>Producción</h1>"
   }
-}
 
-module "web" {
-  source   = "./modules/static-site"
-  for_each = var.sitios
-
-  nombre     = "curso"
-  entorno    = each.key
+  nombre     = "curso-${each.key}"
   index_html = each.value
-}
-
-output "urls" {
-  value = { for k, m in module.web : k => m.url }
 }"""),
 
- ("h", "Módulos del Terraform Registry"),
- ("p", "No hace falta reinventar la rueda. El Registry tiene miles de módulos públicos. Los de **terraform-aws-modules** son los más usados para AWS. Por ejemplo, una VPC completa con subredes públicas, privadas y NAT en pocas líneas:"),
+ ("h", "Módulos hechos por otros"),
+ ("p", "En el Terraform Registry hay miles de módulos públicos listos para usar. Por ejemplo, este crea una red completa en AWS:"),
  ("code", "hcl", "vpc.tf", """module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 6.0"   # ¡fija SIEMPRE la versión!
+  version = "~> 6.0"
 
   name = "curso-vpc"
   cidr = "10.0.0.0/16"
 
-  azs             = ["eu-west-1a", "eu-west-1b"]
-  public_subnets  = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_subnets = ["10.0.11.0/24", "10.0.12.0/24"]
-
-  enable_nat_gateway = false   # el NAT Gateway cuesta ~35 €/mes; actívalo solo si lo necesitas
-}
-
-output "subredes_publicas" {
-  value = module.vpc.public_subnets
+  azs            = ["eu-west-1a", "eu-west-1b"]
+  public_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
 }"""),
- ("p", "Cómo evaluar un módulo público antes de usarlo: número de descargas, fecha de la última versión, issues abiertos, que tenga ejemplos y que su README documente entradas y salidas. Y **lee el código**: es tu infraestructura."),
+ ("warn", "Indica siempre la versión (`version`). Si no, un día podrías descargar una versión nueva que cambie cosas sin avisar."),
+ ("p", "Un módulo también puede venir de un repositorio de GitHub. En ese caso la versión se indica con `?ref=`:"),
+ ("code", "hcl", "módulo desde GitHub", """module "red" {
+  source = "github.com/mi-usuario/terraform-modulos//red?ref=v1.0.0"
+}"""),
+ ("p", "La doble barra `//` separa el repositorio de la carpeta del módulo."),
 
- ("h", "Fuentes de módulos y versiones"),
- ("table", ["Fuente", "Ejemplo de source"], [
-  ["Carpeta local", "`./modules/static-site`"],
-  ["Terraform Registry", "`terraform-aws-modules/vpc/aws` + `version`"],
-  ["GitHub", "`github.com/mi-org/terraform-modulos//static-site?ref=v1.2.0`"],
-  ["Git genérico", "`git::https://gitlab.com/org/modulos.git//red?ref=v2.0.0`"],
-  ["Registro privado", "`app.terraform.io/mi-org/static-site/aws` + `version`"],
- ]),
+ ("h", "Consejos para crear buenos módulos"),
  ("ul", [
-  "`//` separa el repositorio de la subcarpeta del módulo.",
-  "`?ref=` fija una etiqueta, rama o commit de Git. Usa siempre **etiquetas de versión** (`v1.2.0`), no `main`.",
-  "Versiona tus módulos con **SemVer**: MAYOR (rompe compatibilidad), MENOR (añade funciones), PARCHE (arreglos).",
+  "Que hagan **una sola cosa** clara (una red, una web, una base de datos).",
+  "Variables con `description` y `type`.",
+  "Outputs con todo lo que otros puedan necesitar.",
+  "No pongas bloques `provider` dentro del módulo: deja que los reciba del módulo raíz.",
+  "Añade un `README.md` explicando cómo usarlo.",
  ]),
-
- ("h", "Buenas prácticas al diseñar módulos"),
- ("ul", [
-  "**Una responsabilidad clara**: «red», «web estática», «base de datos». No un módulo que lo hace todo.",
-  "**No envuelvas un único recurso** sin añadir valor: un módulo que solo crea un `aws_s3_bucket` con los mismos argumentos no aporta nada.",
-  "**No configures providers dentro** de un módulo reutilizable: deja que los herede del root (o pásaselos con `providers = { aws = aws.virginia }`).",
-  "Todas las variables con `description` y `type`; valores por defecto sensatos y seguros.",
-  "Outputs para todo lo que otro pueda necesitar (IDs, ARNs, URLs).",
-  "Un `README.md` y una carpeta `examples/` con un uso mínimo.",
-  "Genera la documentación automáticamente con **terraform-docs**:",
- ]),
- ("code", "bash", "terminal", """terraform-docs markdown table ./modules/static-site > ./modules/static-site/README.md"""),
 ]
 
 TEST = [

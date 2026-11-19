@@ -8,53 +8,111 @@
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/styles.css">
 <script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
-    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
-    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
-  </div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
 </header>
-<main id="contenido">
-<div class="wrap narrow">
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 16 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
+<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html" aria-current="page"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#el-proyecto">El proyecto</a></li><li><a href="#requisitos">Requisitos</a></li><li><a href="#el-modulo-de-red">El módulo de red</a></li><li><a href="#el-modulo-web">El módulo web</a></li><li><a href="#el-entorno-dev">El entorno dev</a></li><li><a href="#como-se-evalua">Cómo se evalúa</a></li><li><a href="#la-certificacion-oficial">La certificación oficial</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
 <nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 15</nav>
 <header class="mod-head">
   <p class="eyebrow">Módulo 15</p>
   <h1>Proyecto final y certificación</h1>
   <p class="lead">Integrar todo en una infraestructura completa y preparar la certificación oficial.</p>
-  <div class="chips"><span class="chip nivel-avanzado">Avanzado</span><span class="chip">⏱ 4–6 h</span><span class="chip">📝 10 preguntas</span><span class="chip">🏋️ 2 retos</span></div>
+  <div class="meta-row"><span>Nivel: Avanzado</span><span>Duración: 4–6 h</span><span>Test: 10 preguntas</span><span>Retos: 2</span></div>
 </header>
-<nav class="toc" aria-label="En esta página"><strong>En esta página</strong><a href="#objetivos">Objetivos</a><a href="#leccion">Lección</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#test">Test</a><a href="#retos">Retos</a></nav>
-
-<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Diseñar y desplegar una infraestructura de varios componentes con buenas prácticas.</li><li>Documentar el proyecto como lo haría un equipo profesional.</li><li>Conocer el temario de la certificación HashiCorp Certified: Terraform Associate.</li></ul></section>
-<section id="leccion" class="leccion"><h2>📚 Lección</h2><nav class="indice" aria-label="Índice de la lección"><strong>Índice de la lección</strong><ol><li><a href="#el-proyecto">El proyecto</a></li><li><a href="#requisitos">Requisitos</a></li><li><a href="#modulo-network">Módulo network</a></li><li><a href="#modulo-web">Módulo web</a></li><li><a href="#el-entorno-dev">El entorno dev</a></li><li><a href="#ideas-para-subir-de-nivel">Ideas para subir de nivel</a></li><li><a href="#rubrica-de-evaluacion">Rúbrica de evaluación</a></li><li><a href="#la-certificacion-terraform-associate">La certificación Terraform Associate</a></li></ol></nav><h3 id="el-proyecto">El proyecto</h3>
-<p>Vas a construir, de principio a fin, la infraestructura de una <strong>web escalable</strong> en AWS aplicando todo lo aprendido. Es un proyecto ideal para tu portfolio y para preparar la certificación.</p>
-<figure class="code"><figcaption><span>arquitectura</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">                         Internet
-                            │
-                  ┌─────────▼──────────┐
-                  │ Application Load   │   subredes públicas
-                  │ Balancer (ALB)     │   (2 zonas)
-                  └─────────┬──────────┘
-                            │ :80
-          ┌─────────────────┼─────────────────┐
-          │      Auto Scaling Group (2-4)     │   subredes
-          │   ┌──────────┐     ┌──────────┐   │   (2 zonas)
-          │   │ EC2 nginx│     │ EC2 nginx│   │
-          │   └──────────┘     └──────────┘   │
-          └───────────────────────────────────┘
-
-          S3 (estáticos)          S3 (estado remoto) + lock</code></pre></figure>
-<div class="callout aviso"><strong>⚠️ Cuidado.</strong> El Application Load Balancer <strong>no es gratuito</strong> (unos 0,025 USD/hora + tráfico, ≈ 20 USD/mes). Despliega, prueba y <strong>destruye en la misma sesión</strong>. Evita el NAT Gateway: en este diseño las instancias van en subredes públicas protegidas por security groups para ahorrar costes.</div>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Diseñar y desplegar una infraestructura de varios componentes con buenas prácticas.</li><li>Documentar el proyecto como lo haría un equipo profesional.</li><li>Conocer el temario de la certificación HashiCorp Certified: Terraform Associate.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="el-proyecto">El proyecto</h3>
+<p>Vas a montar una <strong>web que aguanta muchas visitas</strong>, usando todo lo aprendido. Tiene estas piezas:</p>
+<ul><li><strong>Red (VPC)</strong>: el espacio privado donde viven tus recursos, con subredes en dos zonas.</li><li><strong>Balanceador de carga (ALB)</strong>: recibe las visitas y las reparte entre los servidores.</li><li><strong>Grupo de servidores (Auto Scaling)</strong>: entre 2 y 4 servidores iguales. Si uno falla, se crea otro.</li></ul>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">esquema</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">            Internet
+               |
+     +---------v---------+
+     |    Balanceador    |
+     +---------+---------+
+               |
+       +-------+-------+
+       |               |
+  +----v----+     +----v----+
+  | servidor|     | servidor|
+  +---------+     +---------+</code></pre></figure>
+<div class="callout aviso"><span class="k">Importante</span>El balanceador <strong>no es gratis</strong> (unos 20 dólares al mes si lo dejas encendido). Crea, prueba y borra en la misma sesión.</div>
 <h3 id="requisitos">Requisitos</h3>
-<div class="table-wrap"><table class="data"><thead><tr><th>#</th><th>Requisito</th><th>Módulos del curso</th></tr></thead><tbody><tr><td>1</td><td>Estado remoto en S3 con <code>use_lockfile</code> (bootstrap separado)</td><td>10</td></tr><tr><td>2</td><td>Módulos propios: <code>network</code>, <code>web</code>; y al menos uno del Registry</td><td>11</td></tr><tr><td>3</td><td>Dos entornos (<code>envs/dev</code>, <code>envs/prod</code>) con distinto tamaño/réplicas</td><td>4, 14</td></tr><tr><td>4</td><td>Variables con tipos, descripciones y validaciones</td><td>4, 13</td></tr><tr><td>5</td><td><code>for_each</code> o <code>count</code> para subredes</td><td>7, 8</td></tr><tr><td>6</td><td>Outputs: URL del balanceador, IDs de red</td><td>4</td></tr><tr><td>7</td><td>Al menos un <code>terraform test</code> (puede usar mocks)</td><td>13</td></tr><tr><td>8</td><td>CI: fmt, validate, tflint y plan en cada PR</td><td>14</td></tr><tr><td>9</td><td>Sin secretos en el código; Trivy sin hallazgos HIGH sin justificar</td><td>13</td></tr><tr><td>10</td><td>README con diagrama, instrucciones y coste estimado</td><td>13, 15</td></tr></tbody></table></div>
-<h3 id="modulo-network">Módulo network</h3>
-<p>Te damos el esqueleto de los módulos para que no partas de cero. Complétalos y mejóralos.</p>
-<figure class="code"><figcaption><span>modules/network/main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">data "aws_availability_zones" "disponibles" {
+<div class="table-wrap"><table><thead><tr><th>#</th><th>Qué debe tener</th><th>Módulo</th></tr></thead><tbody><tr><td>1</td><td>Estado guardado en S3 con bloqueo</td><td>10</td></tr><tr><td>2</td><td>Módulos propios: <code>network</code> y <code>web</code></td><td>11</td></tr><tr><td>3</td><td>Dos entornos: <code>envs/dev</code> y <code>envs/prod</code></td><td>14</td></tr><tr><td>4</td><td>Variables con tipo, descripción y validación</td><td>4</td></tr><tr><td>5</td><td>Subredes creadas con <code>for_each</code></td><td>7</td></tr><tr><td>6</td><td>Output con la dirección web</td><td>4</td></tr><tr><td>7</td><td>Al menos un test con <code>terraform test</code></td><td>13</td></tr><tr><td>8</td><td>GitHub Actions con <code>plan</code> en cada Pull Request</td><td>14</td></tr><tr><td>9</td><td>Sin contraseñas en el código</td><td>13</td></tr><tr><td>10</td><td>README explicando cómo usarlo</td><td>15</td></tr></tbody></table></div>
+<h3 id="el-modulo-de-red">El módulo de red</h3>
+<p>Crea la red y una subred pública en cada zona. Fíjate cómo <code>for_each</code> y <code>cidrsubnet</code> calculan las subredes solas:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">modules/network/main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">data "aws_availability_zones" "disponibles" {
   state = "available"
 }
 
@@ -70,7 +128,6 @@ resource "aws_vpc" "this" {
 
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
-  tags   = { Name = var.nombre }
 }
 
 resource "aws_subnet" "publica" {
@@ -80,7 +137,6 @@ resource "aws_subnet" "publica" {
   availability_zone       = each.key
   cidr_block              = cidrsubnet(var.vpc_cidr, 8, each.value)
   map_public_ip_on_launch = true
-  tags                    = { Name = "${var.nombre}-publica-${each.key}" }
 }
 
 resource "aws_route_table" "publica" {
@@ -97,89 +153,10 @@ resource "aws_route_table_association" "publica" {
   subnet_id      = each.value.id
   route_table_id = aws_route_table.publica.id
 }</code></pre></figure>
-<figure class="code"><figcaption><span>modules/network/variables.tf + outputs.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "nombre" {
-  type = string
-}
-
-variable "vpc_cidr" {
-  type    = string
-  default = "10.0.0.0/16"
-  validation {
-    condition     = can(cidrhost(var.vpc_cidr, 0))
-    error_message = "vpc_cidr debe ser un CIDR válido."
-  }
-}
-
-variable "num_zonas" {
-  type    = number
-  default = 2
-  validation {
-    condition     = var.num_zonas &gt;= 2 &amp;&amp; var.num_zonas &lt;= 3
-    error_message = "Entre 2 y 3 zonas (el ALB necesita al menos 2)."
-  }
-}
-
-output "vpc_id" {
-  value = aws_vpc.this.id
-}
-
-output "public_subnet_ids" {
-  value = [for s in aws_subnet.publica : s.id]
-}</code></pre></figure>
-<h3 id="modulo-web">Módulo web</h3>
-<figure class="code"><figcaption><span>modules/web/main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">data "aws_ami" "al2023" {
-  most_recent = true
-  owners      = ["amazon"]
-  filter {
-    name   = "name"
-    values = ["al2023-ami-2023.*-x86_64"]
-  }
-}
-
-# --- Security groups ---
-resource "aws_security_group" "alb" {
-  name_prefix = "${var.nombre}-alb-"
-  vpc_id      = var.vpc_id
-}
-
-resource "aws_vpc_security_group_ingress_rule" "alb_http" {
-  # trivy:ignore:AVD-AWS-0107 El balanceador es público por diseño
-  security_group_id = aws_security_group.alb.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 80
-  to_port           = 80
-  ip_protocol       = "tcp"
-}
-
-resource "aws_vpc_security_group_egress_rule" "alb_a_app" {
-  security_group_id            = aws_security_group.alb.id
-  referenced_security_group_id = aws_security_group.app.id
-  from_port                    = 80
-  to_port                      = 80
-  ip_protocol                  = "tcp"
-}
-
-resource "aws_security_group" "app" {
-  name_prefix = "${var.nombre}-app-"
-  vpc_id      = var.vpc_id
-}
-
-# Las instancias SOLO aceptan tráfico del balanceador
-resource "aws_vpc_security_group_ingress_rule" "app_desde_alb" {
-  security_group_id            = aws_security_group.app.id
-  referenced_security_group_id = aws_security_group.alb.id
-  from_port                    = 80
-  to_port                      = 80
-  ip_protocol                  = "tcp"
-}
-
-resource "aws_vpc_security_group_egress_rule" "app_salida" {
-  security_group_id = aws_security_group.app.id
-  cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "-1"
-}
-
-# --- Balanceador ---
+<p>El código completo de los dos módulos (con sus variables y outputs) está en la carpeta <code>labs/15-proyecto-final</code> del repositorio.</p>
+<h3 id="el-modulo-web">El módulo web</h3>
+<p>Este módulo crea el balanceador, los servidores y dos firewalls: uno para el balanceador (abierto a Internet) y otro para los servidores (solo acepta visitas que vengan del balanceador). Las partes principales:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">modules/web/main.tf (resumen)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl"># Balanceador
 resource "aws_lb" "this" {
   name_prefix        = "web-"
   load_balancer_type = "application"
@@ -187,97 +164,24 @@ resource "aws_lb" "this" {
   security_groups    = [aws_security_group.alb.id]
 }
 
-resource "aws_lb_target_group" "this" {
-  name_prefix = "web-"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = var.vpc_id
-
-  health_check {
-    path    = "/"
-    matcher = "200"
-  }
-}
-
-resource "aws_lb_listener" "http" {
-  load_balancer_arn = aws_lb.this.arn
-  port              = 80
-  protocol          = "HTTP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.this.arn
-  }
-}
-
-# --- Servidores ---
+# Plantilla para crear servidores iguales
 resource "aws_launch_template" "this" {
-  name_prefix            = "${var.nombre}-"
-  image_id               = data.aws_ami.al2023.id
-  instance_type          = var.tipo_instancia
-  vpc_security_group_ids = [aws_security_group.app.id]
-
-  metadata_options {
-    http_tokens = "required"
-  }
-
-  user_data = base64encode(&lt;&lt;-EOF
-    #!/bin/bash
-    dnf install -y nginx
-    TOKEN=$(curl -s -X PUT http://169.254.169.254/latest/api/token \
-      -H "X-aws-ec2-metadata-token-ttl-seconds: 60")
-    ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" \
-      http://169.254.169.254/latest/meta-data/instance-id)
-    echo "&lt;h1&gt;${var.nombre}&lt;/h1&gt;&lt;p&gt;Servido por $ID&lt;/p&gt;" &gt; /usr/share/nginx/html/index.html
-    systemctl enable --now nginx
-  EOF
-  )
+  name_prefix   = "${var.nombre}-"
+  image_id      = data.aws_ami.al2023.id
+  instance_type = var.tipo_instancia
+  # ... script que instala nginx ...
 }
 
+# Grupo de servidores
 resource "aws_autoscaling_group" "this" {
-  name_prefix         = "${var.nombre}-"
   min_size            = var.min_instancias
   max_size            = var.max_instancias
-  desired_capacity    = var.min_instancias
   vpc_zone_identifier = var.subnet_ids
   target_group_arns   = [aws_lb_target_group.this.arn]
-  health_check_type   = "ELB"
 
   launch_template {
     id      = aws_launch_template.this.id
     version = "$Latest"
-  }
-
-  instance_refresh {
-    strategy = "Rolling"
-  }
-
-  tag {
-    key                 = "Name"
-    value               = var.nombre
-    propagate_at_launch = true
-  }
-}</code></pre></figure>
-<figure class="code"><figcaption><span>modules/web/variables.tf + outputs.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "nombre" { type = string }
-variable "vpc_id" { type = string }
-variable "subnet_ids" { type = list(string) }
-
-variable "tipo_instancia" {
-  type    = string
-  default = "t3.micro"
-}
-
-variable "min_instancias" {
-  type    = number
-  default = 2
-}
-
-variable "max_instancias" {
-  type    = number
-  default = 4
-  validation {
-    condition     = var.max_instancias &lt;= 6
-    error_message = "Máximo 6 instancias para controlar el coste."
   }
 }
 
@@ -285,31 +189,7 @@ output "url" {
   value = "http://${aws_lb.this.dns_name}"
 }</code></pre></figure>
 <h3 id="el-entorno-dev">El entorno dev</h3>
-<figure class="code"><figcaption><span>envs/dev/main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
-  required_version = "&gt;= 1.10"
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~&gt; 6.0"
-    }
-  }
-  backend "s3" {
-    bucket       = "tfstate-123456789012-eu-west-1"
-    key          = "proyecto-final/dev/terraform.tfstate"
-    region       = "eu-west-1"
-    encrypt      = true
-    use_lockfile = true
-  }
-}
-
-provider "aws" {
-  region = "eu-west-1"
-  default_tags {
-    tags = { Proyecto = "proyecto-final", Entorno = "dev", Gestion = "terraform" }
-  }
-}
-
-module "network" {
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">envs/dev/main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">module "network" {
   source   = "../../modules/network"
   nombre   = "pf-dev"
   vpc_cidr = "10.0.0.0/16"
@@ -328,35 +208,34 @@ module "web" {
 output "url" {
   value = module.web.url
 }</code></pre></figure>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ cd envs/dev &amp;&amp; terraform init &amp;&amp; terraform apply
-...
-Plan: 19 to add, 0 to change, 0 to destroy.
-...
-Outputs:
-url = "http://web-20261119123456-1234567890.eu-west-1.elb.amazonaws.com"
-
-$ for i in 1 2 3 4; do curl -s $(terraform output -raw url); echo; done
-&lt;h1&gt;pf-dev&lt;/h1&gt;&lt;p&gt;Servido por i-0aaa111&lt;/p&gt;
-&lt;h1&gt;pf-dev&lt;/h1&gt;&lt;p&gt;Servido por i-0bbb222&lt;/p&gt;
-&lt;h1&gt;pf-dev&lt;/h1&gt;&lt;p&gt;Servido por i-0aaa111&lt;/p&gt;
-&lt;h1&gt;pf-dev&lt;/h1&gt;&lt;p&gt;Servido por i-0bbb222&lt;/p&gt;</code></pre></figure>
-<p>¡El balanceador reparte las peticiones entre las dos instancias! Las instancias tardan 2-3 minutos en pasar el <em>health check</em>; hasta entonces verás errores 502/503.</p>
-<h3 id="ideas-para-subir-de-nivel">Ideas para subir de nivel</h3>
-<ul><li>Mover las instancias a <strong>subredes privadas</strong> con NAT Gateway (o VPC endpoints) — es lo correcto en producción, aunque cueste más.</li><li>Añadir <strong>HTTPS</strong> con un certificado de ACM y un dominio en Route 53.</li><li>Una política de <strong>autoescalado</strong> por CPU (<code>aws_autoscaling_policy</code> con <em>target tracking</em>).</li><li>Una base de datos <strong>RDS</strong> en subredes privadas con <code>manage_master_user_password</code>.</li><li><strong>CloudFront</strong> delante del bucket de estáticos.</li><li>Alarmas de <strong>CloudWatch</strong> y un dashboard, todo en Terraform.</li></ul>
-<h3 id="rubrica-de-evaluacion">Rúbrica de evaluación</h3>
-<div class="table-wrap"><table class="data"><thead><tr><th>Criterio</th><th>Peso</th><th>Excelente si…</th></tr></thead><tbody><tr><td>Funciona</td><td>30 %</td><td>Despliega y destruye a la primera; la URL responde desde varias instancias</td></tr><tr><td>Organización</td><td>20 %</td><td>Módulos con responsabilidad clara, entornos separados, nombres consistentes</td></tr><tr><td>Seguridad</td><td>20 %</td><td>Sin secretos, IMDSv2, instancias solo accesibles desde el ALB, escáner limpio</td></tr><tr><td>Automatización</td><td>15 %</td><td>CI con fmt/validate/tflint/plan; tests que pasan</td></tr><tr><td>Documentación</td><td>15 %</td><td>README con diagrama, cómo desplegar, outputs y coste estimado</td></tr></tbody></table></div>
-<h3 id="la-certificacion-terraform-associate">La certificación Terraform Associate</h3>
-<p>La certificación <strong>HashiCorp Certified: Terraform Associate</strong> valida los conocimientos de este curso. Datos orientativos (compruébalos siempre en la web oficial de HashiCorp, porque cambian con cada versión del examen):</p>
-<ul><li>Formato: online y supervisado, unos 60 minutos, preguntas de opción múltiple, verdadero/falso y respuesta corta.</li><li>Validez: 2 años.</li><li>Nivel: el de este curso. No hace falta experiencia profesional previa.</li></ul>
-<p>Temas que más se preguntan y dónde los has visto:</p>
-<div class="table-wrap"><table class="data"><thead><tr><th>Tema</th><th>Módulo</th></tr></thead><tbody><tr><td>Ventajas de IaC y de Terraform frente a otras herramientas</td><td>00</td></tr><tr><td>Flujo init / validate / plan / apply / destroy y qué hace cada uno</td><td>02</td></tr><tr><td>Restricciones de versión, lock file, <code>init -upgrade</code></td><td>05</td></tr><tr><td>Precedencia de variables, tipos, <code>sensitive</code></td><td>04</td></tr><tr><td>count vs for_each, dynamic, funciones (<code>lookup</code>, <code>merge</code>, <code>toset</code>, <code>cidrsubnet</code>)</td><td>07, 08</td></tr><tr><td>Estado: para qué sirve, comandos <code>state</code>, drift, <code>-refresh-only</code>, <code>-replace</code></td><td>09</td></tr><tr><td>Backends, bloqueo, configuración parcial, workspaces</td><td>10</td></tr><tr><td>Módulos: fuentes, versiones, inputs/outputs, Registry</td><td>11</td></tr><tr><td><code>import</code>, <code>moved</code>, logs con <code>TF_LOG</code></td><td>12</td></tr><tr><td>HCP Terraform: workspaces remotos, ejecuciones, Sentinel, registro privado</td><td>10, 14</td></tr></tbody></table></div>
-<p>Consejos para el examen:</p>
-<ol><li>Repasa la <strong>chuleta de comandos</strong> del curso hasta saber qué hace cada flag.</li><li>Haz los <strong>tests de autoevaluación</strong> de todos los módulos y repite los que no aprobaste.</li><li>Lee los tutoriales oficiales de <em>developer.hashicorp.com/terraform</em> y su guía de estudio.</li><li>Practica, practica: escribir código es la mejor preparación. Las preguntas son muy prácticas.</li></ol></section>
-<section id="practica"><h2>🛠 Práctica guiada: Web escalable en AWS</h2><ol class="pasos"><li>Dibuja el diagrama de arquitectura antes de escribir código.</li><li>Implementa los módulos <code>network</code>, <code>web</code> y <code>static-site</code>.</li><li>Despliega <code>dev</code> desde CI y comprueba la URL del balanceador.</li><li>Ejecuta <code>infracost</code> y documenta el coste estimado.</li><li>Destruye todo y deja constancia en el README.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
-<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform plan -var-file=prod.tfvars -out=prod.tfplan</code></td><td>Plan de producción guardado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -var-file=prod.tfvars -out=prod.tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform destroy -var-file=dev.tfvars</code></td><td>Limpieza final del entorno.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform destroy -var-file=dev.tfvars" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
-<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt>Olvidar destruir el NAT Gateway o el ALB</dt><dd>Son de los recursos que más cobran por hora. Revisa la factura al día siguiente.</dd></div></dl></section>
-<section id="test"><h2>✅ Test de autoevaluación</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="15" data-total="10"><fieldset class="q" data-ok="0"><legend><span class="qn">1</span><span class="txt">Simulacro · ¿Qué comando debes ejecutar tras añadir un nuevo provider al código?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform init</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform providers</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform refresh</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">terraform plan</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Cualquier provider o módulo nuevo requiere init.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">2</span><span class="txt">Simulacro · ¿Qué afirmación sobre el estado es FALSA?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Puede contener secretos</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Terraform lo necesita para funcionar</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Debe guardarse en un backend remoto en equipos</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Es seguro subirlo a un repositorio público si se marca sensitive</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>sensitive</code> no cifra nada en el estado.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">3</span><span class="txt">Simulacro · ¿Qué hace <code>terraform apply -refresh-only</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Destruye el drift</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Actualiza el estado para que refleje la realidad sin modificar la infraestructura</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Recrea todos los recursos</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Actualiza los providers</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Sincroniza estado ← realidad, previa confirmación.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">4</span><span class="txt">Simulacro · Tienes <code>variable "x" { default = 1 }</code>, <code>TF_VAR_x=2</code> y <code>x = 3</code> en terraform.tfvars. ¿Valor de var.x?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">2</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Error</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">1</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">3</span></button></div><p class="exp" hidden><strong class="verdict"></strong> terraform.tfvars tiene prioridad sobre las variables de entorno.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">5</span><span class="txt">Simulacro · ¿Qué meta-argumento evita recrear recursos al quitar un elemento intermedio de una colección?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">for_each</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">count</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">provider</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">depends_on</span></button></div><p class="exp" hidden><strong class="verdict"></strong> for_each identifica cada copia por clave, no por posición.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">6</span><span class="txt">Simulacro · ¿Dónde se guardan los providers descargados por init?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">En el estado</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">En la carpeta .terraform del proyecto</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">En el lock file</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">En ~/.aws</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El lock file solo guarda versiones y hashes; los binarios van a .terraform/.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">7</span><span class="txt">Simulacro · ¿Qué variable de entorno activa los logs detallados de Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">TF_DEBUG</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">TERRAFORM_VERBOSE</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">TF_LOG</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">TF_VAR_log</span></button></div><p class="exp" hidden><strong class="verdict"></strong> TF_LOG=TRACE|DEBUG|INFO|WARN|ERROR; TF_LOG_PATH para guardarlos.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">8</span><span class="txt">Simulacro · ¿Cómo referencias el output <code>vpc_id</code> del módulo <code>network</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">output.network.vpc_id</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">module.network.vpc_id</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">network.vpc_id</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">data.network.vpc_id</span></button></div><p class="exp" hidden><strong class="verdict"></strong> module.NOMBRE.OUTPUT.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">9</span><span class="txt">Simulacro · ¿Qué bloque permite renombrar un recurso sin destruirlo y queda registrado en el código?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">import</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">moved</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">rename</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">removed</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Disponible desde Terraform 1.1.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">10</span><span class="txt">Simulacro · ¿Qué es cierto sobre los workspaces CLI?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Sustituyen al backend</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Solo existen en HCP Terraform</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Cada uno tiene su propio código</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Cada uno tiene su propio estado con el mismo código</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Mismo código, estados separados; <code>terraform.workspace</code> da el nombre actual.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
-<section id="retos"><h2>🏋️ Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1: Entorno prod</h3><p>Crea <code>envs/prod</code> reutilizando los módulos, con otra <code>key</code> de estado, otra VPC (<code>10.10.0.0/16</code>), 3 zonas y entre 2 y 4 instancias <code>t3.small</code>.</p><details><summary>💡 Ver pista</summary><p>Copia <code>envs/dev</code> y cambia solo lo necesario. Comprueba con <code>terraform plan</code> que no toca nada de dev.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># envs/prod/main.tf (lo que cambia respecto a dev)
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="cd envs/dev
+terraform init
+terraform apply
+curl http://web-20261119-1234567890.eu-west-1.elb.amazonaws.com
+curl http://web-20261119-1234567890.eu-west-1.elb.amazonaws.com">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">cd envs/dev</span>
+<span class="prompt">$ </span><span class="cmdline">terraform init</span>
+<span class="prompt">$ </span><span class="cmdline">terraform apply</span>
+<span class="out">...</span>
+<span class="out">Outputs:</span>
+<span class="out">url = "http://web-20261119-1234567890.eu-west-1.elb.amazonaws.com"</span>
+<span class="out"></span>
+<span class="prompt">$ </span><span class="cmdline">curl http://web-20261119-1234567890.eu-west-1.elb.amazonaws.com</span>
+<span class="out">&lt;h1&gt;pf-dev&lt;/h1&gt;&lt;p&gt;Servido por i-0aaa111&lt;/p&gt;</span>
+<span class="prompt">$ </span><span class="cmdline">curl http://web-20261119-1234567890.eu-west-1.elb.amazonaws.com</span>
+<span class="out">&lt;h1&gt;pf-dev&lt;/h1&gt;&lt;p&gt;Servido por i-0bbb222&lt;/p&gt;</span></code></pre></figure>
+<p>Cada visita la atiende un servidor distinto: el balanceador está repartiendo el trabajo.</p>
+<div class="callout tip"><span class="k">Consejo</span>Los servidores tardan 2 o 3 minutos en estar listos. Hasta entonces verás errores 502 o 503.</div>
+<h3 id="como-se-evalua">Cómo se evalúa</h3>
+<div class="table-wrap"><table><thead><tr><th>Criterio</th><th>Peso</th><th>Qué se valora</th></tr></thead><tbody><tr><td>Funciona</td><td>30 %</td><td>Se crea y se borra sin errores, y la web responde</td></tr><tr><td>Organización</td><td>20 %</td><td>Módulos claros y entornos separados</td></tr><tr><td>Seguridad</td><td>20 %</td><td>Sin contraseñas en el código; servidores solo accesibles desde el balanceador</td></tr><tr><td>Automatización</td><td>15 %</td><td>GitHub Actions con fmt, validate y plan; tests que pasan</td></tr><tr><td>Documentación</td><td>15 %</td><td>README con esquema e instrucciones</td></tr></tbody></table></div>
+<h3 id="la-certificacion-oficial">La certificación oficial</h3>
+<p>HashiCorp ofrece la certificación <strong>Terraform Associate</strong>, que valida lo que has aprendido en este curso. Es un examen online de unos 60 minutos con preguntas tipo test. Consulta los detalles actualizados en la web de HashiCorp.</p>
+<p>Para prepararla:</p>
+<ol><li>Repasa la chuleta de comandos hasta saber qué hace cada uno.</li><li>Repite los tests de todos los módulos hasta aprobarlos.</li><li>Haz el simulacro de este módulo.</li><li>Practica escribiendo código: es la mejor preparación.</li></ol></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Web escalable en AWS</strong></p><ol class="pasos"><li>Dibuja el diagrama de arquitectura antes de escribir código.</li><li>Implementa los módulos <code>network</code>, <code>web</code> y <code>static-site</code>.</li><li>Despliega <code>dev</code> desde CI y comprueba la URL del balanceador.</li><li>Ejecuta <code>infracost</code> y documenta el coste estimado.</li><li>Destruye todo y deja constancia en el README.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform plan -var-file=prod.tfvars -out=prod.tfplan</code></td><td>Plan de producción guardado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -var-file=prod.tfvars -out=prod.tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform destroy -var-file=dev.tfvars</code></td><td>Limpieza final del entorno.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform destroy -var-file=dev.tfvars" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt>Olvidar destruir el NAT Gateway o el ALB</dt><dd>Son de los recursos que más cobran por hora. Revisa la factura al día siguiente.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="15" data-total="10"><fieldset class="q" data-ok="0"><legend><span class="qn">01</span><span class="txt">Simulacro · ¿Qué comando debes ejecutar tras añadir un nuevo provider al código?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform init</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform providers</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform refresh</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">terraform plan</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Cualquier provider o módulo nuevo requiere init.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">02</span><span class="txt">Simulacro · ¿Qué afirmación sobre el estado es FALSA?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Puede contener secretos</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Terraform lo necesita para funcionar</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Debe guardarse en un backend remoto en equipos</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Es seguro subirlo a un repositorio público si se marca sensitive</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>sensitive</code> no cifra nada en el estado.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">03</span><span class="txt">Simulacro · ¿Qué hace <code>terraform apply -refresh-only</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Destruye el drift</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Actualiza el estado para que refleje la realidad sin modificar la infraestructura</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Recrea todos los recursos</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Actualiza los providers</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Sincroniza estado ← realidad, previa confirmación.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">04</span><span class="txt">Simulacro · Tienes <code>variable "x" { default = 1 }</code>, <code>TF_VAR_x=2</code> y <code>x = 3</code> en terraform.tfvars. ¿Valor de var.x?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">2</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Error</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">1</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">3</span></button></div><p class="exp" hidden><strong class="verdict"></strong> terraform.tfvars tiene prioridad sobre las variables de entorno.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">05</span><span class="txt">Simulacro · ¿Qué meta-argumento evita recrear recursos al quitar un elemento intermedio de una colección?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">for_each</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">count</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">provider</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">depends_on</span></button></div><p class="exp" hidden><strong class="verdict"></strong> for_each identifica cada copia por clave, no por posición.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">06</span><span class="txt">Simulacro · ¿Dónde se guardan los providers descargados por init?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">En el estado</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">En la carpeta .terraform del proyecto</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">En el lock file</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">En ~/.aws</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El lock file solo guarda versiones y hashes; los binarios van a .terraform/.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">07</span><span class="txt">Simulacro · ¿Qué variable de entorno activa los logs detallados de Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">TF_DEBUG</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">TERRAFORM_VERBOSE</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">TF_LOG</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">TF_VAR_log</span></button></div><p class="exp" hidden><strong class="verdict"></strong> TF_LOG=TRACE|DEBUG|INFO|WARN|ERROR; TF_LOG_PATH para guardarlos.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">08</span><span class="txt">Simulacro · ¿Cómo referencias el output <code>vpc_id</code> del módulo <code>network</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">output.network.vpc_id</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">module.network.vpc_id</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">network.vpc_id</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">data.network.vpc_id</span></button></div><p class="exp" hidden><strong class="verdict"></strong> module.NOMBRE.OUTPUT.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">09</span><span class="txt">Simulacro · ¿Qué bloque permite renombrar un recurso sin destruirlo y queda registrado en el código?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">import</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">moved</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">rename</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">removed</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Disponible desde Terraform 1.1.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">10</span><span class="txt">Simulacro · ¿Qué es cierto sobre los workspaces CLI?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Sustituyen al backend</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Solo existen en HCP Terraform</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Cada uno tiene su propio código</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Cada uno tiene su propio estado con el mismo código</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Mismo código, estados separados; <code>terraform.workspace</code> da el nombre actual.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Entorno prod</h3><p>Crea <code>envs/prod</code> reutilizando los módulos, con otra <code>key</code> de estado, otra VPC (<code>10.10.0.0/16</code>), 3 zonas y entre 2 y 4 instancias <code>t3.small</code>.</p><details><summary>Ver pista</summary><p>Copia <code>envs/dev</code> y cambia solo lo necesario. Comprueba con <code>terraform plan</code> que no toca nada de dev.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl"># envs/prod/main.tf (lo que cambia respecto a dev)
 #   backend:  key = "proyecto-final/prod/terraform.tfstate"
 #   tags:     Entorno = "prod"
 
@@ -376,7 +255,7 @@ module "web" {
   min_instancias = 2
   max_instancias = 4
 }</code></pre></figure></details></article>
-<article class="reto"><h3>Reto 2: Test del módulo network con mocks</h3><p>Escribe <code>modules/network/tests/network.tftest.hcl</code> con un <code>mock_provider "aws"</code> que compruebe que con <code>num_zonas = 3</code> se crean 3 subredes y que la primera tiene el CIDR <code>10.0.0.0/24</code>.</p><details><summary>💡 Ver pista</summary><p>El data source de zonas también se mockea: <code>mock_data "aws_availability_zones" { defaults = { names = [...] } }</code>.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">mock_provider "aws" {
+<article class="reto"><h3>Reto 2. Test del módulo network con mocks</h3><p>Escribe <code>modules/network/tests/network.tftest.hcl</code> con un <code>mock_provider "aws"</code> que compruebe que con <code>num_zonas = 3</code> se crean 3 subredes y que la primera tiene el CIDR <code>10.0.0.0/24</code>.</p><details><summary>Ver pista</summary><p>El data source de zonas también se mockea: <code>mock_data "aws_availability_zones" { defaults = { names = [...] } }</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">mock_provider "aws" {
   mock_data "aws_availability_zones" {
     defaults = {
       names = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
@@ -403,13 +282,11 @@ run "tres_subredes" {
   }
 }</code></pre></figure></details></article></section>
 <div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="15"> He completado este módulo</label></div>
-<nav class="pager" aria-label="Módulos"><a class="prev" href="14-equipo-cicd.html"><small>← Anterior</small>Trabajo en equipo y CI/CD</a><span></span></nav></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="14-equipo-cicd.html"><small>Anterior</small>Trabajo en equipo y CI/CD</a><span></span></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
 </main>
-<footer class="site-footer">
-  <div class="wrap">
-    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
-  </div>
-</footer>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>

@@ -2,34 +2,48 @@
 # Módulo 06 · Recursos, data sources y dependencias
 
 LECCION = [
- ("h", "Argumentos y atributos"),
- ("p", "Cada recurso tiene dos tipos de datos:"),
+ ("h", "Lo que escribes y lo que recibes"),
+ ("p", "Cada recurso tiene dos clases de datos:"),
  ("ul", [
-  "**Argumentos**: lo que tú escribes (`instance_type = \"t3.micro\"`).",
-  "**Atributos**: lo que el recurso expone después de crearse, incluidos los argumentos y valores calculados por la nube (`id`, `arn`, `public_ip`…).",
+  "**Argumentos**: lo que tú escribes. Por ejemplo, el tamaño del servidor: `instance_type = \"t3.micro\"`.",
+  "**Atributos**: lo que AWS te devuelve al crearlo. Por ejemplo, su IP pública: `public_ip`.",
  ]),
- ("p", "Los atributos calculados aparecen en el plan como `(known after apply)` porque AWS los asigna en el momento de crear el recurso."),
- ("info", "Este módulo crea una instancia EC2 `t3.micro`, incluida en la capa gratuita de AWS en la mayoría de cuentas nuevas. Fuera de ella cuesta unos céntimos por hora. **Destruye todo al terminar.**"),
+ ("p", "Por eso en el plan algunos valores aparecen como `(known after apply)`: AWS los decide al crear el recurso."),
+ ("info", "En este módulo creamos un servidor pequeño (`t3.micro`), gratis en la capa gratuita de AWS. Bórralo siempre al terminar."),
 
- ("h", "Data sources: leer lo que ya existe"),
- ("p", "Un bloque `data` **no crea nada**: consulta información que ya existe (en AWS o donde sea) para usarla en tu configuración. Se referencia con el prefijo `data.`:"),
- ("code", "hcl", "data.tf", """# ¿Quién soy? (cuenta y usuario actual)
-data "aws_caller_identity" "actual" {}
+ ("h", "Consultar cosas que ya existen: data"),
+ ("p", "Un bloque `data` **no crea nada**: solo busca información. Por ejemplo, la imagen de sistema operativo más reciente para un servidor:"),
+ ("code", "hcl", "data.tf", """data "aws_ami" "amazon_linux" {
+  most_recent = true
+  owners      = ["amazon"]
 
-# ¿En qué región estoy?
-data "aws_region" "actual" {}
+  filter {
+    name   = "name"
+    values = ["al2023-ami-2023.*-x86_64"]
+  }
+}"""),
+ ("p", "Se usa con el prefijo `data.`: `data.aws_ami.amazon_linux.id`."),
+ ("p", "¿Por qué no escribir el código de la imagen directamente? Porque cambia según la región y cada pocas semanas sale una versión nueva. Así siempre usas la correcta."),
 
-# Zonas de disponibilidad de la región
-data "aws_availability_zones" "disponibles" {
-  state = "available"
+ ("h", "El orden lo decide Terraform"),
+ ("p", "Cuando un recurso usa datos de otro, Terraform sabe que debe crearlo después. Con eso calcula el orden y crea **a la vez** lo que no depende entre sí."),
+ ("code", "text", "orden en el ejemplo de este módulo", """imagen (data)  ──────┐
+                     ├──>  servidor
+firewall  ───────────┘
+   └──> reglas del firewall"""),
+ ("p", "Al borrar, el orden es el contrario: primero el servidor y después el firewall."),
+ ("p", "Si hay una dependencia que Terraform no puede ver (porque no hay ninguna referencia), puedes indicarla con `depends_on`. Úsalo solo cuando sea necesario:"),
+ ("code", "hcl", "depends_on", """resource "aws_instance" "app" {
+  # ...
+  depends_on = [aws_s3_bucket.logs]
+}"""),
+
+ ("h", "Práctica: un servidor web"),
+ ("p", "Vamos a crear un servidor con una página web. Necesitamos tres cosas: la imagen del sistema, un **firewall** (en AWS se llama *security group*) y el **servidor** (en AWS, *instancia EC2*)."),
+ ("code", "hcl", "main.tf", """provider "aws" {
+  region = "eu-west-1"
 }
 
-# La VPC por defecto que AWS crea en cada región
-data "aws_vpc" "default" {
-  default = true
-}
-
-# La imagen (AMI) más reciente de Amazon Linux 2023
 data "aws_ami" "amazon_linux" {
   most_recent = true
   owners      = ["amazon"]
@@ -40,83 +54,13 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-output "info" {
-  value = {
-    cuenta = data.aws_caller_identity.actual.account_id
-    region = data.aws_region.actual.region
-    zonas  = data.aws_availability_zones.disponibles.names
-    ami    = data.aws_ami.amazon_linux.id
-  }
-}"""),
- ("p", "¿Por qué no escribir el ID de la AMI directamente? Porque cambia en cada región y Amazon publica versiones nuevas cada pocas semanas. Con el data source siempre obtienes la correcta."),
- ("tip", "En el plan, los data sources aparecen con `<=` (*read*). Puedes probarlos con `terraform apply` sin crear ningún recurso."),
-
- ("h", "Dependencias implícitas y el grafo"),
- ("p", "Cuando un recurso hace referencia a otro, Terraform crea una **dependencia implícita**. Con todas ellas construye un **grafo** que decide el orden y qué puede hacerse en paralelo (por defecto, hasta 10 operaciones a la vez)."),
- ("code", "text", "grafo del ejemplo de este módulo", """data.aws_ami.amazon_linux ──────────────┐
-                                        ▼
-aws_security_group.web ──────────► aws_instance.web
-        │
-        ├──► aws_vpc_security_group_ingress_rule.http
-        └──► aws_vpc_security_group_egress_rule.todo"""),
- ("p", "El security group y la AMI no dependen entre sí, así que se procesan **a la vez**. La instancia espera a ambos. Al destruir, el orden se invierte."),
- ("code", "bash", "ver el grafo", """# Necesita Graphviz: brew install graphviz / sudo apt install graphviz
-terraform graph | dot -Tsvg > grafo.svg"""),
-
- ("h", "Dependencias explícitas: depends_on"),
- ("p", "A veces existe una dependencia que Terraform no puede ver porque no hay referencia directa. Por ejemplo, una aplicación que necesita que exista una política IAM aunque no la nombre. Para eso está `depends_on`:"),
- ("code", "hcl", "depends_on", """resource "aws_s3_bucket" "logs" {
-  bucket_prefix = "logs-"
-}
-
-resource "aws_instance" "app" {
-  ami           = data.aws_ami.amazon_linux.id
-  instance_type = "t3.micro"
-
-  # la app escribe en el bucket al arrancar, pero no lo referenciamos
-  depends_on = [aws_s3_bucket.logs]
-}"""),
- ("warn", "Usa `depends_on` solo como último recurso. Si puedes pasar un valor de un recurso a otro, hazlo: la dependencia queda clara y Terraform optimiza mejor."),
-
- ("h", "Práctica: un servidor web en EC2"),
- ("p", "Vamos a desplegar un servidor web accesible desde Internet en la VPC por defecto. Necesitamos tres piezas: la imagen (AMI), un **security group** (el firewall) y la **instancia**."),
- ("code", "hcl", "versions.tf + providers.tf", """terraform {
-  required_version = ">= 1.10"
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 6.0"
-    }
-  }
-}
-
-provider "aws" {
-  region = var.region
-  default_tags {
-    tags = { Gestion = "terraform", Curso = "modulo-06" }
-  }
-}
-
-variable "region" {
-  type    = string
-  default = "eu-west-1"
-}"""),
- ("code", "hcl", "main.tf", """data "aws_ami" "amazon_linux" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["al2023-ami-2023.*-x86_64"]
-  }
-}
-
-# Firewall: permite HTTP de entrada y todo de salida
+# Firewall
 resource "aws_security_group" "web" {
   name_prefix = "web-"
-  description = "Permite HTTP desde Internet"
+  description = "Permite HTTP"
 }
 
+# Regla: dejar entrar visitas web (puerto 80)
 resource "aws_vpc_security_group_ingress_rule" "http" {
   security_group_id = aws_security_group.web.id
   cidr_ipv4         = "0.0.0.0/0"
@@ -125,86 +69,72 @@ resource "aws_vpc_security_group_ingress_rule" "http" {
   ip_protocol       = "tcp"
 }
 
+# Regla: dejar salir todo (para descargar programas)
 resource "aws_vpc_security_group_egress_rule" "todo" {
   security_group_id = aws_security_group.web.id
   cidr_ipv4         = "0.0.0.0/0"
-  ip_protocol       = "-1" # todos los protocolos
+  ip_protocol       = "-1"
 }
 
+# Servidor
 resource "aws_instance" "web" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = "t3.micro"
   vpc_security_group_ids = [aws_security_group.web.id]
 
-  # Script que se ejecuta en el primer arranque
+  # Script que se ejecuta al arrancar: instala un servidor web
   user_data = <<-EOF
     #!/bin/bash
     dnf install -y nginx
-    echo "<h1>Hola desde Terraform</h1><p>Servidor: $(hostname)</p>" \\
-      > /usr/share/nginx/html/index.html
+    echo "<h1>Hola desde Terraform</h1>" > /usr/share/nginx/html/index.html
     systemctl enable --now nginx
   EOF
 
-  # Si cambia user_data, recrear la instancia para que se vuelva a ejecutar
   user_data_replace_on_change = true
 
   tags = {
     Name = "web-curso-terraform"
   }
-}"""),
- ("code", "hcl", "outputs.tf", """output "ip_publica" {
-  value = aws_instance.web.public_ip
 }
 
 output "url" {
   value = "http://${aws_instance.web.public_ip}"
 }"""),
- ("term", """$ terraform apply
+ ("term", """$ terraform init
+$ terraform apply
 ...
 Plan: 4 to add, 0 to change, 0 to destroy.
 ...
-aws_security_group.web: Creating...
-aws_security_group.web: Creation complete after 2s [id=sg-0a1b2c3d4e5f]
-aws_vpc_security_group_egress_rule.todo: Creating...
-aws_vpc_security_group_ingress_rule.http: Creating...
-aws_instance.web: Creating...
-aws_instance.web: Still creating... [10s elapsed]
-aws_instance.web: Creation complete after 13s [id=i-0123456789abcdef0]
+aws_security_group.web: Creation complete after 2s
+aws_instance.web: Creation complete after 13s
 
 Outputs:
-ip_publica = "54.170.10.20"
 url = "http://54.170.10.20"
 
-$ curl $(terraform output -raw url)     # espera 1-2 minutos a que arranque nginx
-<h1>Hola desde Terraform</h1><p>Servidor: ip-172-31-5-10...</p>"""),
- ("info", "Para entrar al servidor por terminal sin abrir el puerto 22, AWS ofrece *Session Manager* y *EC2 Instance Connect*. Lo veremos más adelante; de momento no abras SSH a todo Internet."),
+$ curl http://54.170.10.20
+<h1>Hola desde Terraform</h1>"""),
+ ("tip", "El servidor tarda uno o dos minutos en instalar la web. Si al principio no carga, espera un poco."),
 
- ("h", "¿Actualizar o reemplazar?"),
- ("p", "Haz pequeños cambios y observa el plan antes de aplicarlos:"),
- ("table", ["Cambio", "Resultado en el plan"], [
-  ["Cambiar el tag `Name`", "`~` update in-place (instantáneo)"],
-  ["Cambiar `instance_type` a `t3.small`", "`~` update in-place (AWS para y arranca la instancia)"],
-  ["Cambiar `user_data`", "`-/+` reemplazo (por `user_data_replace_on_change`)"],
-  ["Cambiar la `ami`", "`-/+` reemplazo: la máquina se destruye y se crea otra"],
-  ["Cambiar la `description` del security group", "`-/+` reemplazo"],
+ ("h", "Modificar o recrear"),
+ ("p", "Cambia algo y mira el plan antes de aplicar. Algunos cambios se hacen sobre el mismo recurso (`~`) y otros obligan a borrarlo y crearlo de nuevo (`-/+`):"),
+ ("table", ["Cambio", "Qué pasa"], [
+  ["Cambiar la etiqueta `Name`", "Se modifica (`~`)"],
+  ["Cambiar `instance_type` a `t3.small`", "Se modifica (`~`); el servidor se reinicia"],
+  ["Cambiar `user_data`", "Se borra y se crea de nuevo (`-/+`)"],
+  ["Cambiar la imagen (`ami`)", "Se borra y se crea de nuevo (`-/+`)"],
  ]),
- ("warn", "Un reemplazo de un servidor significa una IP pública nueva y perder todo lo que hubiera en su disco. Por eso en infraestructura moderna los servidores se tratan como desechables (*cattle, not pets*) y los datos se guardan fuera (S3, bases de datos)."),
+ ("warn", "Si un servidor se recrea, pierde todo lo que tenía en su disco y cambia de IP."),
 
- ("h", "Leer el estado de un recurso"),
- ("code", "bash", "inspección", """terraform state list
-# data.aws_ami.amazon_linux
-# aws_instance.web
-# aws_security_group.web
-# ...
-
-terraform state show aws_instance.web   # todos los atributos
-terraform console
-> aws_instance.web.availability_zone
-"eu-west-1b"
-> data.aws_ami.amazon_linux.name
-"al2023-ami-2023.6.20261110.0-kernel-6.1-x86_64\""""),
- ("p", "Y al terminar, siempre:"),
- ("code", "bash", "terminal", "terraform destroy"),
+ ("h", "Ver lo que se ha creado"),
+ ("term", """$ terraform state list
+data.aws_ami.amazon_linux
+aws_instance.web
+aws_security_group.web
+aws_vpc_security_group_egress_rule.todo
+aws_vpc_security_group_ingress_rule.http
+$ terraform state show aws_instance.web"""),
+ ("p", "Cuando termines, borra todo:"),
+ ("term", """$ terraform destroy"""),
 ]
 
 TEST = [

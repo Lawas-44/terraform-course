@@ -8,101 +8,129 @@
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/styles.css">
 <script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
-    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
-    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
-  </div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
 </header>
-<main id="contenido">
-<div class="wrap narrow">
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 16 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
+<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html" aria-current="page"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#organizar-el-repositorio">Organizar el repositorio</a></li><li><a href="#trabajar-en-equipo">Trabajar en equipo</a></li><li><a href="#guardar-el-plan-y-aplicar-ese-mismo-plan">Guardar el plan y aplicar ese mismo plan</a></li><li><a href="#conectar-github-con-aws-sin-guardar-claves">Conectar GitHub con AWS sin guardar claves</a></li><li><a href="#el-flujo-automatico-en-github-actions">El flujo automático en GitHub Actions</a></li><li><a href="#normas-para-trabajar-en-equipo">Normas para trabajar en equipo</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
 <nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 14</nav>
 <header class="mod-head">
   <p class="eyebrow">Módulo 14</p>
   <h1>Trabajo en equipo y CI/CD</h1>
   <p class="lead">Flujo con Git y Pull Requests, GitHub Actions con OIDC y HCP Terraform.</p>
-  <div class="chips"><span class="chip nivel-avanzado">Avanzado</span><span class="chip">⏱ 2,5 h</span><span class="chip">📝 6 preguntas</span><span class="chip">🏋️ 2 retos</span></div>
+  <div class="meta-row"><span>Nivel: Avanzado</span><span>Duración: 2,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span></div>
 </header>
-<nav class="toc" aria-label="En esta página"><strong>En esta página</strong><a href="#objetivos">Objetivos</a><a href="#leccion">Lección</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#test">Test</a><a href="#retos">Retos</a></nav>
-
-<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Organizar un repositorio de infraestructura para varios entornos.</li><li>Automatizar <code>fmt</code>, <code>validate</code>, <code>plan</code> en cada Pull Request.</li><li>Autenticar GitHub Actions en AWS sin claves (OIDC).</li><li>Conocer HCP Terraform y alternativas (Atlantis, Spacelift, env0).</li></ul></section>
-<section id="leccion" class="leccion"><h2>📚 Lección</h2><nav class="indice" aria-label="Índice de la lección"><strong>Índice de la lección</strong><ol><li><a href="#organizar-un-repositorio-de-infraestructura">Organizar un repositorio de infraestructura</a></li><li><a href="#el-flujo-de-trabajo-en-equipo-gitops">El flujo de trabajo en equipo (GitOps)</a></li><li><a href="#planes-guardados-y-codigos-de-salida">Planes guardados y códigos de salida</a></li><li><a href="#autenticacion-sin-claves-oidc">Autenticación sin claves: OIDC</a></li><li><a href="#pipeline-con-github-actions">Pipeline con GitHub Actions</a></li><li><a href="#reglas-de-convivencia">Reglas de convivencia</a></li><li><a href="#politicas-como-codigo">Políticas como código</a></li></ol></nav><h3 id="organizar-un-repositorio-de-infraestructura">Organizar un repositorio de infraestructura</h3>
-<p>Cuando el código crece y hay varios entornos, una estructura clara es fundamental. La más extendida separa <strong>módulos reutilizables</strong> de <strong>configuraciones por entorno</strong>:</p>
-<figure class="code"><figcaption><span>estructura recomendada</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">infra/
-├── bootstrap/               # bucket del estado (se aplica una vez)
-├── modules/                 # piezas reutilizables, sin backend ni provider
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Organizar un repositorio de infraestructura para varios entornos.</li><li>Automatizar <code>fmt</code>, <code>validate</code>, <code>plan</code> en cada Pull Request.</li><li>Autenticar GitHub Actions en AWS sin claves (OIDC).</li><li>Conocer HCP Terraform y alternativas (Atlantis, Spacelift, env0).</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="organizar-el-repositorio">Organizar el repositorio</h3>
+<p>Cuando hay varios entornos (desarrollo, producción...), conviene separar los <strong>módulos</strong> (las piezas reutilizables) de los <strong>entornos</strong> (donde se usan):</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">estructura recomendada</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">infra/
+├── modules/          # piezas reutilizables
 │   ├── network/
-│   ├── web/
-│   └── database/
+│   └── web/
 ├── envs/
-│   ├── dev/
-│   │   ├── backend.tf       # key = "dev/terraform.tfstate"
-│   │   ├── main.tf          # llama a ../../modules/*
-│   │   ├── providers.tf
-│   │   └── terraform.tfvars # valores de dev
-│   └── prod/
-│       ├── backend.tf       # key = "prod/terraform.tfstate"
+│   ├── dev/          # entorno de desarrollo (su propio estado)
+│   │   ├── main.tf
+│   │   └── terraform.tfvars
+│   └── prod/         # entorno de producción (su propio estado)
 │       ├── main.tf
-│       ├── providers.tf
 │       └── terraform.tfvars
-├── .github/workflows/terraform.yml
-├── .pre-commit-config.yaml
-├── .tflint.hcl
-└── README.md</code></pre></figure>
-<figure class="code"><figcaption><span>envs/prod/main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">module "network" {
-  source   = "../../modules/network"
-  nombre   = "tienda-prod"
-  vpc_cidr = "10.10.0.0/16"
-}
-
-module "web" {
+└── .github/workflows/terraform.yml</code></pre></figure>
+<p>Cada entorno tiene su propio estado. Así, un error en desarrollo nunca afecta a producción.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">envs/prod/main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">module "web" {
   source         = "../../modules/web"
   nombre         = "tienda-prod"
-  subnet_ids     = module.network.public_subnet_ids
-  tipo_instancia = var.tipo_instancia   # t3.medium en prod, t3.micro en dev
-  replicas       = var.replicas
+  tipo_instancia = "t3.medium"
 }</code></pre></figure>
-<ul><li>Cada entorno tiene <strong>su propio estado</strong>: un error en dev nunca toca prod.</li><li>Las diferencias entre entornos están <strong>a la vista</strong> en sus <code>tfvars</code>.</li><li>Para promocionar un cambio: se prueba en <code>envs/dev</code> y después se aplica igual en <code>envs/prod</code>.</li></ul>
-<div class="callout "><strong>ℹ️ Nota.</strong> Herramientas como <strong>Terragrunt</strong> reducen la repetición entre carpetas de entorno. Merece la pena mirarla cuando tengas muchos entornos o cuentas.</div>
-<h3 id="el-flujo-de-trabajo-en-equipo-gitops">El flujo de trabajo en equipo (GitOps)</h3>
-<p>En un equipo nadie ejecuta <code>apply</code> desde su portátil contra producción. El flujo habitual es:</p>
-<figure class="code"><figcaption><span>flujo con Pull Requests</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none"> 1. rama nueva      git switch -c feat/aumentar-replicas
- 2. cambio          editar envs/prod/terraform.tfvars
- 3. Pull Request    ──►  CI: fmt, validate, tflint, trivy, PLAN
-                         └─ el plan se publica como comentario en el PR
- 4. revisión        un compañero lee el código Y el plan
- 5. merge a main    ──►  CI: APPLY (con aprobación manual para prod)</code></pre></figure>
-<p>Ventajas: todo cambio queda revisado y registrado, nadie necesita credenciales de producción en su máquina y el plan que se revisa es el que se aplica.</p>
-<h3 id="planes-guardados-y-codigos-de-salida">Planes guardados y códigos de salida</h3>
-<p>En automatización se usan algunas opciones especiales:</p>
-<figure class="code"><figcaption><span>terraform en CI</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">export TF_IN_AUTOMATION=1        # salida adaptada a CI
-terraform init -input=false
-terraform plan -input=false -out=tfplan   # guarda el plan
-terraform show -no-color tfplan &gt; plan.txt   # versión legible para el PR
-terraform apply -input=false tfplan       # aplica EXACTAMENTE ese plan</code></pre></figure>
-<p>Aplicar un plan guardado garantiza que se ejecuta lo que se revisó, aunque alguien haya cambiado algo entre medias (si el estado cambió, Terraform rechaza el plan obsoleto).</p>
-<p>Con <code>-detailed-exitcode</code>, <code>plan</code> devuelve un código de salida útil para scripts:</p>
-<div class="table-wrap"><table class="data"><thead><tr><th>Código</th><th>Significado</th></tr></thead><tbody><tr><td>0</td><td>Sin cambios</td></tr><tr><td>1</td><td>Error</td></tr><tr><td>2</td><td>Hay cambios pendientes</td></tr></tbody></table></div>
-<figure class="code"><figcaption><span>detectar drift cada noche</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform plan -detailed-exitcode -input=false &gt; /dev/null
-if [ $? -eq 2 ]; then
-  echo "¡Hay drift en producción!"   # enviar alerta
-fi</code></pre></figure>
-<h3 id="autenticacion-sin-claves-oidc">Autenticación sin claves: OIDC</h3>
-<p>Para que GitHub Actions despliegue en AWS lo peor que puedes hacer es guardar access keys como secretos del repositorio (duran para siempre y se filtran). Lo correcto es <strong>OIDC</strong>: GitHub emite un token temporal en cada ejecución, AWS confía en GitHub y entrega credenciales que caducan en una hora.</p>
-<p>Se configura una vez en AWS (¡con Terraform, claro!):</p>
-<figure class="code"><figcaption><span>bootstrap/github-oidc.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "repo_github" {
-  description = "Repositorio autorizado, formato propietario/nombre"
-  type        = string
-  default     = "mi-usuario/terraform-labs"
-}
-
-resource "aws_iam_openid_connect_provider" "github" {
+<h3 id="trabajar-en-equipo">Trabajar en equipo</h3>
+<p>En un equipo nadie aplica cambios desde su ordenador. El proceso habitual es:</p>
+<ol><li>Creas una rama nueva en Git y haces tu cambio.</li><li>Abres un <strong>Pull Request</strong> en GitHub.</li><li>Un sistema automático ejecuta <code>terraform plan</code> y publica el resultado en el Pull Request.</li><li>Un compañero revisa el código y el plan.</li><li>Al aprobarlo y unirlo a <code>main</code>, el sistema automático ejecuta <code>terraform apply</code>.</li></ol>
+<p>Así todo cambio queda revisado y registrado, y nadie necesita las claves de producción en su ordenador.</p>
+<h3 id="guardar-el-plan-y-aplicar-ese-mismo-plan">Guardar el plan y aplicar ese mismo plan</h3>
+<p>En los sistemas automáticos se guarda el plan en un archivo y luego se aplica exactamente ese plan:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform plan -out=tfplan
+terraform show tfplan
+terraform apply tfplan">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform plan -out=tfplan</span>
+<span class="prompt">$ </span><span class="cmdline">terraform show tfplan</span>
+<span class="prompt">$ </span><span class="cmdline">terraform apply tfplan</span></code></pre></figure>
+<p>Así se aplica justo lo que se revisó, sin sorpresas.</p>
+<p>Otra opción útil es <code>-detailed-exitcode</code>. Hace que <code>plan</code> termine con un número que indica el resultado:</p>
+<div class="table-wrap"><table><thead><tr><th>Número</th><th>Significado</th></tr></thead><tbody><tr><td>0</td><td>No hay cambios</td></tr><tr><td>1</td><td>Ha habido un error</td></tr><tr><td>2</td><td>Hay cambios pendientes</td></tr></tbody></table></div>
+<h3 id="conectar-github-con-aws-sin-guardar-claves">Conectar GitHub con AWS sin guardar claves</h3>
+<p>GitHub Actions es el sistema automático de GitHub. Para que pueda crear cosas en AWS <strong>no guardes tus claves de AWS en GitHub</strong>. Usa <strong>OIDC</strong>: GitHub pide permiso a AWS en cada ejecución y recibe unas claves temporales que caducan en una hora.</p>
+<p>Se configura una vez en AWS:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">oidc.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "aws_iam_openid_connect_provider" "github" {
   url            = "https://token.actions.githubusercontent.com"
   client_id_list = ["sts.amazonaws.com"]
 }
@@ -121,15 +149,14 @@ resource "aws_iam_role" "github_terraform" {
           "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
         }
         StringLike = {
-          # solo este repositorio puede asumir el rol
-          "token.actions.githubusercontent.com:sub" = "repo:${var.repo_github}:*"
+          # Solo TU repositorio puede usar este permiso
+          "token.actions.githubusercontent.com:sub" = "repo:mi-usuario/terraform-labs:*"
         }
       }
     }]
   })
 }
 
-# Para el curso damos permisos amplios; en real, limita al mínimo necesario
 resource "aws_iam_role_policy_attachment" "admin" {
   role       = aws_iam_role.github_terraform.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
@@ -138,26 +165,19 @@ resource "aws_iam_role_policy_attachment" "admin" {
 output "role_arn" {
   value = aws_iam_role.github_terraform.arn
 }</code></pre></figure>
-<div class="callout aviso"><strong>⚠️ Cuidado.</strong> La condición <code>sub</code> es crítica: sin ella, <strong>cualquier repositorio de GitHub</strong> podría asumir tu rol. Puedes restringirla aún más, por ejemplo a la rama main (<code>repo:usuario/repo:ref:refs/heads/main</code>) para el job de apply.</div>
-<h3 id="pipeline-con-github-actions">Pipeline con GitHub Actions</h3>
-<p>Este workflow hace plan en cada Pull Request (y lo comenta en el PR) y apply al hacer merge en <code>main</code>:</p>
-<figure class="code"><figcaption><span>.github/workflows/terraform.yml</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-yaml">name: terraform
+<div class="callout aviso"><span class="k">Importante</span>La línea con <code>sub</code> es muy importante: limita el permiso a tu repositorio. Sin ella, cualquier repositorio de GitHub podría usar tu cuenta de AWS.</div>
+<h3 id="el-flujo-automatico-en-github-actions">El flujo automático en GitHub Actions</h3>
+<p>Este archivo hace <code>plan</code> en cada Pull Request y <code>apply</code> al unir los cambios a <code>main</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">.github/workflows/terraform.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">name: terraform
 
 on:
   pull_request:
-    paths: ["envs/dev/**", "modules/**"]
   push:
     branches: [main]
-    paths: ["envs/dev/**", "modules/**"]
 
 permissions:
-  id-token: write       # necesario para OIDC
+  id-token: write    # necesario para OIDC
   contents: read
-  pull-requests: write  # para comentar el plan
-
-env:
-  TF_IN_AUTOMATION: "1"
-  AWS_REGION: eu-west-1
 
 jobs:
   terraform:
@@ -165,66 +185,30 @@ jobs:
     defaults:
       run:
         working-directory: envs/dev
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: "1.10.5"
-
       - uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: ${{ env.AWS_REGION }}
+          aws-region: eu-west-1
 
-      - name: Formato
-        run: terraform fmt -check -recursive
-
-      - name: Init
-        run: terraform init -input=false
-
-      - name: Validate
-        run: terraform validate
-
-      - name: Plan
-        id: plan
-        run: |
-          terraform plan -input=false -no-color -out=tfplan
-          terraform show -no-color tfplan &gt; plan.txt
-
-      - name: Comentar plan en el PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const plan = fs.readFileSync('envs/dev/plan.txt', 'utf8');
-            const body = '### Terraform plan (dev)\n```\n' + plan.slice(0, 60000) + '\n```';
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: context.issue.number,
-              body
-            });
+      - run: terraform fmt -check -recursive
+      - run: terraform init -input=false
+      - run: terraform validate
+      - run: terraform plan -input=false -out=tfplan
 
       - name: Apply
-        if: github.event_name == 'push' &amp;&amp; github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' &amp;&amp; github.event_name == 'push'
         run: terraform apply -input=false tfplan</code></pre></figure>
-<ol><li>Guarda el ARN del rol (output <code>role_arn</code>) como secreto <code>AWS_ROLE_ARN</code> en <em>Settings → Secrets and variables → Actions</em>. No es un secreto en sentido estricto, pero así no lo repites.</li><li>Abre un PR que cambie algo en <code>envs/dev</code>: verás el plan como comentario.</li><li>Haz merge: el job aplica el cambio.</li></ol>
-<div class="callout tip"><strong>💡 Consejo.</strong> Para producción, crea un <strong>GitHub Environment</strong> llamado <code>prod</code> con <em>required reviewers</em>. Añade <code>environment: prod</code> al job de apply y GitHub pedirá aprobación manual antes de ejecutarlo.</div>
-<h3 id="reglas-de-convivencia">Reglas de convivencia</h3>
-<ul><li><strong>Una sola vía de despliegue</strong>: si se aplica desde CI, nadie aplica desde su portátil (permisos de solo lectura para las personas).</li><li><strong>Cambios pequeños</strong>: un PR con un plan de 3 recursos se revisa bien; uno de 300, no.</li><li><strong>Lee el plan en el PR</strong>, no solo el código. Busca especialmente <code>destroy</code> y <code>-/+</code>.</li><li><strong>Protege la rama <code>main</code></strong>: PR obligatorio, revisiones y checks en verde.</li><li><strong>Fija versiones</strong>: Terraform (<code>required_version</code>, <code>.terraform-version</code>), providers (lock file) y módulos.</li><li><strong>Documenta</strong>: README por entorno y por módulo (terraform-docs).</li></ul>
-<h3 id="politicas-como-codigo">Políticas como código</h3>
-<p>En organizaciones grandes se añaden <strong>políticas automáticas</strong> que revisan cada plan: «no se permiten instancias mayores de xlarge», «todos los buckets deben estar cifrados», «el coste no puede subir más de 500 €». Las herramientas más usadas son <strong>Sentinel</strong> (HCP Terraform) y <strong>OPA/Conftest</strong> (open source), que evalúan el plan en JSON:</p>
-<figure class="code"><figcaption><span>evaluar un plan con conftest</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform plan -out=tfplan
-terraform show -json tfplan &gt; plan.json
-conftest test plan.json --policy politicas/</code></pre></figure></section>
-<section id="practica"><h2>🛠 Práctica guiada: Pipeline de infraestructura</h2><ol class="pasos"><li>Reorganiza tus labs en <code>modules/</code> + <code>envs/dev</code> + <code>envs/prod</code>.</li><li>Crea el proveedor OIDC y el rol IAM para GitHub (¡con Terraform!).</li><li>Añade el workflow de ejemplo y abre un PR para ver el plan.</li><li>Añade un job de <code>apply</code> que solo se ejecute al hacer merge en <code>main</code>.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
-<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform plan -out=tfplan</code></td><td>Guarda el plan en un archivo.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -out=tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform show tfplan</code></td><td>Muestra el contenido de un plan guardado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform show tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform apply tfplan</code></td><td>Aplica exactamente el plan guardado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform plan -detailed-exitcode</code></td><td>Sale con 0 (sin cambios), 1 (error) o 2 (hay cambios).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -detailed-exitcode" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform -chdir=envs/dev plan</code></td><td>Ejecuta en otra carpeta sin hacer <code>cd</code>.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform -chdir=envs/dev plan" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
-<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt>Guardar access keys de AWS como secretos de GitHub</dt><dd>Usa OIDC con un rol de permisos mínimos.</dd></div><div><dt>Aplicar desde el portátil y desde CI a la vez</dt><dd>Define una única vía de despliegue y respétala.</dd></div></dl></section>
-<section id="test"><h2>✅ Test de autoevaluación</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="14" data-total="6"><fieldset class="q" data-ok="3"><legend><span class="qn">1</span><span class="txt">¿Por qué separar <code>envs/dev</code> y <code>envs/prod</code> en carpetas con estados distintos?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Por estética</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para que sea más barato</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Porque Terraform lo exige</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para que un error en un entorno no afecte al otro y las diferencias sean explícitas</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Cada entorno tiene su estado y su configuración visibles por separado.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">2</span><span class="txt">¿Qué ventaja tiene <code>terraform apply tfplan</code> frente a <code>terraform apply</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">No modifica el estado</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Es más rápido</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Aplica exactamente el plan revisado</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">No necesita credenciales</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Lo que se aprobó en el PR es lo que se ejecuta.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">3</span><span class="txt">Con <code>-detailed-exitcode</code>, ¿qué código devuelve <code>plan</code> si hay cambios pendientes?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">2</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">1</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">0</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">3</span></button></div><p class="exp" hidden><strong class="verdict"></strong> 0 = sin cambios, 1 = error, 2 = cambios.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">4</span><span class="txt">¿Qué aporta OIDC frente a guardar access keys de AWS en GitHub?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Permite usar Azure</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Nada</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Es más rápido</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Credenciales temporales sin secretos de larga duración</span></button></div><p class="exp" hidden><strong class="verdict"></strong> No hay claves que puedan filtrarse; cada ejecución obtiene credenciales que caducan.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">5</span><span class="txt">En la política de confianza del rol OIDC, ¿qué limita la condición sobre <code>sub</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">La versión de Terraform</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">La región</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Qué repositorio (y rama) puede asumir el rol</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">El tamaño de las instancias</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Sin ella, cualquier repositorio de GitHub podría asumir el rol.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">6</span><span class="txt">¿Qué permiso necesita el workflow de GitHub Actions para usar OIDC?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">contents: write</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">actions: write</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">id-token: write</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">packages: read</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Permite solicitar el token OIDC a GitHub.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
-<section id="retos"><h2>🏋️ Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1: Tu primer pipeline</h3><p>En tu repositorio de prácticas, crea el rol OIDC, añade el workflow y abre un PR que cambie una etiqueta. Comprueba que aparece el plan como comentario y que al hacer merge se aplica.</p><details><summary>💡 Ver pista</summary><p>Si el job falla en <code>configure-aws-credentials</code>, revisa el permiso <code>id-token: write</code> y la condición <code>sub</code> (propietario/repositorio exactos, sensibles a mayúsculas).</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">cd bootstrap
+<ol><li>Copia el valor del output <code>role_arn</code>.</li><li>En GitHub, ve a <em>Settings → Secrets and variables → Actions</em> y crea el secreto <code>AWS_ROLE_ARN</code> con ese valor.</li><li>Abre un Pull Request: verás el plan en la pestaña <em>Actions</em>.</li></ol>
+<h3 id="normas-para-trabajar-en-equipo">Normas para trabajar en equipo</h3>
+<ul><li><strong>Un solo camino para aplicar cambios</strong>: si se hace desde GitHub Actions, nadie lo hace desde su ordenador.</li><li><strong>Cambios pequeños</strong>: son más fáciles de revisar.</li><li><strong>Lee el plan</strong>, no solo el código. Fíjate sobre todo en lo que se va a borrar.</li><li><strong>Protege la rama main</strong>: que no se pueda cambiar sin Pull Request y revisión.</li></ul></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Pipeline de infraestructura</strong></p><ol class="pasos"><li>Reorganiza tus labs en <code>modules/</code> + <code>envs/dev</code> + <code>envs/prod</code>.</li><li>Crea el proveedor OIDC y el rol IAM para GitHub (¡con Terraform!).</li><li>Añade el workflow de ejemplo y abre un PR para ver el plan.</li><li>Añade un job de <code>apply</code> que solo se ejecute al hacer merge en <code>main</code>.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform plan -out=tfplan</code></td><td>Guarda el plan en un archivo.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -out=tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform show tfplan</code></td><td>Muestra el contenido de un plan guardado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform show tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform apply tfplan</code></td><td>Aplica exactamente el plan guardado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform plan -detailed-exitcode</code></td><td>Sale con 0 (sin cambios), 1 (error) o 2 (hay cambios).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -detailed-exitcode" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform -chdir=envs/dev plan</code></td><td>Ejecuta en otra carpeta sin hacer <code>cd</code>.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform -chdir=envs/dev plan" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt>Guardar access keys de AWS como secretos de GitHub</dt><dd>Usa OIDC con un rol de permisos mínimos.</dd></div><div><dt>Aplicar desde el portátil y desde CI a la vez</dt><dd>Define una única vía de despliegue y respétala.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="14" data-total="6"><fieldset class="q" data-ok="3"><legend><span class="qn">01</span><span class="txt">¿Por qué separar <code>envs/dev</code> y <code>envs/prod</code> en carpetas con estados distintos?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Por estética</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para que sea más barato</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Porque Terraform lo exige</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para que un error en un entorno no afecte al otro y las diferencias sean explícitas</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Cada entorno tiene su estado y su configuración visibles por separado.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">02</span><span class="txt">¿Qué ventaja tiene <code>terraform apply tfplan</code> frente a <code>terraform apply</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">No modifica el estado</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Es más rápido</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Aplica exactamente el plan revisado</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">No necesita credenciales</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Lo que se aprobó en el PR es lo que se ejecuta.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">03</span><span class="txt">Con <code>-detailed-exitcode</code>, ¿qué código devuelve <code>plan</code> si hay cambios pendientes?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">2</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">1</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">0</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">3</span></button></div><p class="exp" hidden><strong class="verdict"></strong> 0 = sin cambios, 1 = error, 2 = cambios.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">04</span><span class="txt">¿Qué aporta OIDC frente a guardar access keys de AWS en GitHub?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Permite usar Azure</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Nada</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Es más rápido</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Credenciales temporales sin secretos de larga duración</span></button></div><p class="exp" hidden><strong class="verdict"></strong> No hay claves que puedan filtrarse; cada ejecución obtiene credenciales que caducan.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">05</span><span class="txt">En la política de confianza del rol OIDC, ¿qué limita la condición sobre <code>sub</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">La versión de Terraform</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">La región</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Qué repositorio (y rama) puede asumir el rol</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">El tamaño de las instancias</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Sin ella, cualquier repositorio de GitHub podría asumir el rol.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">06</span><span class="txt">¿Qué permiso necesita el workflow de GitHub Actions para usar OIDC?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">contents: write</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">actions: write</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">id-token: write</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">packages: read</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Permite solicitar el token OIDC a GitHub.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Tu primer pipeline</h3><p>En tu repositorio de prácticas, crea el rol OIDC, añade el workflow y abre un PR que cambie una etiqueta. Comprueba que aparece el plan como comentario y que al hacer merge se aplica.</p><details><summary>Ver pista</summary><p>Si el job falla en <code>configure-aws-credentials</code>, revisa el permiso <code>id-token: write</code> y la condición <code>sub</code> (propietario/repositorio exactos, sensibles a mayúsculas).</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-bash">cd bootstrap
 terraform apply -var="repo_github=TU_USUARIO/terraform-labs"
 terraform output -raw role_arn     # cópialo al secreto AWS_ROLE_ARN
 
@@ -232,7 +216,7 @@ git switch -c prueba-pipeline
 # cambia una etiqueta en envs/dev
 git commit -am "chore: cambia etiqueta" &amp;&amp; git push -u origin prueba-pipeline
 # abre el PR en GitHub → ver comentario con el plan → merge</code></pre></figure></details></article>
-<article class="reto"><h3>Reto 2: Detector de drift programado</h3><p>Añade un segundo workflow que se ejecute todas las noches (<code>schedule</code>), haga <code>plan -detailed-exitcode</code> sobre <code>envs/dev</code> y falle (o abra un issue) si hay drift.</p><details><summary>💡 Ver pista</summary><p><code>on: schedule: - cron: "0 3 * * *"</code>. Usa <code>continue-on-error</code> o captura el código de salida en bash.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-yaml">name: drift
+<article class="reto"><h3>Reto 2. Detector de drift programado</h3><p>Añade un segundo workflow que se ejecute todas las noches (<code>schedule</code>), haga <code>plan -detailed-exitcode</code> sobre <code>envs/dev</code> y falle (o abra un issue) si hay drift.</p><details><summary>Ver pista</summary><p><code>on: schedule: - cron: "0 3 * * *"</code>. Usa <code>continue-on-error</code> o captura el código de salida en bash.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">name: drift
 on:
   schedule:
     - cron: "0 3 * * *"
@@ -264,13 +248,11 @@ jobs:
           if [ $code -eq 2 ]; then echo "::error::Drift detectado"; exit 1; fi
           exit $code</code></pre></figure></details></article></section>
 <div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="14"> He completado este módulo</label></div>
-<nav class="pager" aria-label="Módulos"><a class="prev" href="13-calidad-testing.html"><small>← Anterior</small>Validación, testing y seguridad</a><a class="next" href="15-proyecto-final.html"><small>Siguiente →</small>Proyecto final y certificación</a></nav></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="13-calidad-testing.html"><small>Anterior</small>Validación, testing y seguridad</a><a class="next" href="15-proyecto-final.html"><small>Siguiente</small>Proyecto final y certificación</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
 </main>
-<footer class="site-footer">
-  <div class="wrap">
-    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
-  </div>
-</footer>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>

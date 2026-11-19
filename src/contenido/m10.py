@@ -2,218 +2,107 @@
 # Módulo 10 · Backends remotos, bloqueo y workspaces
 
 LECCION = [
- ("h", "El problema del estado local"),
- ("p", "Hasta ahora el estado vivía en tu ordenador. Eso tiene problemas serios en cuanto trabajas con más gente (o con un sistema de CI):"),
+ ("h", "El problema del estado en tu ordenador"),
+ ("p", "Hasta ahora el estado estaba en tu ordenador. Si trabajas con más personas, eso da problemas:"),
  ("ul", [
-  "**Compartir**: tu compañera no tiene tu `terraform.tfstate`, así que para su Terraform la infraestructura no existe.",
-  "**Concurrencia**: si dos personas hacen `apply` a la vez sobre el mismo estado, lo corrompen.",
-  "**Pérdida**: si se rompe tu disco, pierdes el estado.",
-  "**Seguridad**: el estado tiene secretos y está en un portátil sin cifrar.",
+  "Tus compañeros no tienen tu archivo, así que su Terraform no sabe lo que has creado.",
+  "Si dos personas aplican cambios a la vez, el estado se puede estropear.",
+  "Si se rompe tu ordenador, pierdes el estado.",
  ]),
- ("p", "La solución es un **backend remoto**: un lugar compartido donde guardar el estado, con **bloqueo** (*locking*) para que solo una operación pueda modificarlo a la vez."),
- ("table", ["Backend", "Dónde guarda el estado", "Bloqueo"], [
-  ["`local`", "Archivo en disco (por defecto)", "Solo en tu máquina"],
-  ["`s3`", "Bucket de Amazon S3", "Archivo `.tflock` en S3 (`use_lockfile`)"],
-  ["`azurerm`", "Azure Blob Storage", "Lease del blob"],
-  ["`gcs`", "Google Cloud Storage", "Nativo"],
-  ["HCP Terraform (`cloud`)", "Servicio de HashiCorp", "Nativo + ejecuciones remotas"],
- ]),
+ ("p", "La solución es guardar el estado en un sitio compartido. A ese sitio se le llama **backend**. En AWS lo normal es usar un bucket de S3."),
 
- ("h", "Paso 1: crear el bucket del estado (bootstrap)"),
- ("p", "Hay un problema del huevo y la gallina: necesitas un bucket para guardar el estado, pero quieres crear ese bucket con Terraform. La solución habitual es una pequeña configuración **bootstrap** con estado local, que se ejecuta una sola vez:"),
- ("code", "hcl", "bootstrap/main.tf", """terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 6.0"
-    }
-  }
-}
-
-provider "aws" {
+ ("h", "Paso 1: crear el bucket para el estado"),
+ ("p", "Primero creamos el bucket con un proyecto pequeño aparte (llamado *bootstrap*), que solo se ejecuta una vez:"),
+ ("code", "hcl", "bootstrap/main.tf", """provider "aws" {
   region = "eu-west-1"
 }
 
 data "aws_caller_identity" "actual" {}
 
 resource "aws_s3_bucket" "estado" {
-  # incluir el ID de cuenta ayuda a que el nombre sea único
-  bucket = "tfstate-${data.aws_caller_identity.actual.account_id}-eu-west-1"
+  bucket = "tfstate-${data.aws_caller_identity.actual.account_id}"
 
   lifecycle {
-    prevent_destroy = true # ¡nunca borrar el estado por accidente!
+    prevent_destroy = true   # que nadie lo borre por error
   }
 }
 
+# Guardar versiones anteriores del estado, por si algo sale mal
 resource "aws_s3_bucket_versioning" "estado" {
   bucket = aws_s3_bucket.estado.id
   versioning_configuration {
-    status = "Enabled" # permite recuperar versiones anteriores del estado
+    status = "Enabled"
   }
-}
-
-resource "aws_s3_bucket_server_side_encryption_configuration" "estado" {
-  bucket = aws_s3_bucket.estado.id
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "estado" {
-  bucket                  = aws_s3_bucket.estado.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
 }
 
 output "bucket_estado" {
   value = aws_s3_bucket.estado.bucket
 }"""),
- ("code", "bash", "terminal", """cd bootstrap
-terraform init && terraform apply
-terraform output -raw bucket_estado
-# tfstate-123456789012-eu-west-1"""),
+ ("term", """$ cd bootstrap
+$ terraform init
+$ terraform apply
+$ terraform output -raw bucket_estado
+tfstate-123456789012"""),
 
- ("h", "Paso 2: configurar el backend S3"),
- ("p", "En tu proyecto, añade un bloque `backend` dentro de `terraform {}`:"),
+ ("h", "Paso 2: decirle a Terraform dónde guardar el estado"),
+ ("p", "En tu proyecto, añade un bloque `backend` dentro de `terraform`:"),
  ("code", "hcl", "backend.tf", """terraform {
   backend "s3" {
-    bucket       = "tfstate-123456789012-eu-west-1"
-    key          = "curso/web/terraform.tfstate"  # ruta dentro del bucket
+    bucket       = "tfstate-123456789012"
+    key          = "curso/web/terraform.tfstate"
     region       = "eu-west-1"
     encrypt      = true
-    use_lockfile = true   # bloqueo nativo en S3 (Terraform >= 1.10)
+    use_lockfile = true
   }
 }"""),
  ("ul", [
-  "`key` es la ruta del archivo dentro del bucket. Usa una por proyecto y entorno: `red/prod/terraform.tfstate`, `web/dev/terraform.tfstate`…",
-  "`use_lockfile = true` crea un archivo `terraform.tfstate.tflock` mientras alguien está operando.",
+  "`key`: la ruta del archivo dentro del bucket. Usa una distinta para cada proyecto.",
+  "`encrypt`: guarda el estado cifrado.",
+  "`use_lockfile`: activa el **bloqueo** (lo vemos abajo). Necesita Terraform 1.10 o superior.",
  ]),
- ("info", "Antes de Terraform 1.10, el bloqueo en S3 requería una tabla de **DynamoDB** (`dynamodb_table = \"...\"`). Lo verás en muchos tutoriales y proyectos existentes; hoy está obsoleto en favor de `use_lockfile`."),
- ("warn", "Dentro del bloque `backend` **no se pueden usar variables** (`var.x`) ni locals: se evalúa antes que todo lo demás."),
+ ("warn", "Dentro del bloque `backend` no se pueden usar variables (`var.algo`). Si necesitas valores distintos (por ejemplo, uno por entorno), se pasan al ejecutar `terraform init -backend-config=archivo`."),
 
- ("h", "Paso 3: migrar el estado"),
- ("p", "Al cambiar de backend hay que volver a ejecutar `init`. Terraform detecta que ya tienes un estado local y te ofrece copiarlo:"),
+ ("h", "Paso 3: mover el estado"),
+ ("p", "Ejecuta `init` otra vez. Terraform te pregunta si quieres copiar tu estado al bucket. Responde `yes`:"),
  ("term", """$ terraform init -migrate-state
-
-Initializing the backend...
 Do you want to copy existing state to the new backend?
-  Pre-existing state was found while migrating the previous "local" backend to the
-  newly configured "s3" backend. No existing state was found in the newly
-  configured "s3" backend. Do you want to copy this state to the new "s3"
-  backend? Enter "yes" to copy and "no" to start with an empty state.
-
   Enter a value: yes
 
-Successfully configured the backend "s3"! Terraform will automatically
-use this backend unless the backend configuration changes."""),
- ("p", "Comprueba que funcionó: `terraform plan` debe decir *No changes* y el estado ya está en S3:"),
- ("code", "bash", "terminal", """aws s3 ls s3://tfstate-123456789012-eu-west-1/curso/web/
-# 2026-11-19 11:02:10      4521 terraform.tfstate
-rm terraform.tfstate terraform.tfstate.backup   # ya no hacen falta en local"""),
+Successfully configured the backend "s3"!"""),
+ ("p", "Desde ahora el estado vive en S3 y todo el equipo usa el mismo."),
 
- ("h", "El bloqueo en acción"),
- ("p", "Abre dos terminales en la misma carpeta y lanza `terraform apply` en ambas. La segunda verá:"),
- ("term", """╷
-│ Error: Error acquiring the state lock
-│
-│ Error message: operation error S3: PutObject, ... PreconditionFailed
-│ Lock Info:
-│   ID:        a1b2c3d4-e5f6-7890-abcd-ef1234567890
-│   Path:      tfstate-123456789012-eu-west-1/curso/web/terraform.tfstate
-│   Operation: OperationTypeApply
-│   Who:       ana@portatil
-│   Version:   1.10.5
-│   Created:   2026-11-19 11:05:31 UTC
-│
-│ Terraform acquires a state lock to protect the state from being written
-│ by multiple users at the same time.
-╵"""),
- ("p", "Esa protección evita corromper el estado. Si un proceso murió a medias (se cerró el portátil, se cayó el CI) y el bloqueo quedó atascado, puedes liberarlo:"),
- ("code", "bash", "terminal", """terraform force-unlock a1b2c3d4-e5f6-7890-abcd-ef1234567890
-# o esperar en vez de fallar:
-terraform apply -lock-timeout=5m"""),
- ("warn", "Antes de `force-unlock`, **asegúrate** de que nadie está aplicando de verdad. Si lo liberas mientras otra persona aplica, podéis corromper el estado."),
+ ("h", "El bloqueo"),
+ ("p", "Mientras alguien está aplicando cambios, Terraform **bloquea** el estado. Si otra persona lo intenta a la vez, recibe este mensaje y tiene que esperar:"),
+ ("term", """$ terraform apply
+Error: Error acquiring the state lock
 
- ("h", "Configuración parcial del backend"),
- ("p", "Como no se pueden usar variables en el backend, para reutilizar el mismo código en varios entornos se usa **configuración parcial**: dejas el bloque casi vacío y pasas el resto en `init`:"),
- ("code", "hcl", "backend.tf", """terraform {
-  backend "s3" {}
+Lock Info:
+  ID:        a1b2c3d4-e5f6-7890-abcd-ef1234567890
+  Who:       ana@portatil
+  Operation: OperationTypeApply"""),
+ ("p", "Si un proceso se cortó y el bloqueo se quedó puesto, se puede quitar con el ID del mensaje:"),
+ ("term", """$ terraform force-unlock a1b2c3d4-e5f6-7890-abcd-ef1234567890"""),
+ ("warn", "Antes de quitar un bloqueo, asegúrate de que nadie está aplicando cambios en ese momento."),
+ ("info", "En tutoriales antiguos verás que el bloqueo se hacía con una tabla de DynamoDB. Hoy basta con `use_lockfile = true`."),
+
+ ("h", "Varios entornos con el mismo código: workspaces"),
+ ("p", "Un **workspace** es un estado separado que usa el mismo código. Sirve para tener, por ejemplo, un entorno `dev` y otro `prod` sin que se mezclen:"),
+ ("term", """$ terraform workspace new dev
+$ terraform workspace new prod
+$ terraform workspace select dev
+$ terraform workspace list
+  default
+* dev
+  prod"""),
+ ("p", "En el código, `terraform.workspace` te dice en qué workspace estás:"),
+ ("code", "hcl", "main.tf", """resource "local_file" "config" {
+  filename = "config-${terraform.workspace}.txt"
+  content  = "entorno=${terraform.workspace}"
 }"""),
- ("code", "hcl", "dev.s3.tfbackend", """bucket       = "tfstate-123456789012-eu-west-1"
-key          = "web/dev/terraform.tfstate"
-region       = "eu-west-1"
-encrypt      = true
-use_lockfile = true"""),
- ("code", "bash", "terminal", """terraform init -backend-config=dev.s3.tfbackend
-# cambiar a prod (otro estado):
-terraform init -reconfigure -backend-config=prod.s3.tfbackend"""),
-
- ("h", "Leer outputs de otro proyecto"),
- ("p", "En proyectos grandes, la infraestructura se divide en varias configuraciones (red, bases de datos, aplicaciones), cada una con su estado. Una puede leer los outputs de otra con el data source `terraform_remote_state`:"),
- ("code", "hcl", "app/main.tf", """data "terraform_remote_state" "red" {
-  backend = "s3"
-  config = {
-    bucket = "tfstate-123456789012-eu-west-1"
-    key    = "red/prod/terraform.tfstate"
-    region = "eu-west-1"
-  }
-}
-
-resource "aws_instance" "app" {
-  ami           = data.aws_ami.amazon_linux.id
-  instance_type = "t3.micro"
-  subnet_id     = data.terraform_remote_state.red.outputs.subred_privada_id
-}"""),
- ("tip", "Alternativa con menos acoplamiento: usar data sources normales que busquen por etiquetas (`data \"aws_subnet\"` con `filter`), o guardar valores en SSM Parameter Store."),
-
- ("h", "Workspaces"),
- ("p", "Los **workspaces** permiten tener **varios estados con el mismo código** en el mismo backend. Siempre existe uno llamado `default`:"),
- ("code", "bash", "terminal", """terraform workspace list          # * default
-terraform workspace new dev       # crea y cambia a dev
-terraform workspace new prod
-terraform workspace select dev
-terraform workspace show          # dev"""),
- ("p", "Dentro del código, `terraform.workspace` devuelve el nombre del workspace actual:"),
- ("code", "hcl", "main.tf", """locals {
-  entorno = terraform.workspace
-  tamanos = {
-    dev  = "t3.micro"
-    prod = "t3.medium"
-  }
-}
-
-resource "aws_instance" "web" {
-  ami           = data.aws_ami.amazon_linux.id
-  instance_type = lookup(local.tamanos, local.entorno, "t3.micro")
-  tags          = { Name = "web-${local.entorno}" }
-}"""),
- ("p", "En S3, los estados de cada workspace se guardan en `env:/NOMBRE/<key>`."),
- ("table", ["", "Workspaces", "Una carpeta por entorno"], [
-  ["Código", "Idéntico para todos", "Puede diferir (o compartir módulos)"],
-  ["Riesgo", "Fácil equivocarse de workspace y aplicar en prod", "Es explícito: `cd envs/prod`"],
-  ["Diferencias entre entornos", "Con condicionales y `lookup`", "Con archivos `.tfvars`/código distinto"],
-  ["Ideal para", "Entornos efímeros idénticos (una rama, una demo)", "dev / staging / prod con diferencias reales"],
- ]),
- ("info", "Para entornos tipo dev/prod, la mayoría de equipos prefiere **carpetas por entorno** que reutilizan módulos (módulos 11 y 14). Los workspaces CLI brillan para copias temporales idénticas."),
+ ("tip", "Muchos equipos prefieren usar una carpeta por entorno (`envs/dev`, `envs/prod`) en lugar de workspaces, porque así es más difícil equivocarse de entorno. Lo verás en el módulo 14."),
 
  ("h", "HCP Terraform"),
- ("p", "**HCP Terraform** (antes Terraform Cloud) es el servicio de HashiCorp que, además de guardar el estado, ejecuta los `plan` y `apply` en sus servidores, guarda variables y secretos, se integra con GitHub y permite aprobar cambios desde la web. Tiene un plan gratuito limitado."),
- ("code", "hcl", "versions.tf", """terraform {
-  cloud {
-    organization = "mi-organizacion"
-    workspaces {
-      name = "curso-web-dev"
-    }
-  }
-}"""),
- ("code", "bash", "terminal", """terraform login   # abre el navegador para obtener un token
-terraform init    # conecta con HCP Terraform
-terraform plan    # se ejecuta en remoto; ves la salida en tu terminal"""),
- ("p", "Alternativas al estilo de HCP Terraform: Spacelift, env0, Scalr o el open source Atlantis."),
+ ("p", "**HCP Terraform** es un servicio de HashiCorp (la empresa de Terraform) que guarda el estado por ti y además ejecuta los comandos en sus servidores. Tiene un plan gratuito. Para conectarte se usa `terraform login`."),
 ]
 
 TEST = [

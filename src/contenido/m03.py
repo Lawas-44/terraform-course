@@ -2,160 +2,107 @@
 # Módulo 03 · El lenguaje HCL
 
 LECCION = [
- ("h", "Anatomía de un bloque"),
- ("p", "Todo en Terraform se escribe en **HCL** (*HashiCorp Configuration Language*). Su pieza básica es el **bloque**:"),
- ("code", "hcl", "anatomía", """# TIPO       ETIQUETA 1     ETIQUETA 2
-resource     "local_file"   "saludo"   {
-  # CUERPO: argumentos  nombre = valor
-  filename = "saludo.txt"
+ ("h", "Los bloques"),
+ ("p", "El lenguaje de Terraform se llama **HCL**. Todo se escribe en **bloques**. Un bloque tiene un tipo, unas etiquetas entre comillas y un contenido entre llaves `{ }`:"),
+ ("code", "hcl", "anatomía de un bloque", """# tipo      etiqueta 1     etiqueta 2
+resource    "local_file"   "saludo" {
+  filename = "saludo.txt"   # argumento: nombre = valor
   content  = "hola"
-
-  # bloque anidado (sin '=')
-  lifecycle {
-    prevent_destroy = false
-  }
 }"""),
- ("ul", [
-  "**Tipo de bloque**: `resource`, `variable`, `output`… Determina qué significa el bloque.",
-  "**Etiquetas**: van entre comillas. Cada tipo de bloque exige un número concreto (`resource` lleva 2: tipo de recurso y nombre; `variable` lleva 1; `locals` ninguna).",
-  "**Argumentos**: `nombre = valor`. Asignan valores.",
-  "**Bloques anidados**: bloques dentro de bloques, sin `=`.",
- ]),
- ("p", "Los bloques de primer nivel que usarás constantemente:"),
- ("table", ["Bloque", "Para qué sirve", "Se referencia como"], [
-  ["`terraform`", "Versión requerida, providers, backend", "—"],
-  ["`provider`", "Configura un provider (región, credenciales…)", "—"],
-  ["`resource`", "Algo que Terraform crea y gestiona", "`TIPO.NOMBRE`"],
-  ["`data`", "Algo que existe y Terraform solo lee", "`data.TIPO.NOMBRE`"],
-  ["`variable`", "Parámetro de entrada", "`var.NOMBRE`"],
-  ["`output`", "Valor de salida", "`module.X.NOMBRE` (desde fuera)"],
-  ["`locals`", "Valores calculados internos", "`local.NOMBRE`"],
-  ["`module`", "Llama a otro módulo", "`module.NOMBRE`"],
+ ("p", "Los bloques que más vas a usar:"),
+ ("table", ["Bloque", "Para qué sirve"], [
+  ["`resource`", "Algo que Terraform crea"],
+  ["`data`", "Algo que ya existe y Terraform solo consulta"],
+  ["`variable`", "Un dato de entrada que se puede cambiar"],
+  ["`output`", "Un dato que se muestra al terminar"],
+  ["`locals`", "Valores de ayuda para no repetir"],
+  ["`provider`", "Configura un provider (por ejemplo, la región de AWS)"],
+  ["`terraform`", "Ajustes de Terraform (versiones y providers)"],
  ]),
 
  ("h", "Tipos de datos"),
- ("p", "HCL tiene tipos **primitivos** y **complejos**:"),
+ ("p", "Los valores pueden ser de varios tipos:"),
  ("code", "hcl", "tipos.tf", """locals {
-  # Primitivos
-  texto  = "hola"           # string (siempre comillas DOBLES)
-  numero = 42               # number (enteros y decimales: 3.14)
-  activo = true             # bool (true / false, sin comillas)
-
-  # Colecciones (todos los elementos del mismo tipo)
-  lista = ["a", "b", "c"]               # list: ordenada, admite repetidos
-  mapa  = { entorno = "dev", equipo = "web" } # map: clave → valor
-  # set: como list pero sin orden ni repetidos; se crea con toset()
-  conjunto = toset(["a", "b", "a"])     # → ["a", "b"]
-
-  # Estructurales (pueden mezclar tipos)
-  objeto = {
-    nombre  = "web"
-    puertos = [80, 443]
-    publico = true
-  }
-  tupla = ["web", 80, true]
-
-  # Ausencia de valor
-  nada = null
+  texto  = "hola"                        # texto, siempre con comillas dobles
+  numero = 42                            # número
+  activo = true                          # verdadero o falso
+  lista  = ["a", "b", "c"]               # lista de valores
+  mapa   = { entorno = "dev", equipo = "web" }  # pares nombre = valor
+  grupo  = toset(["a", "b", "a"])        # conjunto: sin orden y sin repetidos -> ["a", "b"]
 }"""),
- ("p", "Para leer elementos de una colección:"),
- ("code", "hcl", "acceso", """local.lista[0]            # "a"  (los índices empiezan en 0)
-local.mapa["entorno"]     # "dev"
-local.mapa.entorno        # "dev" (forma corta)
-local.objeto.puertos[1]   # 443"""),
- ("tip", "Terraform convierte tipos automáticamente cuando puede: `\"5\"` se convierte a `5` si se espera un número, y `true` a `\"true\"` si se espera un string."),
+ ("p", "Para leer un elemento:"),
+ ("code", "hcl", "leer valores", """local.lista[0]       # "a"  (se empieza a contar desde 0)
+local.mapa.entorno   # "dev\""""),
+ ("warn", "Usa siempre comillas dobles. `'hola'` con comillas simples da error."),
 
- ("h", "Strings: interpolación, directivas y heredoc"),
- ("p", "Dentro de un string puedes insertar expresiones con `${ ... }`:"),
+ ("h", "Meter valores dentro de un texto"),
+ ("p", "Con `${ }` puedes meter un valor dentro de un texto:"),
  ("code", "hcl", "interpolación", """locals {
   proyecto = "tienda"
   entorno  = "dev"
   nombre   = "${local.proyecto}-${local.entorno}"   # "tienda-dev"
-  saludo   = "Hay ${length(local.lista)} elementos" # "Hay 3 elementos"
 }"""),
- ("p", "Para textos de varias líneas se usa **heredoc**. Con `<<-` (con guion) se elimina la sangría común, lo que permite indentarlo bonito:"),
- ("code", "hcl", "heredoc", """resource "local_file" "config" {
-  filename = "${path.module}/app.conf"
+ ("p", "Para textos de varias líneas se usa `<<-EOT` ... `EOT`:"),
+ ("code", "hcl", "texto de varias líneas", """resource "local_file" "config" {
+  filename = "app.conf"
   content  = <<-EOT
-    # Configuración generada por Terraform
     proyecto = ${local.proyecto}
     entorno  = ${local.entorno}
   EOT
 }"""),
- ("p", "Y las **directivas** `%{ if }` y `%{ for }` permiten lógica dentro del texto:"),
- ("code", "hcl", "directivas", """locals {
-  servidores = ["web1", "web2", "web3"]
 
-  inventario = <<-EOT
-    [web]
-    %{ for s in local.servidores ~}
-    ${s}.ejemplo.com
-    %{ endfor ~}
-  EOT
-}"""),
- ("info", "El `~` elimina el salto de línea junto a la directiva, para que no queden líneas en blanco."),
-
- ("h", "Referencias entre bloques"),
- ("p", "Cada recurso expone **atributos** que otros pueden usar. La sintaxis es `TIPO.NOMBRE.ATRIBUTO`:"),
+ ("h", "Usar datos de otro recurso"),
+ ("p", "Un recurso puede usar datos de otro. Se escribe `TIPO.NOMBRE.DATO`:"),
  ("code", "hcl", "referencias.tf", """resource "random_integer" "puerto" {
   min = 8000
   max = 8999
 }
 
 resource "local_file" "env" {
-  filename = "${path.module}/.env"
-  content  = "PORT=${random_integer.puerto.result}\\n"
+  filename = ".env"
+  content  = "PORT=${random_integer.puerto.result}"
 }"""),
- ("p", "¿Cómo sabes qué atributos tiene un recurso? En la documentación del Registry, cada recurso tiene una sección **Argument Reference** (lo que tú escribes) y **Attribute Reference** (lo que puedes leer después)."),
+ ("p", "Aquí `local_file.env` usa el número que ha generado `random_integer.puerto`. Terraform entiende que primero tiene que crear el número."),
+ ("tip", "¿Qué datos tiene cada recurso? Búscalo en registry.terraform.io, en la página del recurso, en el apartado *Attribute Reference*."),
 
- ("h", "Comentarios y organización de archivos"),
- ("code", "hcl", "comentarios", """# Comentario de una línea (el más habitual)
-// También vale, pero menos común
-/*
-  Comentario
-  de varias líneas
-*/"""),
- ("p", "Terraform carga **todos** los `.tf` de la carpeta y los une; el orden de los archivos y de los bloques da igual. Por convención se reparten así:"),
- ("code", "text", "estructura recomendada", """mi-proyecto/
-├── versions.tf    # bloque terraform {} (versiones y providers)
-├── providers.tf   # bloques provider {}
-├── main.tf        # recursos principales
-├── variables.tf   # bloques variable {}
-├── outputs.tf     # bloques output {}
-└── locals.tf      # bloque locals {} (opcional)"""),
+ ("h", "Comentarios y organización"),
+ ("p", "Los comentarios empiezan por `#`. Terraform los ignora; sirven para explicar el código."),
+ ("p", "Terraform junta todos los `.tf` de la carpeta, así que puedes repartir el código en varios archivos. Lo habitual es:"),
+ ("code", "text", "estructura", """mi-proyecto/
+├── main.tf        # recursos
+├── variables.tf   # variables
+├── outputs.tf     # outputs
+└── versions.tf    # bloque terraform { }"""),
 
- ("h", "Estilo, fmt y validate"),
- ("p", "La comunidad sigue un estilo común: 2 espacios de sangría, signos `=` alineados en argumentos consecutivos, nombres en `snake_case` y sin repetir el tipo en el nombre (`aws_instance.web`, no `aws_instance.web_instance`). No hace falta hacerlo a mano:"),
+ ("h", "Ordenar y comprobar el código"),
+ ("p", "Dos comandos te ayudan a tener el código limpio y sin errores:"),
  ("term", """$ terraform fmt
 main.tf
-$ terraform fmt -check -recursive   # en CI: falla si algo no está formateado
 $ terraform validate
 Success! The configuration is valid."""),
- ("p", "`validate` detecta errores de sintaxis, argumentos que no existen, referencias rotas y tipos incorrectos, **sin conectarse a ninguna nube**. Ejemplo de error típico:"),
+ ("ul", [
+  "`terraform fmt` ordena el código (sangría y alineación).",
+  "`terraform validate` busca errores sin crear nada.",
+  "`terraform fmt -check` no cambia nada: solo avisa si hay archivos sin ordenar. Se usa en revisiones automáticas.",
+ ]),
+ ("p", "Así se ve un error. Te dice el archivo, la línea y, muchas veces, cómo arreglarlo:"),
  ("term", """$ terraform validate
-╷
-│ Error: Unsupported argument
-│
-│   on main.tf line 3, in resource "local_file" "saludo":
-│    3:   file_name = "saludo.txt"
-│
-│ An argument named "file_name" is not expected here. Did you mean "filename"?
-╵"""),
- ("tip", "Lee siempre los errores de abajo a arriba: archivo, línea y una sugerencia. Terraform suele decirte exactamente qué falla."),
+Error: Unsupported argument
 
- ("h", "terraform console: tu laboratorio de expresiones"),
- ("p", "`terraform console` abre una consola donde puedes evaluar cualquier expresión con los `locals`, variables y recursos de tu proyecto. Ideal para experimentar:"),
+  on main.tf line 3, in resource "local_file" "saludo":
+   3:   file_name = "saludo.txt"
+
+An argument named "file_name" is not expected here. Did you mean "filename"?"""),
+
+ ("tip", "Si un comando falla y necesitas más detalle, activa los registros con la variable de entorno `TF_LOG`: por ejemplo `export TF_LOG=DEBUG` antes de ejecutar Terraform."),
+
+ ("h", "La consola de Terraform"),
+ ("p", "`terraform console` te deja probar valores y operaciones. Muy útil para aprender:"),
  ("term", """$ terraform console
-> local.lista
-[
-  "a",
-  "b",
-  "c",
-]
-> upper(local.texto)
+> local.lista[1]
+"b"
+> upper("hola")
 "HOLA"
-> local.objeto.puertos[0] + 1
-81
 > exit"""),
 ]
 

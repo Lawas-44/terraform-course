@@ -2,22 +2,20 @@
 # Módulo 02 · Tu primer proyecto
 
 LECCION = [
- ("h", "Un proyecto = una carpeta"),
- ("p", "En Terraform, un proyecto es simplemente **una carpeta con archivos `.tf`**. Cuando ejecutas un comando, Terraform lee *todos* los `.tf` de la carpeta actual (no las subcarpetas) y los trata como una sola configuración. A esa carpeta se le llama **root module** (módulo raíz)."),
- ("p", "Para aprender el flujo sin gastar dinero ni configurar cuentas usaremos dos providers que funcionan en tu ordenador:"),
+ ("h", "Un proyecto es una carpeta"),
+ ("p", "Un proyecto de Terraform es una **carpeta con archivos que terminan en `.tf`**. Terraform lee todos los `.tf` de la carpeta en la que estás."),
+ ("p", "Para practicar sin gastar dinero usaremos dos providers que funcionan en tu ordenador, sin nube:"),
  ("ul", [
-  "`hashicorp/random`: genera valores aleatorios (nombres, contraseñas, números).",
-  "`hashicorp/local`: crea archivos en tu disco.",
+  "`random`: inventa valores al azar (nombres, números, contraseñas).",
+  "`local`: crea archivos en tu ordenador.",
  ]),
- ("code", "bash", "terminal", """mkdir -p ~/terraform-labs/02-primer-proyecto
-cd ~/terraform-labs/02-primer-proyecto
-code main.tf"""),
+ ("term", """$ mkdir 02-primer-proyecto
+$ cd 02-primer-proyecto
+$ code main.tf"""),
 
- ("h", "Escribe tu primera configuración"),
- ("p", "Copia esto en `main.tf`. Debajo lo explicamos bloque a bloque:"),
+ ("h", "Tu primer archivo"),
+ ("p", "Copia esto en `main.tf`:"),
  ("code", "hcl", "main.tf", """terraform {
-  required_version = ">= 1.6"
-
   required_providers {
     local = {
       source  = "hashicorp/local"
@@ -36,174 +34,104 @@ resource "random_pet" "nombre" {
 
 resource "local_file" "saludo" {
   filename = "${path.module}/saludo.txt"
-  content  = "¡Hola, ${random_pet.nombre.id}! Este archivo lo creó Terraform.\\n"
+  content  = "Hola, ${random_pet.nombre.id}! Este archivo lo creó Terraform.\\n"
 }
 
 output "nombre_mascota" {
   value = random_pet.nombre.id
 }"""),
+ ("p", "Qué significa cada parte:"),
  ("ul", [
-  "**`terraform { ... }`**: ajustes del propio Terraform. Aquí exigimos versión 1.6 o superior y declaramos qué providers usamos, de dónde salen (`source`) y qué versiones aceptamos.",
-  "**`resource \"random_pet\" \"nombre\"`**: un recurso. `random_pet` es el *tipo* (lo aporta el provider random) y `nombre` es el *nombre local* que tú eliges para referirte a él. Genera algo como `gentle-turtle`.",
-  "**`resource \"local_file\" \"saludo\"`**: un archivo en disco. Fíjate en `${random_pet.nombre.id}`: estamos **usando el resultado de otro recurso**. Eso crea una dependencia: Terraform sabe que primero debe generar el nombre.",
-  "**`path.module`**: la ruta de la carpeta actual.",
-  "**`output`**: un valor que Terraform mostrará al terminar.",
+  "**`terraform { ... }`**: indica qué providers necesitamos y qué versión.",
+  "**`resource \"random_pet\" \"nombre\"`**: pide un nombre de mascota al azar (por ejemplo, `gentle-turtle`). `random_pet` es el tipo y `nombre` es el nombre que le damos nosotros.",
+  "**`resource \"local_file\" \"saludo\"`**: crea el archivo `saludo.txt`. Dentro usa el nombre de la mascota con `${random_pet.nombre.id}`.",
+  "**`output`**: muestra un valor en la terminal al terminar.",
  ]),
 
- ("h", "terraform init: preparar la carpeta"),
- ("p", "El primer comando en cualquier proyecto nuevo (o cuando añades providers o módulos) es `init`:"),
+ ("h", "Paso 1: terraform init"),
+ ("p", "`init` prepara la carpeta y descarga los providers. Se ejecuta una vez al empezar (y cuando añades un provider nuevo):"),
  ("term", """$ terraform init
-
-Initializing the backend...
 Initializing provider plugins...
-- Finding hashicorp/local versions matching "~> 2.5"...
-- Finding hashicorp/random versions matching "~> 3.6"...
 - Installing hashicorp/local v2.5.2...
 - Installing hashicorp/random v3.6.3...
 
-Terraform has created a lock file .terraform.lock.hcl to record the provider
-selections it made above.
-
 Terraform has been successfully initialized!"""),
- ("p", "Mira qué ha aparecido en la carpeta:"),
- ("code", "text", "estructura", """02-primer-proyecto/
-├── .terraform/            ← plugins descargados (no va a Git)
-│   └── providers/...
-├── .terraform.lock.hcl    ← versiones y hashes exactos (sí va a Git)
-└── main.tf"""),
- ("tip", "`init` es seguro: nunca crea ni borra infraestructura. Puedes ejecutarlo tantas veces como quieras."),
+ ("p", "Aparecen dos cosas nuevas en la carpeta: la carpeta `.terraform/` (los providers descargados) y el archivo `.terraform.lock.hcl` (las versiones exactas)."),
 
- ("h", "terraform plan: ver antes de tocar"),
- ("p", "`plan` compara tu código con lo que existe y te enseña qué haría. **No cambia nada.** Es la red de seguridad más importante de Terraform: acostúmbrate a leerlo siempre."),
+ ("h", "Paso 2: terraform plan"),
+ ("p", "`plan` te enseña lo que Terraform **va a hacer**, pero **no hace nada todavía**. Léelo siempre antes de aplicar:"),
  ("term", """$ terraform plan
-
-Terraform used the selected providers to generate the following execution
-plan. Resource actions are indicated with the following symbols:
-  + create
-
-Terraform will perform the following actions:
 
   # local_file.saludo will be created
   + resource "local_file" "saludo" {
-      + content              = (known after apply)
-      + filename             = "./saludo.txt"
-      + id                   = (known after apply)
+      + filename = "./saludo.txt"
       ...
     }
 
   # random_pet.nombre will be created
   + resource "random_pet" "nombre" {
-      + id        = (known after apply)
-      + length    = 2
-      + separator = "-"
+      + id     = (known after apply)
+      + length = 2
     }
 
-Plan: 2 to add, 0 to change, 0 to destroy.
-
-Changes to Outputs:
-  + nombre_mascota = (known after apply)"""),
- ("p", "Cómo se lee un plan:"),
+Plan: 2 to add, 0 to change, 0 to destroy."""),
+ ("p", "Los símbolos del plan:"),
  ("table", ["Símbolo", "Significado"], [
-  ["`+`", "Se va a **crear**"],
-  ["`-`", "Se va a **destruir**"],
-  ["`~`", "Se va a **modificar** sin recrear (*update in-place*)"],
-  ["`-/+`", "Se va a **destruir y volver a crear** (reemplazo)"],
-  ["`<=`", "Se va a **leer** (data source)"],
-  ["`(known after apply)`", "El valor aún no se conoce; lo sabremos al crear el recurso"],
+  ["`+`", "Se va a crear"],
+  ["`~`", "Se va a modificar"],
+  ["`-`", "Se va a borrar"],
+  ["`-/+`", "Se va a borrar y crear de nuevo"],
+  ["`(known after apply)`", "El valor se conocerá al crearlo"],
  ]),
 
- ("h", "terraform apply: hacerlo realidad"),
- ("p", "`apply` vuelve a calcular el plan, te lo enseña y **pide confirmación**. Solo se ejecuta si escribes exactamente `yes`:"),
+ ("h", "Paso 3: terraform apply"),
+ ("p", "`apply` hace los cambios. Antes te enseña el plan y te pide que escribas `yes` para confirmar:"),
  ("term", """$ terraform apply
 ...
 Plan: 2 to add, 0 to change, 0 to destroy.
 
-Do you want to perform these actions?
-  Terraform will perform the actions described above.
-  Only 'yes' will be accepted to approve.
-
   Enter a value: yes
 
-random_pet.nombre: Creating...
 random_pet.nombre: Creation complete after 0s [id=gentle-turtle]
-local_file.saludo: Creating...
-local_file.saludo: Creation complete after 0s [id=3f1e...]
+local_file.saludo: Creation complete after 0s
 
 Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 
 Outputs:
-
 nombre_mascota = "gentle-turtle"
 
 $ cat saludo.txt
-¡Hola, gentle-turtle! Este archivo lo creó Terraform."""),
- ("p", "Observa el orden: primero `random_pet`, después `local_file`. Terraform lo dedujo solo gracias a la referencia `random_pet.nombre.id`."),
- ("p", "Ahora ejecuta `terraform apply` **otra vez**:"),
+Hola, gentle-turtle! Este archivo lo creó Terraform."""),
+ ("p", "Fíjate: primero creó el nombre y después el archivo. Terraform se dio cuenta solo de que el archivo necesita el nombre."),
+ ("p", "Si ejecutas `terraform apply` otra vez, no hace nada, porque todo está ya como pide el código:"),
  ("term", """$ terraform apply
-random_pet.nombre: Refreshing state... [id=gentle-turtle]
-local_file.saludo: Refreshing state... [id=3f1e...]
-
 No changes. Your infrastructure matches the configuration."""),
- ("p", "¡Idempotencia en acción! Como todo coincide con el código, no hace nada."),
- ("warn", "Existe `terraform apply -auto-approve`, que no pide confirmación. Evítalo mientras aprendes: leer el plan antes de escribir `yes` es lo que te salvará de borrar algo importante."),
 
- ("h", "El estado: la memoria de Terraform"),
- ("p", "Tras el `apply` ha aparecido un archivo nuevo: `terraform.tfstate`. Ábrelo (sin modificarlo):"),
- ("code", "json", "terraform.tfstate (fragmento)", """{
-  "version": 4,
-  "terraform_version": "1.10.5",
-  "serial": 3,
-  "resources": [
-    {
-      "mode": "managed",
-      "type": "random_pet",
-      "name": "nombre",
-      "instances": [
-        { "attributes": { "id": "gentle-turtle", "length": 2, "separator": "-" } }
-      ]
-    }
-  ]
-}"""),
- ("p", "Así es como Terraform sabe que `random_pet.nombre` en tu código corresponde a la mascota `gentle-turtle`. Si no existiera el estado, Terraform pensaría que tiene que crearlo todo de nuevo. Lo estudiaremos a fondo en el módulo 9."),
- ("code", "bash", "comandos para inspeccionar", """terraform state list           # qué recursos gestiona
-terraform show                 # el estado en formato legible
-terraform output nombre_mascota"""),
+ ("h", "El archivo de estado"),
+ ("p", "Después del `apply` aparece el archivo `terraform.tfstate`. Ahí Terraform apunta lo que ha creado. Así sabe, la próxima vez, qué existe ya."),
+ ("warn", "No edites ni borres este archivo. Lo veremos con calma en el módulo 9."),
 
- ("h", "Cambios: actualizar vs reemplazar"),
+ ("h", "Hacer un cambio"),
  ("p", "Cambia `length = 2` por `length = 3` y ejecuta `terraform plan`:"),
- ("term", """  # local_file.saludo must be replaced
--/+ resource "local_file" "saludo" {
-      ~ content  = <<-EOT # forces replacement
-          - ¡Hola, gentle-turtle! Este archivo lo creó Terraform.
-          + (known after apply)
-        EOT
-      ...
-    }
-
-  # random_pet.nombre must be replaced
+ ("term", """$ terraform plan
 -/+ resource "random_pet" "nombre" {
-      ~ id        = "gentle-turtle" -> (known after apply)
-      ~ length    = 2 -> 3 # forces replacement
-        # (1 unchanged attribute hidden)
+      ~ length = 2 -> 3 # forces replacement
     }
+-/+ resource "local_file" "saludo" { ... }
 
 Plan: 2 to add, 0 to change, 2 to destroy."""),
- ("p", "Fíjate en `# forces replacement`: algunos argumentos no se pueden cambiar sobre la marcha y obligan a **recrear** el recurso. Con un archivo no importa, pero con un servidor o una base de datos significa perder lo que había dentro. **Por eso siempre se lee el plan.** Además, como el archivo depende del nombre, también se recrea: los cambios se propagan por las dependencias."),
- ("p", "Otro experimento: borra a mano `saludo.txt` (`rm saludo.txt`) y ejecuta `terraform plan`. Terraform detecta que falta y propone crearlo de nuevo. Ha comparado el estado con la realidad."),
+ ("p", "Algunos cambios no se pueden hacer «en caliente» y obligan a **borrar y crear de nuevo** (`forces replacement`). Con un archivo no pasa nada, pero con un servidor perderías lo que tuviera dentro. Por eso hay que leer el plan."),
 
- ("h", "terraform destroy: limpiar"),
- ("p", "`destroy` elimina **todo** lo que gestiona la configuración. También muestra un plan (con `-`) y pide confirmación:"),
+ ("h", "Paso 4: terraform destroy"),
+ ("p", "`destroy` borra todo lo que ha creado este proyecto. También pide confirmación:"),
  ("term", """$ terraform destroy
 ...
 Plan: 0 to add, 0 to change, 2 to destroy.
 
   Enter a value: yes
 
-local_file.saludo: Destroying...
-random_pet.nombre: Destroying...
 Destroy complete! Resources: 2 destroyed."""),
- ("p", "El orden ahora es el inverso: primero lo que depende (el archivo), luego aquello de lo que depende (el nombre)."),
- ("info", "Resumen del flujo: `init` (una vez) → `plan` → `apply` → … cambios … → `plan` → `apply` → `destroy` al terminar."),
+ ("info", "Resumen: `init` una vez, luego `plan` y `apply` cada vez que cambies algo, y `destroy` al terminar."),
 ]
 
 TEST = [

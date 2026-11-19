@@ -8,134 +8,165 @@
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/styles.css">
 <script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
-    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
-    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
-  </div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
 </header>
-<main id="contenido">
-<div class="wrap narrow">
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 16 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
+<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html" aria-current="page"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#que-es-un-provider">Qué es un provider</a></li><li><a href="#indicar-el-provider-y-su-version">Indicar el provider y su versión</a></li><li><a href="#el-archivo-terraform-lock-hcl">El archivo .terraform.lock.hcl</a></li><li><a href="#configurar-aws">Configurar AWS</a></li><li><a href="#las-claves-de-acceso">Las claves de acceso</a></li><li><a href="#tu-primer-recurso-en-la-nube-un-bucket-s3">Tu primer recurso en la nube: un bucket S3</a></li><li><a href="#usar-dos-regiones">Usar dos regiones</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+</ul>
+<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
 <nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 05</nav>
 <header class="mod-head">
   <p class="eyebrow">Módulo 05</p>
   <h1>Providers y conexión con la nube</h1>
   <p class="lead">Configurar el provider de AWS, versiones, lock file, alias y autenticación segura.</p>
-  <div class="chips"><span class="chip nivel-básico">Básico</span><span class="chip">⏱ 1,5 h</span><span class="chip">📝 6 preguntas</span><span class="chip">🏋️ 2 retos</span></div>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 1,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span></div>
 </header>
-<nav class="toc" aria-label="En esta página"><strong>En esta página</strong><a href="#objetivos">Objetivos</a><a href="#leccion">Lección</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#test">Test</a><a href="#retos">Retos</a></nav>
-
-<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Configurar el provider de AWS y autenticarse sin escribir claves en el código.</li><li>Entender restricciones de versión (<code>=</code>, <code>&gt;=</code>, <code>~&gt;</code>) y el lock file.</li><li>Usar varios providers y alias (por ejemplo, dos regiones).</li><li>Crear el primer recurso real en la nube (un bucket S3).</li></ul></section>
-<section id="leccion" class="leccion"><h2>📚 Lección</h2><nav class="indice" aria-label="Índice de la lección"><strong>Índice de la lección</strong><ol><li><a href="#que-es-un-provider">Qué es un provider</a></li><li><a href="#declarar-providers-y-versiones">Declarar providers y versiones</a></li><li><a href="#el-lock-file">El lock file</a></li><li><a href="#configurar-el-provider-de-aws">Configurar el provider de AWS</a></li><li><a href="#autenticacion-nunca-claves-en-el-codigo">Autenticación: nunca claves en el código</a></li><li><a href="#tu-primer-recurso-en-la-nube-un-bucket-s3">Tu primer recurso en la nube: un bucket S3</a></li><li><a href="#varias-regiones-o-cuentas-alias">Varias regiones o cuentas: alias</a></li><li><a href="#otros-providers-para-practicar">Otros providers para practicar</a></li></ol></nav><h3 id="que-es-un-provider">Qué es un provider</h3>
-<p>Terraform Core no sabe nada de AWS, Azure ni GitHub. Todo ese conocimiento vive en los <strong>providers</strong>: plugins que traducen tus bloques <code>resource</code> a llamadas a la API correspondiente. Hay más de 4.000 en el <strong>Terraform Registry</strong> (registry.terraform.io), clasificados en tres niveles:</p>
-<div class="table-wrap"><table class="data"><thead><tr><th>Nivel</th><th>Quién lo mantiene</th><th>Ejemplos</th></tr></thead><tbody><tr><td>Official</td><td>HashiCorp</td><td>aws, azurerm, google, kubernetes, random, local</td></tr><tr><td>Partner</td><td>La empresa del servicio</td><td>cloudflare, datadog, mongodbatlas</td></tr><tr><td>Community</td><td>Personas de la comunidad</td><td>Muchos útiles; revisa su mantenimiento</td></tr></tbody></table></div>
-<p>La documentación de cada provider en el Registry es <strong>la referencia que más vas a consultar</strong>. Para cada recurso encontrarás un ejemplo, los argumentos (<em>Argument Reference</em>), los atributos que exporta (<em>Attribute Reference</em>) y cómo importarlo (<em>Import</em>).</p>
-<h3 id="declarar-providers-y-versiones">Declarar providers y versiones</h3>
-<p>Los providers se declaran en <code>required_providers</code> con una dirección (<code>source</code>) y una restricción de versión:</p>
-<figure class="code"><figcaption><span>versions.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
-  required_version = "&gt;= 1.10"
-
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Configurar el provider de AWS y autenticarse sin escribir claves en el código.</li><li>Entender restricciones de versión (<code>=</code>, <code>&gt;=</code>, <code>~&gt;</code>) y el lock file.</li><li>Usar varios providers y alias (por ejemplo, dos regiones).</li><li>Crear el primer recurso real en la nube (un bucket S3).</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="que-es-un-provider">Qué es un provider</h3>
+<p>Terraform por sí solo no sabe crear nada en AWS, Azure o GitHub. Para eso usa <strong>providers</strong>: complementos que saben hablar con cada servicio. Hay miles en el <strong>Terraform Registry</strong> (registry.terraform.io).</p>
+<p>En la página de cada provider está la documentación de todos sus recursos, con ejemplos. Es la página que más vas a consultar.</p>
+<h3 id="indicar-el-provider-y-su-version">Indicar el provider y su versión</h3>
+<p>Se declara dentro del bloque <code>terraform</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">versions.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"   # registry.terraform.io/hashicorp/aws
+      source  = "hashicorp/aws"
       version = "~&gt; 6.0"
     }
   }
 }</code></pre></figure>
-<div class="table-wrap"><table class="data"><thead><tr><th>Restricción</th><th>Significado</th><th>Acepta</th></tr></thead><tbody><tr><td><code>= 6.2.0</code></td><td>Exactamente esa</td><td>6.2.0</td></tr><tr><td><code>&gt;= 6.0</code></td><td>Esa o superior</td><td>6.0, 6.5, 7.0, 8.1…</td></tr><tr><td><code>~&gt; 6.0</code></td><td>Solo cambia el último número indicado</td><td>6.0 … 6.99 (no 7.0)</td></tr><tr><td><code>~&gt; 6.2.0</code></td><td>Solo parches</td><td>6.2.0 … 6.2.x</td></tr><tr><td><code>&gt;= 6.0, &lt; 7.0</code></td><td>Rango explícito</td><td>igual que <code>~&gt; 6.0</code></td></tr></tbody></table></div>
-<div class="callout tip"><strong>💡 Consejo.</strong> En proyectos usa <code>~&gt; MAYOR.MENOR</code> para recibir mejoras sin cambios incompatibles. Las versiones mayores (6 → 7) suelen romper cosas y conviene actualizarlas a propósito.</div>
-<h3 id="el-lock-file">El lock file</h3>
-<p>Al hacer <code>init</code>, Terraform elige la versión más alta que cumpla la restricción y la apunta, con sus hashes, en <code>.terraform.lock.hcl</code>:</p>
-<figure class="code"><figcaption><span>.terraform.lock.hcl</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">provider "registry.terraform.io/hashicorp/aws" {
-  version     = "6.4.0"
-  constraints = "~&gt; 6.0"
-  hashes = [
-    "h1:abc123...",
-    "zh:def456...",
-  ]
-}</code></pre></figure>
-<p>Mientras el lock file exista, <code>init</code> siempre instalará <strong>esa misma versión</strong>, aunque salgan otras nuevas. Así todo el equipo y el CI usan exactamente lo mismo. Por eso se sube a Git. Para actualizar a propósito:</p>
-<figure class="code"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform init -upgrade   # sube a la versión más alta permitida y actualiza el lock
-
-# Si el equipo usa varios sistemas operativos, añade hashes para todos:
-terraform providers lock \
-  -platform=linux_amd64 -platform=darwin_arm64 -platform=windows_amd64</code></pre></figure>
-<h3 id="configurar-el-provider-de-aws">Configurar el provider de AWS</h3>
-<p>El bloque <code>provider</code> configura cómo conectarse. Para AWS lo mínimo es la región:</p>
-<figure class="code"><figcaption><span>providers.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">provider "aws" {
-  region = "eu-west-1"   # Irlanda. Otras: eu-south-2 (España), us-east-1...
+<p>La versión se puede indicar de varias formas:</p>
+<div class="table-wrap"><table><thead><tr><th>Escribes</th><th>Acepta</th></tr></thead><tbody><tr><td><code>= 6.2.0</code></td><td>Solo la 6.2.0</td></tr><tr><td><code>&gt;= 6.0</code></td><td>La 6.0 o cualquiera más nueva</td></tr><tr><td><code>~&gt; 6.0</code></td><td>Cualquier 6.x, pero no la 7.0</td></tr></tbody></table></div>
+<div class="callout tip"><span class="k">Consejo</span>Usa <code>~&gt;</code>. Recibes mejoras pero evitas versiones nuevas que puedan romper tu código.</div>
+<h3 id="el-archivo-terraform-lock-hcl">El archivo .terraform.lock.hcl</h3>
+<p>Al hacer <code>terraform init</code>, Terraform elige una versión exacta y la apunta en <code>.terraform.lock.hcl</code>. Así todo el equipo usa la misma versión. Este archivo <strong>sí se sube a Git</strong>.</p>
+<p>Si quieres actualizar a una versión más nueva:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform init -upgrade">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform init -upgrade</span></code></pre></figure>
+<h3 id="configurar-aws">Configurar AWS</h3>
+<p>El bloque <code>provider</code> dice cómo conectarse. Para AWS basta con la región:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">providers.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">provider "aws" {
+  region = "eu-west-1"
 
   default_tags {
     tags = {
       Gestion = "terraform"
-      Curso   = "terraform-desde-cero"
     }
   }
 }</code></pre></figure>
-<p><code>default_tags</code> añade esas etiquetas a <strong>todos</strong> los recursos que lo admitan. Así en la consola de AWS (y en la factura) sabrás qué creó Terraform.</p>
-<h3 id="autenticacion-nunca-claves-en-el-codigo">Autenticación: nunca claves en el código</h3>
-<p>El provider de AWS busca credenciales en este orden, igual que la AWS CLI:</p>
-<ol><li>Argumentos del bloque provider (<code>access_key</code>, <code>secret_key</code>) — <strong>no los uses nunca</strong>.</li><li>Variables de entorno: <code>AWS_ACCESS_KEY_ID</code>, <code>AWS_SECRET_ACCESS_KEY</code>, <code>AWS_SESSION_TOKEN</code>.</li><li>Perfil de <code>~/.aws/config</code> y <code>~/.aws/credentials</code> (el indicado en <code>AWS_PROFILE</code> o <code>profile</code>).</li><li>Rol de la máquina o contenedor (EC2 instance profile, ECS, OIDC en CI…).</li></ol>
-<figure class="code"><figcaption><span>la forma recomendada</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">export AWS_PROFILE=curso-terraform   # el perfil del módulo 1
-aws sts get-caller-identity          # comprueba
-terraform plan                       # Terraform usa el mismo perfil</code></pre></figure>
-<div class="callout aviso"><strong>⚠️ Cuidado.</strong> Si escribes <code>access_key = "AKIA..."</code> en un <code>.tf</code> y lo subes a GitHub, en minutos habrá bots usando tu cuenta para minar criptomonedas. No es una exageración.</div>
+<p><code>default_tags</code> pone esas etiquetas a todo lo que crees. Así sabrás en AWS qué ha creado Terraform.</p>
+<h3 id="las-claves-de-acceso">Las claves de acceso</h3>
+<p>Terraform necesita tus credenciales de AWS. <strong>Nunca las escribas en el código.</strong> Terraform las busca solo en el mismo sitio que la herramienta <code>aws</code> (lo configuraste en el módulo 1):</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="export AWS_PROFILE=curso-terraform
+aws sts get-caller-identity
+terraform plan">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">export AWS_PROFILE=curso-terraform</span>
+<span class="prompt">$ </span><span class="cmdline">aws sts get-caller-identity</span>
+<span class="prompt">$ </span><span class="cmdline">terraform plan</span></code></pre></figure>
+<div class="callout aviso"><span class="k">Importante</span>Si subes unas claves de AWS a GitHub, en pocos minutos alguien puede usarlas para gastar dinero en tu cuenta.</div>
 <h3 id="tu-primer-recurso-en-la-nube-un-bucket-s3">Tu primer recurso en la nube: un bucket S3</h3>
-<p>S3 es el almacenamiento de objetos de AWS. Un bucket es gratuito mientras esté vacío (y casi gratuito con pocos datos). Crea una carpeta nueva con estos archivos:</p>
-<figure class="code"><figcaption><span>main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "aws_s3_bucket" "demo" {
-  # Los nombres de bucket son GLOBALES (únicos en todo AWS).
-  # bucket_prefix añade un sufijo aleatorio para evitar choques.
+<p><strong>S3</strong> es el almacenamiento de archivos de AWS. Un <strong>bucket</strong> es como una carpeta. Crear uno vacío es gratis.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "aws_s3_bucket" "demo" {
   bucket_prefix = "curso-tf-demo-"
-  force_destroy = true # permite borrarlo aunque tenga archivos (solo para labs)
-}
-
-resource "aws_s3_bucket_versioning" "demo" {
-  bucket = aws_s3_bucket.demo.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
+  force_destroy = true
 }
 
 resource "aws_s3_object" "hola" {
-  bucket       = aws_s3_bucket.demo.id
-  key          = "hola.txt"
-  content      = "Subido con Terraform"
-  content_type = "text/plain"
+  bucket  = aws_s3_bucket.demo.id
+  key     = "hola.txt"
+  content = "Subido con Terraform"
 }
 
 output "bucket" {
   value = aws_s3_bucket.demo.bucket
-}
-
-output "arn" {
-  value = aws_s3_bucket.demo.arn
 }</code></pre></figure>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform init
-$ terraform apply
-...
-Plan: 3 to add, 0 to change, 0 to destroy.
-...
-Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
-
-Outputs:
-arn    = "arn:aws:s3:::curso-tf-demo-20261119103512345600000001"
-bucket = "curso-tf-demo-20261119103512345600000001"
-
-$ aws s3 ls s3://$(terraform output -raw bucket)
-2026-11-19 10:35:14         20 hola.txt</code></pre></figure>
-<div class="callout "><strong>ℹ️ Nota.</strong> En el provider AWS moderno, la configuración del bucket (versionado, cifrado, políticas, web…) se hace con <strong>recursos separados</strong> como <code>aws_s3_bucket_versioning</code>, no con bloques dentro de <code>aws_s3_bucket</code>. Lo verás en tutoriales antiguos de la otra forma.</div>
-<p>Abre la consola de AWS → S3 y busca tu bucket. Mira la pestaña <em>Properties</em>: verás el versionado activado y las etiquetas de <code>default_tags</code>. Cuando termines: <code>terraform destroy</code>.</p>
-<h3 id="varias-regiones-o-cuentas-alias">Varias regiones o cuentas: alias</h3>
-<p>Puedes declarar el mismo provider varias veces con un <code>alias</code> y elegir cuál usa cada recurso con el meta-argumento <code>provider</code>:</p>
-<figure class="code"><figcaption><span>providers.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">provider "aws" {
-  region = "eu-west-1"            # el de por defecto (sin alias)
+<ul><li>Los nombres de bucket deben ser únicos en todo el mundo. Con <code>bucket_prefix</code>, AWS añade un final al azar para que no se repita.</li><li><code>force_destroy = true</code> permite borrar el bucket aunque tenga archivos (solo para practicar).</li><li><code>aws_s3_object</code> sube un archivo al bucket.</li></ul>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform init
+terraform apply
+aws s3 ls s3://curso-tf-demo-20261119103512345600000001">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform init</span>
+<span class="prompt">$ </span><span class="cmdline">terraform apply</span>
+<span class="out">...</span>
+<span class="out">Apply complete! Resources: 2 added, 0 changed, 0 destroyed.</span>
+<span class="out"></span>
+<span class="out">Outputs:</span>
+<span class="out">bucket = "curso-tf-demo-20261119103512345600000001"</span>
+<span class="out"></span>
+<span class="prompt">$ </span><span class="cmdline">aws s3 ls s3://curso-tf-demo-20261119103512345600000001</span>
+<span class="out">2026-11-19 10:35:14         20 hola.txt</span></code></pre></figure>
+<p>Busca el bucket en la web de AWS (sección S3). Cuando termines, bórralo con <code>terraform destroy</code>.</p>
+<h3 id="usar-dos-regiones">Usar dos regiones</h3>
+<p>Puedes repetir el bloque <code>provider</code> con un nombre extra (<code>alias</code>) para trabajar en otra región:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">providers.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">provider "aws" {
+  region = "eu-west-1"
 }
 
 provider "aws" {
@@ -143,47 +174,16 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "europa" {
-  bucket_prefix = "datos-eu-"
-}
-
 resource "aws_s3_bucket" "usa" {
   provider      = aws.virginia
   bucket_prefix = "datos-us-"
 }</code></pre></figure>
-<p>Casos típicos: certificados para CloudFront (deben estar en us-east-1), réplicas de backups en otra región o gestionar varias cuentas a la vez (con <code>assume_role</code>).</p>
-<div class="callout "><strong>ℹ️ Nota.</strong> Novedad del provider AWS 6.x: muchos recursos aceptan directamente un argumento <code>region = "us-east-1"</code>, así que para el caso «misma cuenta, otra región» ya no siempre hace falta un alias. Para otra cuenta (<code>assume_role</code>) los alias siguen siendo necesarios.</div>
-<h3 id="otros-providers-para-practicar">Otros providers para practicar</h3>
-<p>El flujo es idéntico con cualquier provider. Algunos interesantes para practicar sin AWS:</p>
-<figure class="code"><figcaption><span>docker (necesita Docker instalado)</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
-  required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
-      version = "~&gt; 3.0"
-    }
-  }
-}
-
-resource "docker_image" "nginx" {
-  name = "nginx:alpine"
-}
-
-resource "docker_container" "web" {
-  name  = "web-terraform"
-  image = docker_image.nginx.image_id
-
-  ports {
-    internal = 80
-    external = 8080
-  }
-}
-# terraform apply y abre http://localhost:8080</code></pre></figure>
-<p>Otros: <code>integrations/github</code> (repositorios y equipos), <code>hashicorp/kubernetes</code>, <code>hashicorp/azurerm</code>, <code>hashicorp/google</code>, <code>cloudflare/cloudflare</code>.</p></section>
-<section id="practica"><h2>🛠 Práctica guiada: Tu primer bucket S3</h2><ol class="pasos"><li>Configura un perfil con <code>aws configure --profile curso-terraform</code>.</li><li>Crea el bucket del ejemplo y localízalo en la consola de AWS.</li><li>Revisa el contenido de <code>.terraform.lock.hcl</code>.</li><li>Cambia la restricción de versión y prueba <code>terraform init -upgrade</code>.</li><li>Destruye el bucket.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
-<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform providers</code></td><td>Lista los providers que requiere la configuración.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform providers" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform init -upgrade</code></td><td>Actualiza providers dentro de las restricciones.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -upgrade" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform providers lock -platform=linux_amd64 -platform=darwin_arm64 -platform=windows_amd64</code></td><td>Añade hashes para varios sistemas al lock file.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform providers lock -platform=linux_amd64 -platform=darwin_arm64 -platform=windows_amd64" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">export AWS_PROFILE=curso-terraform</code></td><td>Selecciona el perfil de AWS (bash).</td><td class="copy-cell"><button class="copy" type="button" data-copy="export AWS_PROFILE=curso-terraform" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
-<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt><code>No valid credential sources found</code></dt><dd>No hay credenciales. Revisa <code>AWS_PROFILE</code> y <code>aws sts get-caller-identity</code>.</dd></div><div><dt><code>BucketAlreadyExists</code></dt><dd>Los nombres de bucket son globales. Usa <code>bucket_prefix</code> o un sufijo aleatorio.</dd></div></dl></section>
-<section id="test"><h2>✅ Test de autoevaluación</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="05" data-total="6"><fieldset class="q" data-ok="1"><legend><span class="qn">1</span><span class="txt">¿Qué versiones acepta la restricción <code>~&gt; 6.0</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Cualquier versión ≥ 6.0</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">De 6.0 a 6.x, pero no 7.0</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Solo la 6.0.0</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">De 6.0.0 a 6.0.x</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>~&gt;</code> permite que aumente solo el último número indicado (el menor, en este caso).</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">2</span><span class="txt">¿Para qué sirve <code>.terraform.lock.hcl</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Para impedir el destroy</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para fijar la versión exacta y los hashes de los providers</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para guardar contraseñas</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para bloquear el estado</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Garantiza que todos instalan exactamente la misma versión. Se sube a Git.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">3</span><span class="txt">¿Cuál es la forma CORRECTA de dar credenciales de AWS a Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Un perfil de AWS (AWS_PROFILE) o variables de entorno</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">En un comentario</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Ponerlas en terraform.tfvars y subirlo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Escribir access_key en el provider</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Las credenciales deben vivir fuera del código: perfiles, SSO, variables de entorno o roles.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">4</span><span class="txt">Has cambiado <code>version = "~&gt; 5.0"</code> por <code>"~&gt; 6.0"</code>. <code>terraform init</code> falla. ¿Qué haces?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform init -upgrade</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Reinstalar Terraform</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform apply</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Borrar el estado</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El lock file aún apunta a la 5.x; <code>-upgrade</code> permite elegir una versión nueva.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">5</span><span class="txt">¿Por qué usamos <code>bucket_prefix</code> en lugar de <code>bucket</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Porque los nombres de bucket son globales y así evitamos conflictos</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Es obligatorio</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para que sea más barato</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para que sea privado</span></button></div><p class="exp" hidden><strong class="verdict"></strong> AWS genera un sufijo único para que no choque con buckets de otras personas.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">6</span><span class="txt">¿Cómo indicas que un recurso use el provider con <code>alias = "virginia"</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">region = "virginia"</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">provider = "virginia"</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">alias = "virginia"</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">provider = aws.virginia</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El meta-argumento <code>provider</code> recibe <code>NOMBRE.ALIAS</code> sin comillas.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
-<section id="retos"><h2>🏋️ Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1: Bucket con cifrado y bloqueo de acceso público</h3><p>Amplía el ejemplo del bucket añadiendo cifrado por defecto (SSE-S3, AES256) y el bloqueo de acceso público completo. Busca los recursos en la documentación del provider AWS.</p><details><summary>💡 Ver pista</summary><p>Busca <code>aws_s3_bucket_server_side_encryption_configuration</code> y <code>aws_s3_bucket_public_access_block</code>.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "aws_s3_bucket_server_side_encryption_configuration" "demo" {
+<p>El bucket <code>usa</code> se crea en Virginia (us-east-1). Los recursos sin <code>provider</code> usan el primero.</p></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Tu primer bucket S3</strong></p><ol class="pasos"><li>Configura un perfil con <code>aws configure --profile curso-terraform</code>.</li><li>Crea el bucket del ejemplo y localízalo en la consola de AWS.</li><li>Revisa el contenido de <code>.terraform.lock.hcl</code>.</li><li>Cambia la restricción de versión y prueba <code>terraform init -upgrade</code>.</li><li>Destruye el bucket.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform providers</code></td><td>Lista los providers que requiere la configuración.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform providers" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform init -upgrade</code></td><td>Actualiza providers dentro de las restricciones.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -upgrade" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform providers lock -platform=linux_amd64 -platform=darwin_arm64 -platform=windows_amd64</code></td><td>Añade hashes para varios sistemas al lock file.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform providers lock -platform=linux_amd64 -platform=darwin_arm64 -platform=windows_amd64" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">export AWS_PROFILE=curso-terraform</code></td><td>Selecciona el perfil de AWS (bash).</td><td class="copy-cell"><button class="copy" type="button" data-copy="export AWS_PROFILE=curso-terraform" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>No valid credential sources found</code></dt><dd>No hay credenciales. Revisa <code>AWS_PROFILE</code> y <code>aws sts get-caller-identity</code>.</dd></div><div><dt><code>BucketAlreadyExists</code></dt><dd>Los nombres de bucket son globales. Usa <code>bucket_prefix</code> o un sufijo aleatorio.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="05" data-total="6"><fieldset class="q" data-ok="1"><legend><span class="qn">01</span><span class="txt">¿Qué versiones acepta la restricción <code>~&gt; 6.0</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Cualquier versión ≥ 6.0</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">De 6.0 a 6.x, pero no 7.0</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Solo la 6.0.0</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">De 6.0.0 a 6.0.x</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>~&gt;</code> permite que aumente solo el último número indicado (el menor, en este caso).</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">02</span><span class="txt">¿Para qué sirve <code>.terraform.lock.hcl</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Para impedir el destroy</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para fijar la versión exacta y los hashes de los providers</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para guardar contraseñas</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para bloquear el estado</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Garantiza que todos instalan exactamente la misma versión. Se sube a Git.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">03</span><span class="txt">¿Cuál es la forma CORRECTA de dar credenciales de AWS a Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Un perfil de AWS (AWS_PROFILE) o variables de entorno</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">En un comentario</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Ponerlas en terraform.tfvars y subirlo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Escribir access_key en el provider</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Las credenciales deben vivir fuera del código: perfiles, SSO, variables de entorno o roles.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">04</span><span class="txt">Has cambiado <code>version = "~&gt; 5.0"</code> por <code>"~&gt; 6.0"</code>. <code>terraform init</code> falla. ¿Qué haces?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform init -upgrade</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Reinstalar Terraform</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform apply</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Borrar el estado</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El lock file aún apunta a la 5.x; <code>-upgrade</code> permite elegir una versión nueva.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">05</span><span class="txt">¿Por qué usamos <code>bucket_prefix</code> en lugar de <code>bucket</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Porque los nombres de bucket son globales y así evitamos conflictos</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Es obligatorio</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para que sea más barato</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para que sea privado</span></button></div><p class="exp" hidden><strong class="verdict"></strong> AWS genera un sufijo único para que no choque con buckets de otras personas.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">06</span><span class="txt">¿Cómo indicas que un recurso use el provider con <code>alias = "virginia"</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">region = "virginia"</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">provider = "virginia"</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">alias = "virginia"</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">provider = aws.virginia</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El meta-argumento <code>provider</code> recibe <code>NOMBRE.ALIAS</code> sin comillas.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Bucket con cifrado y bloqueo de acceso público</h3><p>Amplía el ejemplo del bucket añadiendo cifrado por defecto (SSE-S3, AES256) y el bloqueo de acceso público completo. Busca los recursos en la documentación del provider AWS.</p><details><summary>Ver pista</summary><p>Busca <code>aws_s3_bucket_server_side_encryption_configuration</code> y <code>aws_s3_bucket_public_access_block</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "aws_s3_bucket_server_side_encryption_configuration" "demo" {
   bucket = aws_s3_bucket.demo.id
 
   rule {
@@ -200,7 +200,7 @@ resource "aws_s3_bucket_public_access_block" "demo" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }</code></pre></figure></details></article>
-<article class="reto"><h3>Reto 2: Mismo código, dos regiones</h3><p>Crea un bucket en <code>eu-west-1</code> y otro en <code>eu-central-1</code> usando alias. Saca ambos nombres y sus regiones (atributo <code>region</code> del bucket) como outputs.</p><details><summary>💡 Ver pista</summary><p>Declara un segundo provider con alias y usa <code>provider = aws.ALIAS</code> en el segundo bucket.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">provider "aws" {
+<article class="reto"><h3>Reto 2. Mismo código, dos regiones</h3><p>Crea un bucket en <code>eu-west-1</code> y otro en <code>eu-central-1</code> usando alias. Saca ambos nombres y sus regiones (atributo <code>region</code> del bucket) como outputs.</p><details><summary>Ver pista</summary><p>Declara un segundo provider con alias y usa <code>provider = aws.ALIAS</code> en el segundo bucket.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">provider "aws" {
   region = "eu-west-1"
 }
 
@@ -227,13 +227,11 @@ output "buckets" {
   }
 }</code></pre></figure></details></article></section>
 <div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="05"> He completado este módulo</label></div>
-<nav class="pager" aria-label="Módulos"><a class="prev" href="04-variables-outputs-locals.html"><small>← Anterior</small>Variables, outputs y locals</a><a class="next" href="06-recursos-dependencias.html"><small>Siguiente →</small>Recursos, data sources y dependencias</a></nav></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="04-variables-outputs-locals.html"><small>Anterior</small>Variables, outputs y locals</a><a class="next" href="06-recursos-dependencias.html"><small>Siguiente</small>Recursos, data sources y dependencias</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
 </main>
-<footer class="site-footer">
-  <div class="wrap">
-    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
-  </div>
-</footer>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>

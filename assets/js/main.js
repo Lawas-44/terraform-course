@@ -1,18 +1,21 @@
 (function () {
   "use strict";
-  var KEY = "tf-curso-progreso";
 
-  function leer() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+  var PROG_KEY = "tf-curso-progreso";
+  var TEST_KEY = "tf-curso-tests";
+  var TOTAL_MODULOS = 16;
+
+  function leer(key) {
+    try { return JSON.parse(localStorage.getItem(key)) || {}; } catch (e) { return {}; }
   }
-  function guardar(p) {
-    try { localStorage.setItem(KEY, JSON.stringify(p)); } catch (e) { /* sin almacenamiento */ }
+  function guardar(key, val) {
+    try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { /* sin almacenamiento */ }
   }
 
-  // Tema claro/oscuro
-  var toggle = document.querySelector(".theme-toggle");
-  if (toggle) {
-    toggle.addEventListener("click", function () {
+  /* ---------- Tema claro / oscuro ---------- */
+  var tema = document.querySelector(".theme-toggle");
+  if (tema) {
+    tema.addEventListener("click", function () {
       var root = document.documentElement;
       var oscuro = root.dataset.theme
         ? root.dataset.theme === "dark"
@@ -22,19 +25,108 @@
     });
   }
 
-  // Botones de copiar
+  /* ---------- Menú lateral en móvil ---------- */
+  var menuBtn = document.querySelector(".menu-toggle");
+  function cerrarMenu() {
+    document.body.classList.remove("menu-open");
+    if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
+  }
+  if (menuBtn) {
+    menuBtn.addEventListener("click", function () {
+      var abierto = document.body.classList.toggle("menu-open");
+      menuBtn.setAttribute("aria-expanded", abierto ? "true" : "false");
+    });
+    var overlay = document.querySelector(".overlay");
+    if (overlay) overlay.addEventListener("click", cerrarMenu);
+    document.querySelectorAll(".sidebar a").forEach(function (a) { a.addEventListener("click", cerrarMenu); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrarMenu(); });
+  }
+
+  // Mostrar en el menú el módulo actual sin mover la página
+  var sidebarEl = document.querySelector(".sidebar");
+  var actual = document.querySelector('.sidebar .sb-link[aria-current="page"]');
+  if (sidebarEl && actual) sidebarEl.scrollTop = Math.max(0, actual.offsetTop - 120);
+
+  /* ---------- Progreso del curso ---------- */
+  function pintarProgreso() {
+    var p = leer(PROG_KEY);
+    var hechos = Object.keys(p).filter(function (k) { return p[k]; }).length;
+    var pct = Math.round(hechos / TOTAL_MODULOS * 100);
+    document.querySelectorAll(".js-fill").forEach(function (el) { el.style.width = pct + "%"; });
+    document.querySelectorAll(".js-pct").forEach(function (el) { el.textContent = pct + " %"; });
+    document.querySelectorAll(".js-count").forEach(function (el) {
+      el.textContent = hechos + " de " + TOTAL_MODULOS + " módulos completados";
+    });
+    document.querySelectorAll(".sb-link[data-mod]").forEach(function (a) {
+      a.classList.toggle("done", !!p[a.dataset.mod]);
+    });
+    var tests = leer(TEST_KEY);
+    var filas = document.querySelectorAll(".mod-row[data-mod]");
+    filas.forEach(function (row) {
+      var partes = [];
+      if (p[row.dataset.mod]) partes.push("Completado");
+      var t = tests[row.dataset.mod];
+      if (t) partes.push("Test " + t.ok + "/" + t.total);
+      row.querySelector(".estado").textContent = partes.join(" · ");
+    });
+    // En la portada, el botón principal lleva al primer módulo sin completar
+    var cont = document.querySelector(".js-continuar");
+    if (cont && hechos > 0) {
+      for (var i = 0; i < filas.length; i++) {
+        if (!p[filas[i].dataset.mod]) {
+          cont.href = filas[i].getAttribute("href");
+          cont.textContent = "Continuar el curso";
+          break;
+        }
+      }
+    }
+  }
+  pintarProgreso();
+
+  var check = document.querySelector(".mark-done");
+  if (check) {
+    check.checked = !!leer(PROG_KEY)[check.dataset.mod];
+    check.addEventListener("change", function () {
+      var p = leer(PROG_KEY);
+      if (check.checked) p[check.dataset.mod] = true; else delete p[check.dataset.mod];
+      guardar(PROG_KEY, p);
+      pintarProgreso();
+    });
+  }
+
+  /* ---------- Sección activa en el menú lateral ---------- */
+  var tocLinks = Array.prototype.slice.call(document.querySelectorAll(".sidebar .sb-toc a"));
+  if (tocLinks.length) {
+    var objetivos = tocLinks.map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); });
+    var pendiente = false;
+    var marcar = function () {
+      pendiente = false;
+      var activo = -1;
+      for (var i = 0; i < objetivos.length; i++) {
+        if (objetivos[i] && objetivos[i].getBoundingClientRect().top < 140) activo = i;
+      }
+      tocLinks.forEach(function (a, i) { a.classList.toggle("active", i === activo); });
+    };
+    window.addEventListener("scroll", function () {
+      if (!pendiente) { pendiente = true; window.requestAnimationFrame(marcar); }
+    }, { passive: true });
+    marcar();
+  }
+
+  /* ---------- Copiar ---------- */
   document.addEventListener("click", function (ev) {
     var btn = ev.target.closest(".copy");
     if (!btn) return;
     var texto = btn.dataset.copy;
     if (!texto) {
-      var code = btn.closest("figure") && btn.closest("figure").querySelector("pre code");
+      var fig = btn.closest("figure");
+      var code = fig && fig.querySelector("pre code");
       texto = code ? code.innerText : "";
     }
     var ok = function () {
       btn.classList.add("copied");
       var prev = btn.textContent;
-      btn.textContent = "¡Copiado!";
+      btn.textContent = "Copiado";
       setTimeout(function () { btn.classList.remove("copied"); btn.textContent = prev; }, 1400);
     };
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -42,35 +134,7 @@
     }
   });
 
-  // Progreso: casilla en cada módulo
-  var progreso = leer();
-  var check = document.querySelector(".mark-done");
-  if (check) {
-    check.checked = !!progreso[check.dataset.mod];
-    check.addEventListener("change", function () {
-      var p = leer();
-      if (check.checked) p[check.dataset.mod] = true; else delete p[check.dataset.mod];
-      guardar(p);
-    });
-  }
-
-  // Progreso: tarjetas del temario
-  var cards = document.querySelectorAll(".mod-card");
-  if (cards.length) {
-    var hechos = 0;
-    cards.forEach(function (c) {
-      if (progreso[c.dataset.mod]) { c.classList.add("done"); hechos++; }
-    });
-    var fill = document.getElementById("progress-fill");
-    var txt = document.getElementById("progress-text");
-    if (fill) fill.style.width = (hechos / cards.length * 100) + "%";
-    if (txt) txt.textContent = hechos + " de " + cards.length + " módulos completados";
-  }
-
-  // Tests de autoevaluación
-  var TEST_KEY = "tf-curso-tests";
-  function leerTests() { try { return JSON.parse(localStorage.getItem(TEST_KEY)) || {}; } catch (e) { return {}; } }
-
+  /* ---------- Tests ---------- */
   document.querySelectorAll(".quiz").forEach(function (quiz) {
     var total = parseInt(quiz.dataset.total, 10);
     var resultado = quiz.querySelector(".quiz-result");
@@ -79,13 +143,16 @@
     function actualizar() {
       var resp = quiz.querySelectorAll(".q.respondida").length;
       var ok = quiz.querySelectorAll(".q.acierto").length;
-      if (resp < total) { resultado.textContent = "Llevas " + ok + " de " + resp + " correctas (" + (total - resp) + " pendientes)."; return; }
+      if (resp < total) {
+        resultado.textContent = "Llevas " + ok + " de " + resp + " correctas. Quedan " + (total - resp) + ".";
+        return;
+      }
       var pct = Math.round(ok / total * 100);
       resultado.textContent = "Resultado: " + ok + "/" + total + " (" + pct + " %). " +
-        (pct >= 80 ? "¡Módulo superado! Ya puedes marcarlo como completado." : "Repasa la lección y vuelve a intentarlo.");
-      var t = leerTests();
+        (pct >= 80 ? "Módulo superado. Ya puedes marcarlo como completado." : "Repasa la lección y vuelve a intentarlo.");
+      var t = leer(TEST_KEY);
       if (!t[quiz.dataset.mod] || t[quiz.dataset.mod].ok < ok) t[quiz.dataset.mod] = { ok: ok, total: total };
-      try { localStorage.setItem(TEST_KEY, JSON.stringify(t)); } catch (e) {}
+      guardar(TEST_KEY, t);
     }
 
     quiz.addEventListener("click", function (ev) {
@@ -103,7 +170,7 @@
           else if (i === elegida) b.classList.add("incorrecta");
         });
         var exp = q.querySelector(".exp");
-        exp.querySelector(".verdict").textContent = elegida === correcta ? "✔ ¡Correcto!" : "✘ No es correcto.";
+        exp.querySelector(".verdict").textContent = elegida === correcta ? "Correcto." : "Incorrecto.";
         exp.hidden = false;
         actualizar();
         return;
@@ -120,26 +187,18 @@
     });
   });
 
-  // Nota del test en las tarjetas del temario
-  if (cards.length) {
-    var tests = leerTests();
-    cards.forEach(function (c) {
-      var t = tests[c.dataset.mod];
-      var badge = c.querySelector(".score-badge");
-      if (t && badge) badge.textContent = "Test " + t.ok + "/" + t.total;
-    });
-  }
-
-  // Buscador de comandos
+  /* ---------- Buscador de comandos ---------- */
   var buscar = document.getElementById("buscar");
   if (buscar) {
-    var normal = function (s) { return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); };
+    var normal = function (s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); };
     buscar.addEventListener("input", function () {
       var q = normal(buscar.value.trim());
       var total = 0;
       document.querySelectorAll(".cmd-section").forEach(function (sec) {
+        var filas = sec.querySelectorAll("tbody tr");
+        if (!filas.length) { sec.hidden = !!q; return; }
         var visibles = 0;
-        sec.querySelectorAll("tbody tr").forEach(function (tr) {
+        filas.forEach(function (tr) {
           var mostrar = !q || normal(tr.textContent).indexOf(q) !== -1;
           tr.hidden = !mostrar;
           if (mostrar) visibles++;
@@ -147,7 +206,7 @@
         sec.hidden = visibles === 0 && !!q;
         total += visibles;
       });
-      document.getElementById("sin-resultados").hidden = total > 0;
+      document.getElementById("sin-resultados").hidden = total > 0 || !q;
     });
   }
 })();

@@ -3,33 +3,25 @@
 
 LECCION = [
  ("h", "Qué son los meta-argumentos"),
- ("p", "Además de sus argumentos propios, **cualquier** bloque `resource` acepta cinco argumentos especiales que cambian cómo lo trata Terraform:"),
- ("table", ["Meta-argumento", "Para qué sirve"], [
-  ["`count`", "Crear N copias numeradas"],
-  ["`for_each`", "Crear una copia por cada elemento de un map o set"],
-  ["`depends_on`", "Dependencias explícitas (módulo 6)"],
-  ["`provider`", "Elegir un provider con alias (módulo 5)"],
-  ["`lifecycle`", "Cambiar cómo se crea, actualiza o destruye"],
+ ("p", "Son opciones especiales que puedes poner en **cualquier** recurso para cambiar cómo lo trata Terraform:"),
+ ("table", ["Opción", "Para qué sirve"], [
+  ["`count`", "Crear varias copias numeradas"],
+  ["`for_each`", "Crear una copia por cada elemento de una lista de nombres"],
+  ["`lifecycle`", "Proteger un recurso o cambiar cómo se reemplaza"],
+  ["`depends_on`", "Indicar un orden a mano (módulo 6)"],
+  ["`provider`", "Elegir otra región o cuenta (módulo 5)"],
  ]),
- ("p", "Para practicar sin coste, usaremos `local_file` en los ejemplos. Todo funciona igual con recursos de AWS."),
+ ("p", "En los ejemplos usamos archivos locales para practicar gratis. Con recursos de AWS funciona igual."),
 
- ("h", "count: N copias"),
+ ("h", "count: varias copias"),
  ("code", "hcl", "count.tf", """resource "local_file" "nota" {
   count    = 3
-  filename = "${path.module}/nota-${count.index}.txt"
-  content  = "Soy la nota número ${count.index}"
-}
-
-output "archivos" {
-  value = local_file.nota[*].filename   # splat: todos los filename
+  filename = "nota-${count.index}.txt"
+  content  = "Soy la nota ${count.index}"
 }"""),
- ("ul", [
-  "`count.index` vale 0, 1, 2…",
-  "El recurso pasa a ser una **lista**: `local_file.nota[0]`, `local_file.nota[1]`…",
-  "`local_file.nota[*].filename` (splat) devuelve una lista con el atributo de todas las copias.",
- ]),
- ("p", "Uso muy habitual: crear un recurso **solo si** se cumple una condición:"),
- ("code", "hcl", "creación condicional", """variable "crear_backup" {
+ ("p", "Crea `nota-0.txt`, `nota-1.txt` y `nota-2.txt`. `count.index` es el número de cada copia, empezando por 0."),
+ ("p", "Un uso muy común: crear algo **solo si** se cumple una condición. Con 1 se crea y con 0 no:"),
+ ("code", "hcl", "crear solo si...", """variable "crear_backup" {
   type    = bool
   default = false
 }
@@ -37,134 +29,69 @@ output "archivos" {
 resource "aws_s3_bucket" "backup" {
   count         = var.crear_backup ? 1 : 0
   bucket_prefix = "backup-"
-}
-
-# Como es una lista, al referenciarlo hay que tener en cuenta que puede no existir:
-output "bucket_backup" {
-  value = var.crear_backup ? aws_s3_bucket.backup[0].bucket : "no creado"
 }"""),
 
- ("h", "El problema de count con listas"),
- ("p", "Crear copias a partir de una lista con `count` parece natural…"),
- ("code", "hcl", "count con lista (¡cuidado!)", """variable "usuarios" {
-  default = ["ana", "luis", "marta"]
-}
-
-resource "local_file" "perfil" {
-  count    = length(var.usuarios)
-  filename = "${path.module}/${var.usuarios[count.index]}.txt"
-  content  = "Perfil de ${var.usuarios[count.index]}"
-}
-# Estado: perfil[0]=ana  perfil[1]=luis  perfil[2]=marta"""),
- ("p", "…hasta que **quitas un elemento del medio**. Si eliminas `\"luis\"`, la lista pasa a ser `[\"ana\", \"marta\"]` y los índices se desplazan:"),
- ("term", """  # local_file.perfil[1] must be replaced     ← luis.txt pasa a ser marta.txt
--/+ resource "local_file" "perfil" {
-      ~ filename = "./luis.txt" -> "./marta.txt" # forces replacement
-
-  # local_file.perfil[2] will be destroyed     ← y se destruye el antiguo marta
-  - resource "local_file" "perfil" {
-
-Plan: 1 to add, 0 to change, 2 to destroy."""),
- ("p", "Con archivos da igual, pero imagina que fueran **bases de datos** de usuarios: se recrearía la de Marta y perdería sus datos. La solución es `for_each`."),
-
  ("h", "for_each: copias con nombre"),
- ("p", "`for_each` recibe un **set de strings** o un **map** y crea una copia por elemento, identificada por su **clave** en lugar de por un número:"),
- ("code", "hcl", "for_each con set", """variable "usuarios" {
+ ("p", "`for_each` crea una copia por cada elemento, y cada copia se identifica **por su nombre**, no por un número:"),
+ ("code", "hcl", "for_each.tf", """variable "usuarios" {
   type    = set(string)
   default = ["ana", "luis", "marta"]
 }
 
 resource "local_file" "perfil" {
   for_each = var.usuarios
-  filename = "${path.module}/${each.key}.txt"
-  content  = "Perfil de ${each.value}"   # en un set, key y value son iguales
-}
-# Estado: perfil["ana"]  perfil["luis"]  perfil["marta"]"""),
- ("p", "Ahora, si quitas `\"luis\"`, el plan solo destruye `perfil[\"luis\"]`. Los demás no se tocan:"),
- ("term", """  # local_file.perfil["luis"] will be destroyed
-  - resource "local_file" "perfil" {
+  filename = "${each.key}.txt"
+  content  = "Perfil de ${each.key}"
+}"""),
+ ("p", "Dentro del bloque, `each.key` es el elemento actual: \"ana\", \"luis\" o \"marta\"."),
+ ("p", "También puedes usar un mapa para dar datos distintos a cada copia. Entonces `each.key` es el nombre y `each.value` su valor:"),
+ ("code", "hcl", "for_each con mapa", """resource "local_file" "servicio" {
+  for_each = {
+    web = 80
+    api = 8080
+  }
+  filename = "${each.key}.conf"
+  content  = "puerto=${each.value}"
+}"""),
+
+ ("h", "Por qué for_each suele ser mejor"),
+ ("p", "Imagina que creas los perfiles con `count` sobre la lista `[\"ana\", \"luis\", \"marta\"]` y luego quitas a luis. Con `count` las copias se identifican por posición: marta pasa de la posición 2 a la 1, y Terraform cree que ha cambiado:"),
+ ("term", """$ terraform plan
+  # local_file.perfil[1] must be replaced
+  # local_file.perfil[2] will be destroyed
+
+Plan: 1 to add, 0 to change, 2 to destroy."""),
+ ("p", "Con `for_each` solo se borra lo que has quitado:"),
+ ("term", """$ terraform plan
+  # local_file.perfil["luis"] will be destroyed
 
 Plan: 0 to add, 0 to change, 1 to destroy."""),
- ("p", "Con un **map** puedes asociar datos a cada elemento:"),
- ("code", "hcl", "for_each con map de objetos", """variable "servicios" {
-  type = map(object({
-    puerto = number
-    replicas = number
-  }))
-  default = {
-    web = { puerto = 80, replicas = 2 }
-    api = { puerto = 8080, replicas = 3 }
-  }
-}
+ ("tip", "Regla sencilla: usa `count` para «N copias iguales» o «crear sí/no», y `for_each` para listas de cosas con nombre."),
 
-resource "local_file" "servicio" {
-  for_each = var.servicios
-  filename = "${path.module}/${each.key}.conf"
-  content  = "puerto=${each.value.puerto}\\nreplicas=${each.value.replicas}\\n"
-}
-
-output "rutas" {
-  # con for_each el recurso es un MAP: se recorre con for
-  value = { for nombre, f in local_file.servicio : nombre => f.filename }
-}"""),
- ("table", ["", "count", "for_each"], [
-  ["Recibe", "un número", "un set(string) o un map"],
-  ["Identifica copias por", "índice `[0]`", "clave `[\"web\"]`"],
-  ["Variable dentro", "`count.index`", "`each.key`, `each.value`"],
-  ["El recurso es", "una lista", "un map"],
-  ["Úsalo para", "N copias idénticas o crear/no crear", "colecciones de cosas distintas"],
- ]),
- ("warn", "Las claves de `for_each` deben conocerse **en el plan**. No puedes usar como clave un atributo que se calcula al crear otro recurso (como un ID). Si lo haces verás el error *Invalid for_each argument*."),
-
- ("h", "lifecycle: controlar el ciclo de vida"),
- ("p", "El bloque `lifecycle` acepta varias opciones:"),
- ("code", "hcl", "lifecycle", """resource "aws_s3_bucket" "datos_criticos" {
+ ("h", "lifecycle: proteger y controlar"),
+ ("code", "hcl", "lifecycle", """resource "aws_s3_bucket" "datos" {
   bucket_prefix = "datos-"
 
   lifecycle {
-    # 1. Impide destruir el recurso: el plan fallará si lo intenta
-    prevent_destroy = true
-
-    # 2. Ignora cambios hechos fuera de Terraform en estos atributos
-    ignore_changes = [tags["UltimaRevision"]]
-  }
-}
-
-resource "aws_instance" "web" {
-  ami           = data.aws_ami.amazon_linux.id
-  instance_type = "t3.micro"
-
-  lifecycle {
-    # 3. Si hay que reemplazarla, crea la nueva ANTES de borrar la vieja
-    create_before_destroy = true
-
-    # 4. Reemplázala cuando cambie este otro recurso
-    replace_triggered_by = [aws_security_group.web]
+    prevent_destroy = true            # impide borrarlo
+    ignore_changes  = [tags]          # no deshacer cambios de etiquetas hechos a mano
   }
 }"""),
- ("table", ["Opción", "Cuándo usarla"], [
-  ["`prevent_destroy`", "Bases de datos, buckets con datos, zonas DNS: lo que no debe borrarse nunca por error"],
-  ["`ignore_changes`", "Atributos que modifica otro sistema (autoescalado, etiquetas que pone otro equipo)"],
-  ["`create_before_destroy`", "Evitar cortes de servicio al reemplazar (certificados, instancias tras un balanceador)"],
-  ["`replace_triggered_by`", "Forzar reemplazo cuando cambia algo relacionado"],
+ ("table", ["Opción", "Qué hace"], [
+  ["`prevent_destroy`", "Da error si algo intenta borrar el recurso. Ideal para bases de datos"],
+  ["`ignore_changes`", "Terraform no toca esos datos aunque alguien los cambie fuera"],
+  ["`create_before_destroy`", "Al reemplazar, crea el nuevo antes de borrar el viejo"],
  ]),
  ("term", """$ terraform destroy
-╷
-│ Error: Instance cannot be destroyed
-│
-│ Resource aws_s3_bucket.datos_criticos has lifecycle.prevent_destroy set,
-│ but the plan calls for this resource to be destroyed.
-╵"""),
- ("info", "Para destruir un recurso con `prevent_destroy`, primero tienes que quitar esa línea del código. Es intencionado: obliga a pensarlo dos veces y deja constancia en Git."),
+Error: Instance cannot be destroyed
 
- ("h", "Forzar un reemplazo con -replace"),
- ("p", "A veces un recurso está «roto» aunque Terraform crea que está bien (una instancia que no responde, por ejemplo). Puedes forzar que se recree:"),
- ("code", "bash", "terminal", """terraform plan  -replace="aws_instance.web"
-terraform apply -replace="aws_instance.web"
+Resource aws_s3_bucket.datos has lifecycle.prevent_destroy set"""),
+ ("p", "Para poder borrarlo, primero tienes que quitar `prevent_destroy` del código."),
 
-# Con count / for_each, cuidado con las comillas:
-terraform apply -replace='local_file.perfil["ana"]'"""),
- ("info", "En tutoriales antiguos verás `terraform taint`. Está obsoleto: usa `-replace`, que además te enseña el plan antes."),
+ ("h", "Forzar que se cree de nuevo"),
+ ("p", "Si un recurso funciona mal y quieres que Terraform lo cree otra vez:"),
+ ("term", """$ terraform apply -replace="aws_instance.web\""""),
+ ("info", "En tutoriales antiguos verás `terraform taint`. Hace lo mismo, pero ya no se usa."),
 ]
 
 TEST = [

@@ -8,42 +8,103 @@
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/styles.css">
 <script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 </head>
 <body>
-<header class="site-header">
-  <div class="wrap header-inner">
-    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
-    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
-    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
-  </div>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
 </header>
-<main id="contenido">
-<div class="wrap narrow">
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 16 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
+<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html" aria-current="page"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#un-proyecto-es-una-carpeta">Un proyecto es una carpeta</a></li><li><a href="#tu-primer-archivo">Tu primer archivo</a></li><li><a href="#paso-1-terraform-init">Paso 1: terraform init</a></li><li><a href="#paso-2-terraform-plan">Paso 2: terraform plan</a></li><li><a href="#paso-3-terraform-apply">Paso 3: terraform apply</a></li><li><a href="#el-archivo-de-estado">El archivo de estado</a></li><li><a href="#hacer-un-cambio">Hacer un cambio</a></li><li><a href="#paso-4-terraform-destroy">Paso 4: terraform destroy</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
 <nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 02</nav>
 <header class="mod-head">
   <p class="eyebrow">Módulo 02</p>
   <h1>Tu primer proyecto: el flujo de trabajo</h1>
   <p class="lead">init → plan → apply → destroy, sin gastar un céntimo, usando providers locales.</p>
-  <div class="chips"><span class="chip nivel-básico">Básico</span><span class="chip">⏱ 1,5 h</span><span class="chip">📝 6 preguntas</span><span class="chip">🏋️ 2 retos</span></div>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 1,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span></div>
 </header>
-<nav class="toc" aria-label="En esta página"><strong>En esta página</strong><a href="#objetivos">Objetivos</a><a href="#leccion">Lección</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#test">Test</a><a href="#retos">Retos</a></nav>
-
-<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Crear un proyecto mínimo y entender qué archivos genera Terraform.</li><li>Ejecutar el flujo completo <code>init</code>, <code>plan</code>, <code>apply</code> y <code>destroy</code>.</li><li>Leer e interpretar la salida de un plan (<code>+</code>, <code>~</code>, <code>-</code>, <code>-/+</code>).</li><li>Entender qué es el archivo de estado y para qué sirve.</li></ul></section>
-<section id="leccion" class="leccion"><h2>📚 Lección</h2><nav class="indice" aria-label="Índice de la lección"><strong>Índice de la lección</strong><ol><li><a href="#un-proyecto-una-carpeta">Un proyecto = una carpeta</a></li><li><a href="#escribe-tu-primera-configuracion">Escribe tu primera configuración</a></li><li><a href="#terraform-init-preparar-la-carpeta">terraform init: preparar la carpeta</a></li><li><a href="#terraform-plan-ver-antes-de-tocar">terraform plan: ver antes de tocar</a></li><li><a href="#terraform-apply-hacerlo-realidad">terraform apply: hacerlo realidad</a></li><li><a href="#el-estado-la-memoria-de-terraform">El estado: la memoria de Terraform</a></li><li><a href="#cambios-actualizar-vs-reemplazar">Cambios: actualizar vs reemplazar</a></li><li><a href="#terraform-destroy-limpiar">terraform destroy: limpiar</a></li></ol></nav><h3 id="un-proyecto-una-carpeta">Un proyecto = una carpeta</h3>
-<p>En Terraform, un proyecto es simplemente <strong>una carpeta con archivos <code>.tf</code></strong>. Cuando ejecutas un comando, Terraform lee <em>todos</em> los <code>.tf</code> de la carpeta actual (no las subcarpetas) y los trata como una sola configuración. A esa carpeta se le llama <strong>root module</strong> (módulo raíz).</p>
-<p>Para aprender el flujo sin gastar dinero ni configurar cuentas usaremos dos providers que funcionan en tu ordenador:</p>
-<ul><li><code>hashicorp/random</code>: genera valores aleatorios (nombres, contraseñas, números).</li><li><code>hashicorp/local</code>: crea archivos en tu disco.</li></ul>
-<figure class="code"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">mkdir -p ~/terraform-labs/02-primer-proyecto
-cd ~/terraform-labs/02-primer-proyecto
-code main.tf</code></pre></figure>
-<h3 id="escribe-tu-primera-configuracion">Escribe tu primera configuración</h3>
-<p>Copia esto en <code>main.tf</code>. Debajo lo explicamos bloque a bloque:</p>
-<figure class="code"><figcaption><span>main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
-  required_version = "&gt;= 1.6"
-
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Crear un proyecto mínimo y entender qué archivos genera Terraform.</li><li>Ejecutar el flujo completo <code>init</code>, <code>plan</code>, <code>apply</code> y <code>destroy</code>.</li><li>Leer e interpretar la salida de un plan (<code>+</code>, <code>~</code>, <code>-</code>, <code>-/+</code>).</li><li>Entender qué es el archivo de estado y para qué sirve.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="un-proyecto-es-una-carpeta">Un proyecto es una carpeta</h3>
+<p>Un proyecto de Terraform es una <strong>carpeta con archivos que terminan en <code>.tf</code></strong>. Terraform lee todos los <code>.tf</code> de la carpeta en la que estás.</p>
+<p>Para practicar sin gastar dinero usaremos dos providers que funcionan en tu ordenador, sin nube:</p>
+<ul><li><code>random</code>: inventa valores al azar (nombres, números, contraseñas).</li><li><code>local</code>: crea archivos en tu ordenador.</li></ul>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="mkdir 02-primer-proyecto
+cd 02-primer-proyecto
+code main.tf">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">mkdir 02-primer-proyecto</span>
+<span class="prompt">$ </span><span class="cmdline">cd 02-primer-proyecto</span>
+<span class="prompt">$ </span><span class="cmdline">code main.tf</span></code></pre></figure>
+<h3 id="tu-primer-archivo">Tu primer archivo</h3>
+<p>Copia esto en <code>main.tf</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">terraform {
   required_providers {
     local = {
       source  = "hashicorp/local"
@@ -62,160 +123,93 @@ resource "random_pet" "nombre" {
 
 resource "local_file" "saludo" {
   filename = "${path.module}/saludo.txt"
-  content  = "¡Hola, ${random_pet.nombre.id}! Este archivo lo creó Terraform.\n"
+  content  = "Hola, ${random_pet.nombre.id}! Este archivo lo creó Terraform.\n"
 }
 
 output "nombre_mascota" {
   value = random_pet.nombre.id
 }</code></pre></figure>
-<ul><li><strong><code>terraform { ... }</code></strong>: ajustes del propio Terraform. Aquí exigimos versión 1.6 o superior y declaramos qué providers usamos, de dónde salen (<code>source</code>) y qué versiones aceptamos.</li><li><strong><code>resource "random_pet" "nombre"</code></strong>: un recurso. <code>random_pet</code> es el <em>tipo</em> (lo aporta el provider random) y <code>nombre</code> es el <em>nombre local</em> que tú eliges para referirte a él. Genera algo como <code>gentle-turtle</code>.</li><li><strong><code>resource "local_file" "saludo"</code></strong>: un archivo en disco. Fíjate en <code>${random_pet.nombre.id}</code>: estamos <strong>usando el resultado de otro recurso</strong>. Eso crea una dependencia: Terraform sabe que primero debe generar el nombre.</li><li><strong><code>path.module</code></strong>: la ruta de la carpeta actual.</li><li><strong><code>output</code></strong>: un valor que Terraform mostrará al terminar.</li></ul>
-<h3 id="terraform-init-preparar-la-carpeta">terraform init: preparar la carpeta</h3>
-<p>El primer comando en cualquier proyecto nuevo (o cuando añades providers o módulos) es <code>init</code>:</p>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform init
-
-Initializing the backend...
-Initializing provider plugins...
-- Finding hashicorp/local versions matching "~&gt; 2.5"...
-- Finding hashicorp/random versions matching "~&gt; 3.6"...
-- Installing hashicorp/local v2.5.2...
-- Installing hashicorp/random v3.6.3...
-
-Terraform has created a lock file .terraform.lock.hcl to record the provider
-selections it made above.
-
-Terraform has been successfully initialized!</code></pre></figure>
-<p>Mira qué ha aparecido en la carpeta:</p>
-<figure class="code"><figcaption><span>estructura</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">02-primer-proyecto/
-├── .terraform/            ← plugins descargados (no va a Git)
-│   └── providers/...
-├── .terraform.lock.hcl    ← versiones y hashes exactos (sí va a Git)
-└── main.tf</code></pre></figure>
-<div class="callout tip"><strong>💡 Consejo.</strong> <code>init</code> es seguro: nunca crea ni borra infraestructura. Puedes ejecutarlo tantas veces como quieras.</div>
-<h3 id="terraform-plan-ver-antes-de-tocar">terraform plan: ver antes de tocar</h3>
-<p><code>plan</code> compara tu código con lo que existe y te enseña qué haría. <strong>No cambia nada.</strong> Es la red de seguridad más importante de Terraform: acostúmbrate a leerlo siempre.</p>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform plan
-
-Terraform used the selected providers to generate the following execution
-plan. Resource actions are indicated with the following symbols:
-  + create
-
-Terraform will perform the following actions:
-
-  # local_file.saludo will be created
-  + resource "local_file" "saludo" {
-      + content              = (known after apply)
-      + filename             = "./saludo.txt"
-      + id                   = (known after apply)
-      ...
-    }
-
-  # random_pet.nombre will be created
-  + resource "random_pet" "nombre" {
-      + id        = (known after apply)
-      + length    = 2
-      + separator = "-"
-    }
-
-Plan: 2 to add, 0 to change, 0 to destroy.
-
-Changes to Outputs:
-  + nombre_mascota = (known after apply)</code></pre></figure>
-<p>Cómo se lee un plan:</p>
-<div class="table-wrap"><table class="data"><thead><tr><th>Símbolo</th><th>Significado</th></tr></thead><tbody><tr><td><code>+</code></td><td>Se va a <strong>crear</strong></td></tr><tr><td><code>-</code></td><td>Se va a <strong>destruir</strong></td></tr><tr><td><code>~</code></td><td>Se va a <strong>modificar</strong> sin recrear (<em>update in-place</em>)</td></tr><tr><td><code>-/+</code></td><td>Se va a <strong>destruir y volver a crear</strong> (reemplazo)</td></tr><tr><td><code>&lt;=</code></td><td>Se va a <strong>leer</strong> (data source)</td></tr><tr><td><code>(known after apply)</code></td><td>El valor aún no se conoce; lo sabremos al crear el recurso</td></tr></tbody></table></div>
-<h3 id="terraform-apply-hacerlo-realidad">terraform apply: hacerlo realidad</h3>
-<p><code>apply</code> vuelve a calcular el plan, te lo enseña y <strong>pide confirmación</strong>. Solo se ejecuta si escribes exactamente <code>yes</code>:</p>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform apply
-...
-Plan: 2 to add, 0 to change, 0 to destroy.
-
-Do you want to perform these actions?
-  Terraform will perform the actions described above.
-  Only 'yes' will be accepted to approve.
-
-  Enter a value: yes
-
-random_pet.nombre: Creating...
-random_pet.nombre: Creation complete after 0s [id=gentle-turtle]
-local_file.saludo: Creating...
-local_file.saludo: Creation complete after 0s [id=3f1e...]
-
-Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
-
-Outputs:
-
-nombre_mascota = "gentle-turtle"
-
-$ cat saludo.txt
-¡Hola, gentle-turtle! Este archivo lo creó Terraform.</code></pre></figure>
-<p>Observa el orden: primero <code>random_pet</code>, después <code>local_file</code>. Terraform lo dedujo solo gracias a la referencia <code>random_pet.nombre.id</code>.</p>
-<p>Ahora ejecuta <code>terraform apply</code> <strong>otra vez</strong>:</p>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform apply
-random_pet.nombre: Refreshing state... [id=gentle-turtle]
-local_file.saludo: Refreshing state... [id=3f1e...]
-
-No changes. Your infrastructure matches the configuration.</code></pre></figure>
-<p>¡Idempotencia en acción! Como todo coincide con el código, no hace nada.</p>
-<div class="callout aviso"><strong>⚠️ Cuidado.</strong> Existe <code>terraform apply -auto-approve</code>, que no pide confirmación. Evítalo mientras aprendes: leer el plan antes de escribir <code>yes</code> es lo que te salvará de borrar algo importante.</div>
-<h3 id="el-estado-la-memoria-de-terraform">El estado: la memoria de Terraform</h3>
-<p>Tras el <code>apply</code> ha aparecido un archivo nuevo: <code>terraform.tfstate</code>. Ábrelo (sin modificarlo):</p>
-<figure class="code"><figcaption><span>terraform.tfstate (fragmento)</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-json">{
-  "version": 4,
-  "terraform_version": "1.10.5",
-  "serial": 3,
-  "resources": [
-    {
-      "mode": "managed",
-      "type": "random_pet",
-      "name": "nombre",
-      "instances": [
-        { "attributes": { "id": "gentle-turtle", "length": 2, "separator": "-" } }
-      ]
-    }
-  ]
-}</code></pre></figure>
-<p>Así es como Terraform sabe que <code>random_pet.nombre</code> en tu código corresponde a la mascota <code>gentle-turtle</code>. Si no existiera el estado, Terraform pensaría que tiene que crearlo todo de nuevo. Lo estudiaremos a fondo en el módulo 9.</p>
-<figure class="code"><figcaption><span>comandos para inspeccionar</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform state list           # qué recursos gestiona
-terraform show                 # el estado en formato legible
-terraform output nombre_mascota</code></pre></figure>
-<h3 id="cambios-actualizar-vs-reemplazar">Cambios: actualizar vs reemplazar</h3>
+<p>Qué significa cada parte:</p>
+<ul><li><strong><code>terraform { ... }</code></strong>: indica qué providers necesitamos y qué versión.</li><li><strong><code>resource "random_pet" "nombre"</code></strong>: pide un nombre de mascota al azar (por ejemplo, <code>gentle-turtle</code>). <code>random_pet</code> es el tipo y <code>nombre</code> es el nombre que le damos nosotros.</li><li><strong><code>resource "local_file" "saludo"</code></strong>: crea el archivo <code>saludo.txt</code>. Dentro usa el nombre de la mascota con <code>${random_pet.nombre.id}</code>.</li><li><strong><code>output</code></strong>: muestra un valor en la terminal al terminar.</li></ul>
+<h3 id="paso-1-terraform-init">Paso 1: terraform init</h3>
+<p><code>init</code> prepara la carpeta y descarga los providers. Se ejecuta una vez al empezar (y cuando añades un provider nuevo):</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform init">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform init</span>
+<span class="out">Initializing provider plugins...</span>
+<span class="out">- Installing hashicorp/local v2.5.2...</span>
+<span class="out">- Installing hashicorp/random v3.6.3...</span>
+<span class="out"></span>
+<span class="out">Terraform has been successfully initialized!</span></code></pre></figure>
+<p>Aparecen dos cosas nuevas en la carpeta: la carpeta <code>.terraform/</code> (los providers descargados) y el archivo <code>.terraform.lock.hcl</code> (las versiones exactas).</p>
+<h3 id="paso-2-terraform-plan">Paso 2: terraform plan</h3>
+<p><code>plan</code> te enseña lo que Terraform <strong>va a hacer</strong>, pero <strong>no hace nada todavía</strong>. Léelo siempre antes de aplicar:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform plan">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform plan</span>
+<span class="out"></span>
+<span class="out">  # local_file.saludo will be created</span>
+<span class="out">  + resource "local_file" "saludo" {</span>
+<span class="out">      + filename = "./saludo.txt"</span>
+<span class="out">      ...</span>
+<span class="out">    }</span>
+<span class="out"></span>
+<span class="out">  # random_pet.nombre will be created</span>
+<span class="out">  + resource "random_pet" "nombre" {</span>
+<span class="out">      + id     = (known after apply)</span>
+<span class="out">      + length = 2</span>
+<span class="out">    }</span>
+<span class="out"></span>
+<span class="out">Plan: 2 to add, 0 to change, 0 to destroy.</span></code></pre></figure>
+<p>Los símbolos del plan:</p>
+<div class="table-wrap"><table><thead><tr><th>Símbolo</th><th>Significado</th></tr></thead><tbody><tr><td><code>+</code></td><td>Se va a crear</td></tr><tr><td><code>~</code></td><td>Se va a modificar</td></tr><tr><td><code>-</code></td><td>Se va a borrar</td></tr><tr><td><code>-/+</code></td><td>Se va a borrar y crear de nuevo</td></tr><tr><td><code>(known after apply)</code></td><td>El valor se conocerá al crearlo</td></tr></tbody></table></div>
+<h3 id="paso-3-terraform-apply">Paso 3: terraform apply</h3>
+<p><code>apply</code> hace los cambios. Antes te enseña el plan y te pide que escribas <code>yes</code> para confirmar:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform apply
+cat saludo.txt">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform apply</span>
+<span class="out">...</span>
+<span class="out">Plan: 2 to add, 0 to change, 0 to destroy.</span>
+<span class="out"></span>
+<span class="out">  Enter a value: yes</span>
+<span class="out"></span>
+<span class="out">random_pet.nombre: Creation complete after 0s [id=gentle-turtle]</span>
+<span class="out">local_file.saludo: Creation complete after 0s</span>
+<span class="out"></span>
+<span class="out">Apply complete! Resources: 2 added, 0 changed, 0 destroyed.</span>
+<span class="out"></span>
+<span class="out">Outputs:</span>
+<span class="out">nombre_mascota = "gentle-turtle"</span>
+<span class="out"></span>
+<span class="prompt">$ </span><span class="cmdline">cat saludo.txt</span>
+<span class="out">Hola, gentle-turtle! Este archivo lo creó Terraform.</span></code></pre></figure>
+<p>Fíjate: primero creó el nombre y después el archivo. Terraform se dio cuenta solo de que el archivo necesita el nombre.</p>
+<p>Si ejecutas <code>terraform apply</code> otra vez, no hace nada, porque todo está ya como pide el código:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform apply">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform apply</span>
+<span class="out">No changes. Your infrastructure matches the configuration.</span></code></pre></figure>
+<h3 id="el-archivo-de-estado">El archivo de estado</h3>
+<p>Después del <code>apply</code> aparece el archivo <code>terraform.tfstate</code>. Ahí Terraform apunta lo que ha creado. Así sabe, la próxima vez, qué existe ya.</p>
+<div class="callout aviso"><span class="k">Importante</span>No edites ni borres este archivo. Lo veremos con calma en el módulo 9.</div>
+<h3 id="hacer-un-cambio">Hacer un cambio</h3>
 <p>Cambia <code>length = 2</code> por <code>length = 3</code> y ejecuta <code>terraform plan</code>:</p>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">  # local_file.saludo must be replaced
--/+ resource "local_file" "saludo" {
-      ~ content  = &lt;&lt;-EOT # forces replacement
-          - ¡Hola, gentle-turtle! Este archivo lo creó Terraform.
-          + (known after apply)
-        EOT
-      ...
-    }
-
-  # random_pet.nombre must be replaced
--/+ resource "random_pet" "nombre" {
-      ~ id        = "gentle-turtle" -&gt; (known after apply)
-      ~ length    = 2 -&gt; 3 # forces replacement
-        # (1 unchanged attribute hidden)
-    }
-
-Plan: 2 to add, 0 to change, 2 to destroy.</code></pre></figure>
-<p>Fíjate en <code># forces replacement</code>: algunos argumentos no se pueden cambiar sobre la marcha y obligan a <strong>recrear</strong> el recurso. Con un archivo no importa, pero con un servidor o una base de datos significa perder lo que había dentro. <strong>Por eso siempre se lee el plan.</strong> Además, como el archivo depende del nombre, también se recrea: los cambios se propagan por las dependencias.</p>
-<p>Otro experimento: borra a mano <code>saludo.txt</code> (<code>rm saludo.txt</code>) y ejecuta <code>terraform plan</code>. Terraform detecta que falta y propone crearlo de nuevo. Ha comparado el estado con la realidad.</p>
-<h3 id="terraform-destroy-limpiar">terraform destroy: limpiar</h3>
-<p><code>destroy</code> elimina <strong>todo</strong> lo que gestiona la configuración. También muestra un plan (con <code>-</code>) y pide confirmación:</p>
-<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform destroy
-...
-Plan: 0 to add, 0 to change, 2 to destroy.
-
-  Enter a value: yes
-
-local_file.saludo: Destroying...
-random_pet.nombre: Destroying...
-Destroy complete! Resources: 2 destroyed.</code></pre></figure>
-<p>El orden ahora es el inverso: primero lo que depende (el archivo), luego aquello de lo que depende (el nombre).</p>
-<div class="callout "><strong>ℹ️ Nota.</strong> Resumen del flujo: <code>init</code> (una vez) → <code>plan</code> → <code>apply</code> → … cambios … → <code>plan</code> → <code>apply</code> → <code>destroy</code> al terminar.</div></section>
-<section id="practica"><h2>🛠 Práctica guiada: Hola, Terraform (carpeta <code>labs/02-primer-proyecto</code>)</h2><ol class="pasos"><li>Copia el <code>main.tf</code> de ejemplo en una carpeta nueva.</li><li>Ejecuta <code>terraform init</code> y explora la carpeta <code>.terraform/</code>.</li><li>Ejecuta <code>terraform plan</code> y lee cada línea del plan.</li><li>Ejecuta <code>terraform apply</code> y abre <code>saludo.txt</code>.</li><li>Cambia <code>length = 3</code>, vuelve a planificar y observa el reemplazo (<code>-/+</code>).</li><li>Borra a mano <code>saludo.txt</code> y ejecuta <code>terraform plan</code>: Terraform detecta la diferencia.</li><li>Termina con <code>terraform destroy</code>.</li></ol></section>
-<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform init</code></td><td>Inicializa el directorio: descarga providers y módulos.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform plan</code></td><td>Muestra qué cambios se harían sin aplicarlos.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform apply</code></td><td>Aplica los cambios (pide confirmación).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform destroy</code></td><td>Destruye todo lo gestionado por esta configuración.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform destroy" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform output</code></td><td>Muestra los outputs.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform output" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
-<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt><code>Error: Inconsistent dependency lock file</code></dt><dd>Has cambiado versiones de providers. Ejecuta <code>terraform init -upgrade</code>.</dd></div><div><dt>Ejecutar comandos fuera de la carpeta del proyecto</dt><dd>Terraform trabaja sobre el directorio actual (<code>pwd</code>). Usa <code>cd</code> o <code>-chdir=ruta</code>.</dd></div></dl></section>
-<section id="test"><h2>✅ Test de autoevaluación</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="02" data-total="6"><fieldset class="q" data-ok="2"><legend><span class="qn">1</span><span class="txt">¿Qué hace <code>terraform init</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Borra el estado</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Formatea el código</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Descarga providers/módulos y prepara la carpeta</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Crea los recursos</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>init</code> prepara el directorio: backend, providers y módulos. Nunca toca la infraestructura.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">2</span><span class="txt">En un plan, ¿qué indica el símbolo <code>-/+</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">El recurso se destruye y se vuelve a crear</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Hay un error</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">El recurso se crea</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">El recurso se modifica en sitio</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Es un reemplazo: algún argumento marcado como <em>forces replacement</em> ha cambiado.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">3</span><span class="txt">Ejecutas <code>terraform apply</code> dos veces seguidas sin tocar el código. ¿Qué pasa la segunda vez?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Destruye todo</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">No hace cambios: la infraestructura ya coincide</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Crea los recursos por duplicado</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Da error</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Terraform es idempotente: si el estado y la realidad coinciden con el código, no hay nada que hacer.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">4</span><span class="txt">¿Cómo sabe Terraform que debe crear <code>random_pet</code> antes que <code>local_file</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Por el orden en el archivo</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Lo elige al azar</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Porque <code>local_file</code> hace referencia a <code>random_pet.nombre.id</code></span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Por orden alfabético</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Las referencias crean dependencias implícitas; el orden en el archivo no importa.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">5</span><span class="txt">¿Qué archivo usa Terraform para recordar qué recursos ha creado?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform.tfstate</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">main.tf</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">.terraform.lock.hcl</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">.gitignore</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El estado mapea cada recurso del código con el objeto real que existe.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">6</span><span class="txt">¿Qué significa <code>(known after apply)</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Que el valor es secreto</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Que hay un error</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Que el recurso ya existe</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Que el valor solo se conocerá cuando se cree el recurso</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Valores como IDs o IPs los genera el proveedor al crear el recurso.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
-<section id="retos"><h2>🏋️ Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1: Tres archivos encadenados</h3><p>Añade un segundo <code>random_pet</code> llamado <code>apellido</code> y un archivo <code>presentacion.txt</code> cuyo contenido sea «Me llamo NOMBRE APELLIDO». Añade un output con el texto completo.</p><details><summary>💡 Ver pista</summary><p>Puedes usar dos interpolaciones en el mismo string: <code>"${a} ${b}"</code>.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "random_pet" "apellido" {
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform plan">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform plan</span>
+<span class="out">-/+ resource "random_pet" "nombre" {</span>
+<span class="out">      ~ length = 2 -&gt; 3 # forces replacement</span>
+<span class="out">    }</span>
+<span class="out">-/+ resource "local_file" "saludo" { ... }</span>
+<span class="out"></span>
+<span class="out">Plan: 2 to add, 0 to change, 2 to destroy.</span></code></pre></figure>
+<p>Algunos cambios no se pueden hacer «en caliente» y obligan a <strong>borrar y crear de nuevo</strong> (<code>forces replacement</code>). Con un archivo no pasa nada, pero con un servidor perderías lo que tuviera dentro. Por eso hay que leer el plan.</p>
+<h3 id="paso-4-terraform-destroy">Paso 4: terraform destroy</h3>
+<p><code>destroy</code> borra todo lo que ha creado este proyecto. También pide confirmación:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform destroy">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform destroy</span>
+<span class="out">...</span>
+<span class="out">Plan: 0 to add, 0 to change, 2 to destroy.</span>
+<span class="out"></span>
+<span class="out">  Enter a value: yes</span>
+<span class="out"></span>
+<span class="out">Destroy complete! Resources: 2 destroyed.</span></code></pre></figure>
+<div class="callout "><span class="k">Nota</span>Resumen: <code>init</code> una vez, luego <code>plan</code> y <code>apply</code> cada vez que cambies algo, y <code>destroy</code> al terminar.</div></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Hola, Terraform (carpeta <code>labs/02-primer-proyecto</code>)</strong></p><ol class="pasos"><li>Copia el <code>main.tf</code> de ejemplo en una carpeta nueva.</li><li>Ejecuta <code>terraform init</code> y explora la carpeta <code>.terraform/</code>.</li><li>Ejecuta <code>terraform plan</code> y lee cada línea del plan.</li><li>Ejecuta <code>terraform apply</code> y abre <code>saludo.txt</code>.</li><li>Cambia <code>length = 3</code>, vuelve a planificar y observa el reemplazo (<code>-/+</code>).</li><li>Borra a mano <code>saludo.txt</code> y ejecuta <code>terraform plan</code>: Terraform detecta la diferencia.</li><li>Termina con <code>terraform destroy</code>.</li></ol></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform init</code></td><td>Inicializa el directorio: descarga providers y módulos.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform plan</code></td><td>Muestra qué cambios se harían sin aplicarlos.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform apply</code></td><td>Aplica los cambios (pide confirmación).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform destroy</code></td><td>Destruye todo lo gestionado por esta configuración.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform destroy" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform output</code></td><td>Muestra los outputs.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform output" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>Error: Inconsistent dependency lock file</code></dt><dd>Has cambiado versiones de providers. Ejecuta <code>terraform init -upgrade</code>.</dd></div><div><dt>Ejecutar comandos fuera de la carpeta del proyecto</dt><dd>Terraform trabaja sobre el directorio actual (<code>pwd</code>). Usa <code>cd</code> o <code>-chdir=ruta</code>.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="02" data-total="6"><fieldset class="q" data-ok="2"><legend><span class="qn">01</span><span class="txt">¿Qué hace <code>terraform init</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Borra el estado</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Formatea el código</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Descarga providers/módulos y prepara la carpeta</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Crea los recursos</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>init</code> prepara el directorio: backend, providers y módulos. Nunca toca la infraestructura.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">02</span><span class="txt">En un plan, ¿qué indica el símbolo <code>-/+</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">El recurso se destruye y se vuelve a crear</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Hay un error</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">El recurso se crea</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">El recurso se modifica en sitio</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Es un reemplazo: algún argumento marcado como <em>forces replacement</em> ha cambiado.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">03</span><span class="txt">Ejecutas <code>terraform apply</code> dos veces seguidas sin tocar el código. ¿Qué pasa la segunda vez?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Destruye todo</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">No hace cambios: la infraestructura ya coincide</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Crea los recursos por duplicado</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Da error</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Terraform es idempotente: si el estado y la realidad coinciden con el código, no hay nada que hacer.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">04</span><span class="txt">¿Cómo sabe Terraform que debe crear <code>random_pet</code> antes que <code>local_file</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Por el orden en el archivo</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Lo elige al azar</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Porque <code>local_file</code> hace referencia a <code>random_pet.nombre.id</code></span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Por orden alfabético</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Las referencias crean dependencias implícitas; el orden en el archivo no importa.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">05</span><span class="txt">¿Qué archivo usa Terraform para recordar qué recursos ha creado?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform.tfstate</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">main.tf</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">.terraform.lock.hcl</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">.gitignore</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El estado mapea cada recurso del código con el objeto real que existe.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">06</span><span class="txt">¿Qué significa <code>(known after apply)</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Que el valor es secreto</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Que hay un error</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Que el recurso ya existe</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Que el valor solo se conocerá cuando se cree el recurso</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Valores como IDs o IPs los genera el proveedor al crear el recurso.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Tres archivos encadenados</h3><p>Añade un segundo <code>random_pet</code> llamado <code>apellido</code> y un archivo <code>presentacion.txt</code> cuyo contenido sea «Me llamo NOMBRE APELLIDO». Añade un output con el texto completo.</p><details><summary>Ver pista</summary><p>Puedes usar dos interpolaciones en el mismo string: <code>"${a} ${b}"</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "random_pet" "apellido" {
   length = 1
 }
 
@@ -227,7 +221,7 @@ resource "local_file" "presentacion" {
 output "presentacion" {
   value = local_file.presentacion.content
 }</code></pre></figure></details></article>
-<article class="reto"><h3>Reto 2: Una contraseña aleatoria</h3><p>Usa el recurso <code>random_password</code> (del mismo provider random) para generar una contraseña de 16 caracteres y muéstrala en un output. ¿Qué ocurre al hacer <code>apply</code>?</p><details><summary>💡 Ver pista</summary><p>Busca <code>random_password</code> en registry.terraform.io. Fíjate en el atributo <code>result</code>.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "random_password" "db" {
+<article class="reto"><h3>Reto 2. Una contraseña aleatoria</h3><p>Usa el recurso <code>random_password</code> (del mismo provider random) para generar una contraseña de 16 caracteres y muéstrala en un output. ¿Qué ocurre al hacer <code>apply</code>?</p><details><summary>Ver pista</summary><p>Busca <code>random_password</code> en registry.terraform.io. Fíjate en el atributo <code>result</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "random_password" "db" {
   length  = 16
   special = true
 }
@@ -241,13 +235,11 @@ output "password" {
 # Para verla: terraform output -raw password
 # Ojo: está guardada en texto plano en terraform.tfstate.</code></pre></figure></details></article></section>
 <div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="02"> He completado este módulo</label></div>
-<nav class="pager" aria-label="Módulos"><a class="prev" href="01-entorno.html"><small>← Anterior</small>Preparación del entorno</a><a class="next" href="03-hcl.html"><small>Siguiente →</small>El lenguaje HCL</a></nav></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="01-entorno.html"><small>Anterior</small>Preparación del entorno</a><a class="next" href="03-hcl.html"><small>Siguiente</small>El lenguaje HCL</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
 </main>
-<footer class="site-footer">
-  <div class="wrap">
-    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
-  </div>
-</footer>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>

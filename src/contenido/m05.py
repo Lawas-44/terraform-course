@@ -3,130 +3,89 @@
 
 LECCION = [
  ("h", "Qué es un provider"),
- ("p", "Terraform Core no sabe nada de AWS, Azure ni GitHub. Todo ese conocimiento vive en los **providers**: plugins que traducen tus bloques `resource` a llamadas a la API correspondiente. Hay más de 4.000 en el **Terraform Registry** (registry.terraform.io), clasificados en tres niveles:"),
- ("table", ["Nivel", "Quién lo mantiene", "Ejemplos"], [
-  ["Official", "HashiCorp", "aws, azurerm, google, kubernetes, random, local"],
-  ["Partner", "La empresa del servicio", "cloudflare, datadog, mongodbatlas"],
-  ["Community", "Personas de la comunidad", "Muchos útiles; revisa su mantenimiento"],
- ]),
- ("p", "La documentación de cada provider en el Registry es **la referencia que más vas a consultar**. Para cada recurso encontrarás un ejemplo, los argumentos (*Argument Reference*), los atributos que exporta (*Attribute Reference*) y cómo importarlo (*Import*)."),
+ ("p", "Terraform por sí solo no sabe crear nada en AWS, Azure o GitHub. Para eso usa **providers**: complementos que saben hablar con cada servicio. Hay miles en el **Terraform Registry** (registry.terraform.io)."),
+ ("p", "En la página de cada provider está la documentación de todos sus recursos, con ejemplos. Es la página que más vas a consultar."),
 
- ("h", "Declarar providers y versiones"),
- ("p", "Los providers se declaran en `required_providers` con una dirección (`source`) y una restricción de versión:"),
+ ("h", "Indicar el provider y su versión"),
+ ("p", "Se declara dentro del bloque `terraform`:"),
  ("code", "hcl", "versions.tf", """terraform {
-  required_version = ">= 1.10"
-
   required_providers {
     aws = {
-      source  = "hashicorp/aws"   # registry.terraform.io/hashicorp/aws
+      source  = "hashicorp/aws"
       version = "~> 6.0"
     }
   }
 }"""),
- ("table", ["Restricción", "Significado", "Acepta"], [
-  ["`= 6.2.0`", "Exactamente esa", "6.2.0"],
-  ["`>= 6.0`", "Esa o superior", "6.0, 6.5, 7.0, 8.1…"],
-  ["`~> 6.0`", "Solo cambia el último número indicado", "6.0 … 6.99 (no 7.0)"],
-  ["`~> 6.2.0`", "Solo parches", "6.2.0 … 6.2.x"],
-  ["`>= 6.0, < 7.0`", "Rango explícito", "igual que `~> 6.0`"],
+ ("p", "La versión se puede indicar de varias formas:"),
+ ("table", ["Escribes", "Acepta"], [
+  ["`= 6.2.0`", "Solo la 6.2.0"],
+  ["`>= 6.0`", "La 6.0 o cualquiera más nueva"],
+  ["`~> 6.0`", "Cualquier 6.x, pero no la 7.0"],
  ]),
- ("tip", "En proyectos usa `~> MAYOR.MENOR` para recibir mejoras sin cambios incompatibles. Las versiones mayores (6 → 7) suelen romper cosas y conviene actualizarlas a propósito."),
+ ("tip", "Usa `~>`. Recibes mejoras pero evitas versiones nuevas que puedan romper tu código."),
 
- ("h", "El lock file"),
- ("p", "Al hacer `init`, Terraform elige la versión más alta que cumpla la restricción y la apunta, con sus hashes, en `.terraform.lock.hcl`:"),
- ("code", "hcl", ".terraform.lock.hcl", """provider "registry.terraform.io/hashicorp/aws" {
-  version     = "6.4.0"
-  constraints = "~> 6.0"
-  hashes = [
-    "h1:abc123...",
-    "zh:def456...",
-  ]
-}"""),
- ("p", "Mientras el lock file exista, `init` siempre instalará **esa misma versión**, aunque salgan otras nuevas. Así todo el equipo y el CI usan exactamente lo mismo. Por eso se sube a Git. Para actualizar a propósito:"),
- ("code", "bash", "terminal", """terraform init -upgrade   # sube a la versión más alta permitida y actualiza el lock
+ ("h", "El archivo .terraform.lock.hcl"),
+ ("p", "Al hacer `terraform init`, Terraform elige una versión exacta y la apunta en `.terraform.lock.hcl`. Así todo el equipo usa la misma versión. Este archivo **sí se sube a Git**."),
+ ("p", "Si quieres actualizar a una versión más nueva:"),
+ ("term", """$ terraform init -upgrade"""),
 
-# Si el equipo usa varios sistemas operativos, añade hashes para todos:
-terraform providers lock \\
-  -platform=linux_amd64 -platform=darwin_arm64 -platform=windows_amd64"""),
-
- ("h", "Configurar el provider de AWS"),
- ("p", "El bloque `provider` configura cómo conectarse. Para AWS lo mínimo es la región:"),
+ ("h", "Configurar AWS"),
+ ("p", "El bloque `provider` dice cómo conectarse. Para AWS basta con la región:"),
  ("code", "hcl", "providers.tf", """provider "aws" {
-  region = "eu-west-1"   # Irlanda. Otras: eu-south-2 (España), us-east-1...
+  region = "eu-west-1"
 
   default_tags {
     tags = {
       Gestion = "terraform"
-      Curso   = "terraform-desde-cero"
     }
   }
 }"""),
- ("p", "`default_tags` añade esas etiquetas a **todos** los recursos que lo admitan. Así en la consola de AWS (y en la factura) sabrás qué creó Terraform."),
+ ("p", "`default_tags` pone esas etiquetas a todo lo que crees. Así sabrás en AWS qué ha creado Terraform."),
 
- ("h", "Autenticación: nunca claves en el código"),
- ("p", "El provider de AWS busca credenciales en este orden, igual que la AWS CLI:"),
- ("ol", [
-  "Argumentos del bloque provider (`access_key`, `secret_key`) — **no los uses nunca**.",
-  "Variables de entorno: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`.",
-  "Perfil de `~/.aws/config` y `~/.aws/credentials` (el indicado en `AWS_PROFILE` o `profile`).",
-  "Rol de la máquina o contenedor (EC2 instance profile, ECS, OIDC en CI…).",
- ]),
- ("code", "bash", "la forma recomendada", """export AWS_PROFILE=curso-terraform   # el perfil del módulo 1
-aws sts get-caller-identity          # comprueba
-terraform plan                       # Terraform usa el mismo perfil"""),
- ("warn", "Si escribes `access_key = \"AKIA...\"` en un `.tf` y lo subes a GitHub, en minutos habrá bots usando tu cuenta para minar criptomonedas. No es una exageración."),
+ ("h", "Las claves de acceso"),
+ ("p", "Terraform necesita tus credenciales de AWS. **Nunca las escribas en el código.** Terraform las busca solo en el mismo sitio que la herramienta `aws` (lo configuraste en el módulo 1):"),
+ ("term", """$ export AWS_PROFILE=curso-terraform
+$ aws sts get-caller-identity
+$ terraform plan"""),
+ ("warn", "Si subes unas claves de AWS a GitHub, en pocos minutos alguien puede usarlas para gastar dinero en tu cuenta."),
 
  ("h", "Tu primer recurso en la nube: un bucket S3"),
- ("p", "S3 es el almacenamiento de objetos de AWS. Un bucket es gratuito mientras esté vacío (y casi gratuito con pocos datos). Crea una carpeta nueva con estos archivos:"),
+ ("p", "**S3** es el almacenamiento de archivos de AWS. Un **bucket** es como una carpeta. Crear uno vacío es gratis."),
  ("code", "hcl", "main.tf", """resource "aws_s3_bucket" "demo" {
-  # Los nombres de bucket son GLOBALES (únicos en todo AWS).
-  # bucket_prefix añade un sufijo aleatorio para evitar choques.
   bucket_prefix = "curso-tf-demo-"
-  force_destroy = true # permite borrarlo aunque tenga archivos (solo para labs)
-}
-
-resource "aws_s3_bucket_versioning" "demo" {
-  bucket = aws_s3_bucket.demo.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
+  force_destroy = true
 }
 
 resource "aws_s3_object" "hola" {
-  bucket       = aws_s3_bucket.demo.id
-  key          = "hola.txt"
-  content      = "Subido con Terraform"
-  content_type = "text/plain"
+  bucket  = aws_s3_bucket.demo.id
+  key     = "hola.txt"
+  content = "Subido con Terraform"
 }
 
 output "bucket" {
   value = aws_s3_bucket.demo.bucket
-}
-
-output "arn" {
-  value = aws_s3_bucket.demo.arn
 }"""),
+ ("ul", [
+  "Los nombres de bucket deben ser únicos en todo el mundo. Con `bucket_prefix`, AWS añade un final al azar para que no se repita.",
+  "`force_destroy = true` permite borrar el bucket aunque tenga archivos (solo para practicar).",
+  "`aws_s3_object` sube un archivo al bucket.",
+ ]),
  ("term", """$ terraform init
 $ terraform apply
 ...
-Plan: 3 to add, 0 to change, 0 to destroy.
-...
-Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
 
 Outputs:
-arn    = "arn:aws:s3:::curso-tf-demo-20261119103512345600000001"
 bucket = "curso-tf-demo-20261119103512345600000001"
 
-$ aws s3 ls s3://$(terraform output -raw bucket)
+$ aws s3 ls s3://curso-tf-demo-20261119103512345600000001
 2026-11-19 10:35:14         20 hola.txt"""),
- ("info", "En el provider AWS moderno, la configuración del bucket (versionado, cifrado, políticas, web…) se hace con **recursos separados** como `aws_s3_bucket_versioning`, no con bloques dentro de `aws_s3_bucket`. Lo verás en tutoriales antiguos de la otra forma."),
- ("p", "Abre la consola de AWS → S3 y busca tu bucket. Mira la pestaña *Properties*: verás el versionado activado y las etiquetas de `default_tags`. Cuando termines: `terraform destroy`."),
+ ("p", "Busca el bucket en la web de AWS (sección S3). Cuando termines, bórralo con `terraform destroy`."),
 
- ("h", "Varias regiones o cuentas: alias"),
- ("p", "Puedes declarar el mismo provider varias veces con un `alias` y elegir cuál usa cada recurso con el meta-argumento `provider`:"),
+ ("h", "Usar dos regiones"),
+ ("p", "Puedes repetir el bloque `provider` con un nombre extra (`alias`) para trabajar en otra región:"),
  ("code", "hcl", "providers.tf", """provider "aws" {
-  region = "eu-west-1"            # el de por defecto (sin alias)
+  region = "eu-west-1"
 }
 
 provider "aws" {
@@ -134,43 +93,11 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_s3_bucket" "europa" {
-  bucket_prefix = "datos-eu-"
-}
-
 resource "aws_s3_bucket" "usa" {
   provider      = aws.virginia
   bucket_prefix = "datos-us-"
 }"""),
- ("p", "Casos típicos: certificados para CloudFront (deben estar en us-east-1), réplicas de backups en otra región o gestionar varias cuentas a la vez (con `assume_role`)."),
- ("info", "Novedad del provider AWS 6.x: muchos recursos aceptan directamente un argumento `region = \"us-east-1\"`, así que para el caso «misma cuenta, otra región» ya no siempre hace falta un alias. Para otra cuenta (`assume_role`) los alias siguen siendo necesarios."),
-
- ("h", "Otros providers para practicar"),
- ("p", "El flujo es idéntico con cualquier provider. Algunos interesantes para practicar sin AWS:"),
- ("code", "hcl", "docker (necesita Docker instalado)", """terraform {
-  required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
-      version = "~> 3.0"
-    }
-  }
-}
-
-resource "docker_image" "nginx" {
-  name = "nginx:alpine"
-}
-
-resource "docker_container" "web" {
-  name  = "web-terraform"
-  image = docker_image.nginx.image_id
-
-  ports {
-    internal = 80
-    external = 8080
-  }
-}
-# terraform apply y abre http://localhost:8080"""),
- ("p", "Otros: `integrations/github` (repositorios y equipos), `hashicorp/kubernetes`, `hashicorp/azurerm`, `hashicorp/google`, `cloudflare/cloudflare`."),
+ ("p", "El bucket `usa` se crea en Virginia (us-east-1). Los recursos sin `provider` usan el primero."),
 ]
 
 TEST = [

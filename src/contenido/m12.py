@@ -2,153 +2,74 @@
 # Módulo 12 · Importar y refactorizar
 
 LECCION = [
- ("h", "El escenario: infraestructura creada a mano"),
- ("p", "Es lo más habitual al llegar a una empresa: hay recursos creados desde la consola hace años y quieren pasarlos a Terraform. No hace falta destruirlos y recrearlos: se pueden **importar**, es decir, decirle a Terraform «este recurso que ya existe corresponde a este bloque de mi código»."),
- ("p", "Para practicar, crea a mano un bucket y un security group:"),
- ("code", "bash", "crear recursos «a mano»", """aws s3api create-bucket --bucket legado-$(aws sts get-caller-identity --query Account --output text) \\
-  --region eu-west-1 --create-bucket-configuration LocationConstraint=eu-west-1
+ ("h", "Recursos creados a mano"),
+ ("p", "Es muy habitual encontrarse recursos que alguien creó a mano en la web de AWS. No hace falta borrarlos y crearlos de nuevo con Terraform: se pueden **importar**. Importar significa decirle a Terraform: «este recurso que ya existe corresponde a este bloque de mi código»."),
+ ("p", "Para practicar, crea un bucket a mano desde la terminal:"),
+ ("term", """$ aws s3api create-bucket --bucket legado-123456789012 --region eu-west-1 \\
+    --create-bucket-configuration LocationConstraint=eu-west-1"""),
 
-aws ec2 create-security-group --group-name legado-sg --description "Creado a mano"
-# { "GroupId": "sg-0abc123def4567890" }"""),
-
- ("h", "El bloque import (Terraform 1.5+)"),
- ("p", "La forma moderna es **declarativa**: escribes un bloque `import` con la dirección del recurso en tu código (`to`) y el identificador real (`id`):"),
+ ("h", "El bloque import"),
+ ("p", "Escribe un bloque `import` con dos datos: dónde va en tu código (`to`) y cuál es el recurso real (`id`):"),
  ("code", "hcl", "import.tf", """import {
   to = aws_s3_bucket.legado
   id = "legado-123456789012"
-}
-
-import {
-  to = aws_security_group.legado
-  id = "sg-0abc123def4567890"
 }"""),
- ("p", "¿Qué formato tiene el `id`? Depende de cada recurso. Está en la sección **Import** al final de su página en la documentación del provider. Por ejemplo, un bucket se importa por nombre, un security group por su ID `sg-…` y una ruta de tabla por `rtb-xxx_10.0.0.0/16`."),
+ ("p", "¿Qué hay que poner en `id`? Depende del recurso. Lo dice la documentación de cada recurso, al final, en el apartado *Import*. Para un bucket es su nombre."),
 
  ("h", "Generar el código automáticamente"),
- ("p", "Escribir a mano el bloque `resource` que coincida exactamente con lo que existe es tedioso. Terraform puede **generarlo** por ti:"),
+ ("p", "Terraform puede escribir por ti el bloque `resource` mirando cómo es el recurso real:"),
  ("term", """$ terraform plan -generate-config-out=generado.tf
 
 aws_s3_bucket.legado: Preparing import... [id=legado-123456789012]
-aws_security_group.legado: Preparing import... [id=sg-0abc123def4567890]
-aws_s3_bucket.legado: Refreshing state...
-aws_security_group.legado: Refreshing state...
-
-Terraform will perform the following actions:
 
   # aws_s3_bucket.legado will be imported
   # (config will be generated)
-    resource "aws_s3_bucket" "legado" { ... }
 
-  # aws_security_group.legado will be imported
-  # (config will be generated)
-    resource "aws_security_group" "legado" { ... }
-
-Plan: 2 to import, 0 to add, 0 to change, 0 to destroy.
+Plan: 1 to import, 0 to add, 0 to change, 0 to destroy.
 
 Terraform has generated configuration and written it to generado.tf."""),
- ("code", "hcl", "generado.tf (fragmento)", """# __generated__ by Terraform
-resource "aws_security_group" "legado" {
-  description            = "Creado a mano"
-  egress                 = [{ cidr_blocks = ["0.0.0.0/0"], description = "", from_port = 0, ... }]
-  ingress                = []
-  name                   = "legado-sg"
-  name_prefix            = null
-  revoke_rules_on_delete = null
-  tags                   = {}
-  tags_all               = {}
-  vpc_id                 = "vpc-0123456789abcdef0"
+ ("p", "Abre `generado.tf`. El código funciona, pero tiene muchas líneas que no hacen falta. **Límpialo**: deja solo lo importante."),
+ ("code", "hcl", "generado.tf (limpio)", """resource "aws_s3_bucket" "legado" {
+  bucket = "legado-123456789012"
 }"""),
- ("p", "El código generado funciona pero es «feo». **Límpialo** antes de aplicar:"),
- ("ul", [
-  "Quita los argumentos con `null` o vacíos que no necesitas.",
-  "Quita atributos solo de lectura o calculados (`tags_all`, `arn`…) si aparecen.",
-  "Sustituye valores fijos por referencias (`vpc_id = data.aws_vpc.default.id`).",
-  "Muévelo al archivo que le corresponda (`main.tf`, `network.tf`…).",
- ]),
- ("p", "Repite `terraform plan` hasta que diga **solo** importaciones, sin cambios:"),
- ("term", """Plan: 2 to import, 0 to add, 0 to change, 0 to destroy."""),
- ("p", "Entonces aplica. A partir de ese momento los recursos están gestionados por Terraform. Los bloques `import` se pueden borrar después (o dejarlos como documentación; ya no hacen nada)."),
- ("warn", "Si el plan muestra cambios (`~`) en un recurso importado, significa que tu código no coincide con la realidad y al aplicar **modificarías el recurso**. Ajusta el código hasta que no haya diferencias, salvo que el cambio sea intencionado."),
+ ("p", "Ejecuta `terraform plan` hasta que diga que **solo hay que importar**, sin cambios:"),
+ ("term", """$ terraform plan
+Plan: 1 to import, 0 to add, 0 to change, 0 to destroy.
+$ terraform apply"""),
+ ("warn", "Si el plan muestra cambios (`~`) en el recurso importado, tu código no coincide con la realidad y al aplicar **modificarías el recurso**. Ajusta el código hasta que no haya cambios."),
+ ("info", "Antes existía solo el comando `terraform import`. Sigue funcionando, pero el bloque `import` es mejor porque ves el plan antes y puede generar el código."),
 
- ("h", "El comando clásico terraform import"),
- ("p", "Antes de los bloques `import` se usaba un comando. Sigue funcionando y lo verás en documentación antigua:"),
- ("code", "bash", "terminal", """# 1. escribe primero el bloque resource vacío o completo en el código
-# 2. importa:
-terraform import aws_s3_bucket.legado legado-123456789012"""),
- ("table", ["", "Bloque `import`", "Comando `terraform import`"], [
-  ["Se ve en el plan antes de aplicar", "Sí", "No: modifica el estado directamente"],
-  ["Genera código", "Sí (`-generate-config-out`)", "No"],
-  ["Varios recursos a la vez", "Sí", "Uno por comando"],
-  ["Revisable en un Pull Request", "Sí", "No"],
-  ["Con `for_each`", "Sí (1.7+)", "No"],
- ]),
-
- ("h", "Refactorizar con moved"),
- ("p", "Refactorizar es reorganizar el código sin cambiar lo que hace. En Terraform el peligro es que **cambiar la dirección** de un recurso (renombrarlo o meterlo en un módulo) hace que Terraform lo destruya y lo cree de nuevo. El bloque `moved` lo evita:"),
- ("code", "hcl", "renombrar un recurso", """# Antes: resource "aws_instance" "servidor" { ... }
-# Ahora:
-resource "aws_instance" "web" {
-  # ... mismo contenido ...
+ ("h", "Cambiar nombres sin borrar nada: moved"),
+ ("p", "Si cambias el nombre de un recurso en el código, Terraform cree que es uno nuevo: borra el viejo y crea otro. Con un bloque `moved` le explicas que es el mismo:"),
+ ("code", "hcl", "moved.tf", """resource "aws_instance" "web" {
+  # ... antes se llamaba "servidor" ...
 }
 
 moved {
   from = aws_instance.servidor
   to   = aws_instance.web
 }"""),
- ("term", """  # aws_instance.servidor has moved to aws_instance.web
-    resource "aws_instance" "web" {
-        id = "i-0123456789abcdef0"
-        # (no changes)
-    }
+ ("term", """$ terraform plan
+  # aws_instance.servidor has moved to aws_instance.web
 
 Plan: 0 to add, 0 to change, 0 to destroy."""),
- ("p", "También funciona para **meter recursos en un módulo**, algo muy común cuando el código crece:"),
- ("code", "hcl", "mover a un módulo", """# Antes los recursos estaban en el root: aws_s3_bucket.web, aws_s3_object.index
-# Ahora están en module "web" (source = "./modules/static-site")
-
-moved {
+ ("p", "También sirve para mover recursos dentro de un módulo:"),
+ ("code", "hcl", "mover a un módulo", """moved {
   from = aws_s3_bucket.web
   to   = module.web.aws_s3_bucket.this
-}
-
-moved {
-  from = aws_s3_object.index
-  to   = module.web.aws_s3_object.index
 }"""),
- ("p", "Y para pasar de `count` a `for_each`:"),
- ("code", "hcl", "count → for_each", """moved {
-  from = aws_iam_user.equipo[0]
-  to   = aws_iam_user.equipo["ana"]
-}"""),
- ("tip", "Ventaja de `moved` frente a `terraform state mv`: queda en el código, se revisa en el PR y funciona automáticamente en todos los entornos y para todo el equipo. Déjalos en el código un tiempo (o para siempre en módulos públicos) para que todos los usuarios migren."),
+ ("tip", "`moved` hace lo mismo que `terraform state mv` (módulo 9), pero queda escrito en el código y funciona para todo el equipo."),
 
- ("h", "Soltar recursos con removed (1.7+)"),
- ("p", "¿Y si quieres que Terraform deje de gestionar un recurso **sin destruirlo**? Por ejemplo, porque pasa a otro equipo o a otro repositorio. Borra el bloque `resource` y añade:"),
- ("code", "hcl", "removed", """removed {
+ ("h", "Dejar de gestionar sin borrar: removed"),
+ ("p", "Si quieres que Terraform deje de gestionar un recurso pero **sin borrarlo**, quita su bloque `resource` y añade:"),
+ ("code", "hcl", "removed.tf", """removed {
   from = aws_s3_bucket.antiguo
 
   lifecycle {
-    destroy = false   # olvidarlo, no destruirlo
+    destroy = false
   }
 }"""),
- ("term", """  # aws_s3_bucket.antiguo will no longer be managed by Terraform
-    resource "aws_s3_bucket" "antiguo" {
-        id = "antiguo-123456789012"
-    }
-
-Plan: 0 to add, 0 to change, 0 to destroy."""),
- ("p", "Es la versión declarativa de `terraform state rm`."),
-
- ("h", "Estrategia para migrar una cuenta entera"),
- ("ol", [
-  "Haz inventario: lista los recursos (AWS Resource Explorer, `aws resourcegroupstaggingapi get-resources`, la factura).",
-  "Agrupa por dominios (red, datos, aplicaciones) y empieza por lo que menos cambia (la red).",
-  "Escribe bloques `import` y genera el código con `-generate-config-out`.",
-  "Limpia, introduce variables y módulos, y repite `plan` hasta *0 to change*.",
-  "Aplica y protege los recursos críticos con `prevent_destroy`.",
-  "A partir de ahí, **prohíbe los cambios manuales** (permisos de solo lectura en la consola) para evitar drift.",
- ]),
- ("info", "Existen herramientas como **Terraformer** o **former2** que generan código de cuentas enteras. Útiles como punto de partida, pero el código resultante requiere mucha limpieza; el bloque `import` nativo suele ser mejor opción hoy."),
+ ("p", "El recurso sigue existiendo en AWS; Terraform simplemente se olvida de él."),
 ]
 
 TEST = [
