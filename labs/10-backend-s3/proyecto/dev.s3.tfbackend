@@ -1,0 +1,6 @@
+# Sustituye 123456789012 por tu ID de cuenta (output bucket_estado del bootstrap)
+bucket       = "tfstate-123456789012-eu-west-1"
+key          = "curso/modulo-10/terraform.tfstate"
+region       = "eu-west-1"
+encrypt      = true
+use_lockfile = true

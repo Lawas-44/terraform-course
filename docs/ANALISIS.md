@@ -46,7 +46,7 @@ Cada módulo sigue **la misma plantilla** (ya montada en las páginas de `modulo
 4. **Práctica guiada** paso a paso (lab).
 5. **Comandos clave** del módulo.
 6. **Errores frecuentes** y cómo resolverlos (aprender a leer errores es la mitad del trabajo).
-7. **Autoevaluación**: 2–3 preguntas de repaso.
+7. **Test de autoevaluación** interactivo (6–10 preguntas con explicación) y **retos** con pista y solución.
 8. Casilla «He completado este módulo» (progreso guardado en el navegador).
 
 Principios:
@@ -134,6 +134,7 @@ terraform-course/
 │   ├── css/styles.css
 │   ├── js/main.js        # Tema, copiar, progreso, buscador
 │   └── img/
+├── src/                  # Generador + contenido (lecciones, tests, retos)
 └── docs/ANALISIS.md      # Este documento
 ```
 
@@ -143,11 +144,12 @@ terraform-course/
 - [x] Guion completo de los 16 módulos (objetivos, contenido, práctica, comandos, errores, quiz).
 - [x] Chuleta de comandos y glosario.
 - [x] Lab 02 de ejemplo.
-- [ ] Redactar la lección completa de cada módulo (sustituir el aviso «Lección en desarrollo»).
-- [ ] Crear el código de cada lab en `labs/`.
+- [x] Redactar la lección completa de cada módulo.
+- [x] Test interactivo autocorregido y retos con solución en cada módulo.
+- [x] Código de los labs en `labs/`.
+- [x] CI del propio repositorio: `fmt`, `validate` y `test` sobre `labs/`.
 - [ ] Añadir diagramas (arquitectura del lab 06 y del proyecto final).
-- [ ] Banco de preguntas tipo test para la certificación.
-- [ ] CI del propio repositorio: `terraform fmt -check` y `validate` sobre `labs/`.
+- [ ] Banco de preguntas tipo test ampliado para la certificación (hay un simulacro de 10 en el módulo 15).
 
 ## 11. Ideas para ampliar
 

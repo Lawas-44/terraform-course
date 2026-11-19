@@ -27,39 +27,171 @@
   <p class="eyebrow">Módulo 12</p>
   <h1>Importar y refactorizar</h1>
   <p class="lead">Traer infraestructura existente a Terraform y reorganizar el código sin destruir nada.</p>
-  <div class="chips"><span class="chip nivel-intermedio">Intermedio</span><span class="chip">⏱ 1,5 h</span></div>
+  <div class="chips"><span class="chip nivel-intermedio">Intermedio</span><span class="chip">⏱ 1,5 h</span><span class="chip">📝 6 preguntas</span><span class="chip">🏋️ 2 retos</span></div>
 </header>
-<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
-<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#ejemplo">Ejemplo</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong><a href="#objetivos">Objetivos</a><a href="#leccion">Lección</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#test">Test</a><a href="#retos">Retos</a></nav>
 
 <section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Importar recursos creados a mano con el bloque <code>import</code>.</li><li>Generar código automáticamente con <code>-generate-config-out</code>.</li><li>Renombrar y mover recursos con <code>moved</code> y dejar de gestionarlos con <code>removed</code>.</li></ul></section>
-<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Escenario real: infraestructura creada con la consola (ClickOps).</li><li>Bloque <code>import</code> (Terraform 1.5+) vs el comando clásico <code>terraform import</code>.</li><li><code>terraform plan -generate-config-out=generado.tf</code> y cómo limpiar el código generado.</li><li>Bloque <code>moved</code> para renombrar recursos o moverlos a módulos sin recrearlos.</li><li>Bloque <code>removed</code> (1.7+) para soltar recursos del estado de forma declarativa.</li><li>Herramientas externas: Terraformer, former2 (con espíritu crítico).</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
-<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
-</section>
-<section id="ejemplo"><h2>🧩 Ejemplo</h2><figure class="code"><figcaption><span>import.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># 1. Importar un bucket creado a mano
-import {
+<section id="leccion" class="leccion"><h2>📚 Lección</h2><nav class="indice" aria-label="Índice de la lección"><strong>Índice de la lección</strong><ol><li><a href="#el-escenario-infraestructura-creada-a-mano">El escenario: infraestructura creada a mano</a></li><li><a href="#el-bloque-import-terraform-1-5">El bloque import (Terraform 1.5+)</a></li><li><a href="#generar-el-codigo-automaticamente">Generar el código automáticamente</a></li><li><a href="#el-comando-clasico-terraform-import">El comando clásico terraform import</a></li><li><a href="#refactorizar-con-moved">Refactorizar con moved</a></li><li><a href="#soltar-recursos-con-removed-1-7">Soltar recursos con removed (1.7+)</a></li><li><a href="#estrategia-para-migrar-una-cuenta-entera">Estrategia para migrar una cuenta entera</a></li></ol></nav><h3 id="el-escenario-infraestructura-creada-a-mano">El escenario: infraestructura creada a mano</h3>
+<p>Es lo más habitual al llegar a una empresa: hay recursos creados desde la consola hace años y quieren pasarlos a Terraform. No hace falta destruirlos y recrearlos: se pueden <strong>importar</strong>, es decir, decirle a Terraform «este recurso que ya existe corresponde a este bloque de mi código».</p>
+<p>Para practicar, crea a mano un bucket y un security group:</p>
+<figure class="code"><figcaption><span>crear recursos «a mano»</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">aws s3api create-bucket --bucket legado-$(aws sts get-caller-identity --query Account --output text) \
+  --region eu-west-1 --create-bucket-configuration LocationConstraint=eu-west-1
+
+aws ec2 create-security-group --group-name legado-sg --description "Creado a mano"
+# { "GroupId": "sg-0abc123def4567890" }</code></pre></figure>
+<h3 id="el-bloque-import-terraform-1-5">El bloque import (Terraform 1.5+)</h3>
+<p>La forma moderna es <strong>declarativa</strong>: escribes un bloque <code>import</code> con la dirección del recurso en tu código (<code>to</code>) y el identificador real (<code>id</code>):</p>
+<figure class="code"><figcaption><span>import.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">import {
   to = aws_s3_bucket.legado
-  id = "bucket-creado-a-mano"
+  id = "legado-123456789012"
 }
 
-# 2. Renombrar sin destruir
+import {
+  to = aws_security_group.legado
+  id = "sg-0abc123def4567890"
+}</code></pre></figure>
+<p>¿Qué formato tiene el <code>id</code>? Depende de cada recurso. Está en la sección <strong>Import</strong> al final de su página en la documentación del provider. Por ejemplo, un bucket se importa por nombre, un security group por su ID <code>sg-…</code> y una ruta de tabla por <code>rtb-xxx_10.0.0.0/16</code>.</p>
+<h3 id="generar-el-codigo-automaticamente">Generar el código automáticamente</h3>
+<p>Escribir a mano el bloque <code>resource</code> que coincida exactamente con lo que existe es tedioso. Terraform puede <strong>generarlo</strong> por ti:</p>
+<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform plan -generate-config-out=generado.tf
+
+aws_s3_bucket.legado: Preparing import... [id=legado-123456789012]
+aws_security_group.legado: Preparing import... [id=sg-0abc123def4567890]
+aws_s3_bucket.legado: Refreshing state...
+aws_security_group.legado: Refreshing state...
+
+Terraform will perform the following actions:
+
+  # aws_s3_bucket.legado will be imported
+  # (config will be generated)
+    resource "aws_s3_bucket" "legado" { ... }
+
+  # aws_security_group.legado will be imported
+  # (config will be generated)
+    resource "aws_security_group" "legado" { ... }
+
+Plan: 2 to import, 0 to add, 0 to change, 0 to destroy.
+
+Terraform has generated configuration and written it to generado.tf.</code></pre></figure>
+<figure class="code"><figcaption><span>generado.tf (fragmento)</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># __generated__ by Terraform
+resource "aws_security_group" "legado" {
+  description            = "Creado a mano"
+  egress                 = [{ cidr_blocks = ["0.0.0.0/0"], description = "", from_port = 0, ... }]
+  ingress                = []
+  name                   = "legado-sg"
+  name_prefix            = null
+  revoke_rules_on_delete = null
+  tags                   = {}
+  tags_all               = {}
+  vpc_id                 = "vpc-0123456789abcdef0"
+}</code></pre></figure>
+<p>El código generado funciona pero es «feo». <strong>Límpialo</strong> antes de aplicar:</p>
+<ul><li>Quita los argumentos con <code>null</code> o vacíos que no necesitas.</li><li>Quita atributos solo de lectura o calculados (<code>tags_all</code>, <code>arn</code>…) si aparecen.</li><li>Sustituye valores fijos por referencias (<code>vpc_id = data.aws_vpc.default.id</code>).</li><li>Muévelo al archivo que le corresponda (<code>main.tf</code>, <code>network.tf</code>…).</li></ul>
+<p>Repite <code>terraform plan</code> hasta que diga <strong>solo</strong> importaciones, sin cambios:</p>
+<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">Plan: 2 to import, 0 to add, 0 to change, 0 to destroy.</code></pre></figure>
+<p>Entonces aplica. A partir de ese momento los recursos están gestionados por Terraform. Los bloques <code>import</code> se pueden borrar después (o dejarlos como documentación; ya no hacen nada).</p>
+<div class="callout aviso"><strong>⚠️ Cuidado.</strong> Si el plan muestra cambios (<code>~</code>) en un recurso importado, significa que tu código no coincide con la realidad y al aplicar <strong>modificarías el recurso</strong>. Ajusta el código hasta que no haya diferencias, salvo que el cambio sea intencionado.</div>
+<h3 id="el-comando-clasico-terraform-import">El comando clásico terraform import</h3>
+<p>Antes de los bloques <code>import</code> se usaba un comando. Sigue funcionando y lo verás en documentación antigua:</p>
+<figure class="code"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash"># 1. escribe primero el bloque resource vacío o completo en el código
+# 2. importa:
+terraform import aws_s3_bucket.legado legado-123456789012</code></pre></figure>
+<div class="table-wrap"><table class="data"><thead><tr><th></th><th>Bloque <code>import</code></th><th>Comando <code>terraform import</code></th></tr></thead><tbody><tr><td>Se ve en el plan antes de aplicar</td><td>Sí</td><td>No: modifica el estado directamente</td></tr><tr><td>Genera código</td><td>Sí (<code>-generate-config-out</code>)</td><td>No</td></tr><tr><td>Varios recursos a la vez</td><td>Sí</td><td>Uno por comando</td></tr><tr><td>Revisable en un Pull Request</td><td>Sí</td><td>No</td></tr><tr><td>Con <code>for_each</code></td><td>Sí (1.7+)</td><td>No</td></tr></tbody></table></div>
+<h3 id="refactorizar-con-moved">Refactorizar con moved</h3>
+<p>Refactorizar es reorganizar el código sin cambiar lo que hace. En Terraform el peligro es que <strong>cambiar la dirección</strong> de un recurso (renombrarlo o meterlo en un módulo) hace que Terraform lo destruya y lo cree de nuevo. El bloque <code>moved</code> lo evita:</p>
+<figure class="code"><figcaption><span>renombrar un recurso</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># Antes: resource "aws_instance" "servidor" { ... }
+# Ahora:
+resource "aws_instance" "web" {
+  # ... mismo contenido ...
+}
+
 moved {
   from = aws_instance.servidor
   to   = aws_instance.web
+}</code></pre></figure>
+<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">  # aws_instance.servidor has moved to aws_instance.web
+    resource "aws_instance" "web" {
+        id = "i-0123456789abcdef0"
+        # (no changes)
+    }
+
+Plan: 0 to add, 0 to change, 0 to destroy.</code></pre></figure>
+<p>También funciona para <strong>meter recursos en un módulo</strong>, algo muy común cuando el código crece:</p>
+<figure class="code"><figcaption><span>mover a un módulo</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># Antes los recursos estaban en el root: aws_s3_bucket.web, aws_s3_object.index
+# Ahora están en module "web" (source = "./modules/static-site")
+
+moved {
+  from = aws_s3_bucket.web
+  to   = module.web.aws_s3_bucket.this
 }
 
-# 3. Dejar de gestionar sin borrar
-removed {
+moved {
+  from = aws_s3_object.index
+  to   = module.web.aws_s3_object.index
+}</code></pre></figure>
+<p>Y para pasar de <code>count</code> a <code>for_each</code>:</p>
+<figure class="code"><figcaption><span>count → for_each</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">moved {
+  from = aws_iam_user.equipo[0]
+  to   = aws_iam_user.equipo["ana"]
+}</code></pre></figure>
+<div class="callout tip"><strong>💡 Consejo.</strong> Ventaja de <code>moved</code> frente a <code>terraform state mv</code>: queda en el código, se revisa en el PR y funciona automáticamente en todos los entornos y para todo el equipo. Déjalos en el código un tiempo (o para siempre en módulos públicos) para que todos los usuarios migren.</div>
+<h3 id="soltar-recursos-con-removed-1-7">Soltar recursos con removed (1.7+)</h3>
+<p>¿Y si quieres que Terraform deje de gestionar un recurso <strong>sin destruirlo</strong>? Por ejemplo, porque pasa a otro equipo o a otro repositorio. Borra el bloque <code>resource</code> y añade:</p>
+<figure class="code"><figcaption><span>removed</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">removed {
   from = aws_s3_bucket.antiguo
 
   lifecycle {
-    destroy = false
+    destroy = false   # olvidarlo, no destruirlo
   }
-}</code></pre></figure></section>
+}</code></pre></figure>
+<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">  # aws_s3_bucket.antiguo will no longer be managed by Terraform
+    resource "aws_s3_bucket" "antiguo" {
+        id = "antiguo-123456789012"
+    }
+
+Plan: 0 to add, 0 to change, 0 to destroy.</code></pre></figure>
+<p>Es la versión declarativa de <code>terraform state rm</code>.</p>
+<h3 id="estrategia-para-migrar-una-cuenta-entera">Estrategia para migrar una cuenta entera</h3>
+<ol><li>Haz inventario: lista los recursos (AWS Resource Explorer, <code>aws resourcegroupstaggingapi get-resources</code>, la factura).</li><li>Agrupa por dominios (red, datos, aplicaciones) y empieza por lo que menos cambia (la red).</li><li>Escribe bloques <code>import</code> y genera el código con <code>-generate-config-out</code>.</li><li>Limpia, introduce variables y módulos, y repite <code>plan</code> hasta *0 to change*.</li><li>Aplica y protege los recursos críticos con <code>prevent_destroy</code>.</li><li>A partir de ahí, <strong>prohíbe los cambios manuales</strong> (permisos de solo lectura en la consola) para evitar drift.</li></ol>
+<div class="callout "><strong>ℹ️ Nota.</strong> Existen herramientas como <strong>Terraformer</strong> o <strong>former2</strong> que generan código de cuentas enteras. Útiles como punto de partida, pero el código resultante requiere mucha limpieza; el bloque <code>import</code> nativo suele ser mejor opción hoy.</div></section>
 <section id="practica"><h2>🛠 Práctica guiada: Rescata un recurso hecho a mano</h2><ol class="pasos"><li>Crea un bucket y un security group desde la consola web.</li><li>Escribe los bloques <code>import</code> y ejecuta <code>terraform plan -generate-config-out=generado.tf</code>.</li><li>Limpia el código generado y aplica hasta que el plan diga «No changes».</li><li>Mueve el recurso a un módulo usando un bloque <code>moved</code>.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
 <section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform plan -generate-config-out=generado.tf</code></td><td>Genera HCL para los bloques import sin código.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -generate-config-out=generado.tf" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform import aws_s3_bucket.legado bucket-creado-a-mano</code></td><td>Importación clásica por CLI.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform import aws_s3_bucket.legado bucket-creado-a-mano" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state mv aws_instance.a module.web.aws_instance.a</code></td><td>Mover a un módulo (alternativa imperativa a <code>moved</code>).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state mv aws_instance.a module.web.aws_instance.a" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
 <section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt>El plan quiere modificar el recurso importado</dt><dd>Tu código no coincide con la realidad. Ajusta argumentos hasta que no haya cambios.</dd></div><div><dt>ID de importación incorrecto</dt><dd>Cada recurso usa un formato distinto: consulta la sección «Import» en la doc del provider.</dd></div></dl></section>
-<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>¿Qué ventaja tiene el bloque <code>import</code> frente al comando <code>terraform import</code>?</li><li>¿Qué pasa si renombras un recurso sin un bloque <code>moved</code>?</li></ol></section>
+<section id="test"><h2>✅ Test de autoevaluación</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="12" data-total="6"><fieldset class="q" data-ok="3"><legend><span class="qn">1</span><span class="txt">¿Qué hace importar un recurso?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Lo recrea con Terraform</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Descarga su código del Registry</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Lo copia a otra cuenta</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Asocia un recurso existente con un bloque de tu código, añadiéndolo al estado</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El recurso no se modifica; Terraform empieza a gestionarlo.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">2</span><span class="txt">¿Dónde encuentras el formato del <code>id</code> para importar un recurso?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">En la sección Import de la documentación del recurso</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">En el estado</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">En la consola de AWS siempre es el ARN</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Es siempre el nombre</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Cada tipo de recurso usa un identificador distinto.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">3</span><span class="txt">¿Qué comando genera código HCL para los bloques <code>import</code> que aún no tienen resource?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform plan -generate-config-out=archivo.tf</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform fmt -generate</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform import -generate</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">terraform show -hcl</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Genera los bloques resource a partir de lo que existe.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">4</span><span class="txt">Tras importar, el plan muestra <code>~ tags = { ... }</code>. ¿Qué significa?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Que la importación falló</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Que todo está bien</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Que hay que reiniciar</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Que tu código no coincide con la realidad y aplicar modificaría el recurso</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Ajusta el código hasta que el plan no tenga cambios (salvo los intencionados).</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">5</span><span class="txt">Renombras <code>aws_instance.a</code> a <code>aws_instance.b</code>. ¿Qué bloque evita recrear la instancia?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">moved</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">import</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">removed</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">lifecycle</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>moved { from = aws_instance.a  to = aws_instance.b }</code>.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">6</span><span class="txt">¿Qué hace <code>removed { from = X  lifecycle { destroy = false } }</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Deja de gestionar X sin destruirlo</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Destruye X</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Mueve X a otro módulo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Importa X</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Equivale de forma declarativa a <code>terraform state rm</code>.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>🏋️ Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1: Rescate completo</h3><p>Crea a mano (con la CLI o la consola) un bucket con una etiqueta <code>Origen = manual</code>. Impórtalo con un bloque <code>import</code> y <code>-generate-config-out</code>, limpia el código, cambia la etiqueta a <code>Origen = terraform</code> desde el código y aplica.</p><details><summary>💡 Ver pista</summary><p>Primero consigue un plan con <code>1 to import, 0 to change</code>; después haz el cambio de etiqueta en un segundo paso.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">import {
+  to = aws_s3_bucket.rescatado
+  id = "NOMBRE-DEL-BUCKET"
+}
+
+# Tras generar y limpiar:
+resource "aws_s3_bucket" "rescatado" {
+  bucket = "NOMBRE-DEL-BUCKET"
+  tags = {
+    Origen = "terraform"   # paso 2: cambiado desde el código
+  }
+}
+
+# terraform plan -generate-config-out=generado.tf
+# limpiar → terraform apply   (1 imported)
+# cambiar etiqueta → terraform apply   (1 changed)</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2: Refactor a módulo sin downtime</h3><p>Tienes en el root <code>random_pet.nombre</code> y <code>local_file.saludo</code> (del módulo 2). Muévelos a un módulo <code>modules/saludo</code> sin que se recreen.</p><details><summary>💡 Ver pista</summary><p>Necesitas un bloque <code>moved</code> por recurso, con <code>to = module.saludo.TIPO.NOMBRE</code>.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># modules/saludo/main.tf contiene ahora random_pet.nombre y local_file.saludo
+# (usa path.root en filename si quieres conservar la misma ruta)
+
+module "saludo" {
+  source = "./modules/saludo"
+}
+
+moved {
+  from = random_pet.nombre
+  to   = module.saludo.random_pet.nombre
+}
+
+moved {
+  from = local_file.saludo
+  to   = module.saludo.local_file.saludo
+}
+# terraform init &amp;&amp; terraform plan → 0 to add, 0 to change, 0 to destroy</code></pre></figure></details></article></section>
 <div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="12"> He completado este módulo</label></div>
 <nav class="pager" aria-label="Módulos"><a class="prev" href="11-modulos.html"><small>← Anterior</small>Módulos</a><a class="next" href="13-calidad-testing.html"><small>Siguiente →</small>Validación, testing y seguridad</a></nav></div>
 </main>
@@ -72,6 +204,7 @@ removed {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 <script src="../assets/js/main.js"></script>
 </body>
 </html>

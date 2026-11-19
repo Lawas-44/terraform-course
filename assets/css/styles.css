@@ -192,3 +192,51 @@ code.cmd { background: none; border: 0; padding: 0; color: var(--accent); font-s
 
 /* ===== Footer ===== */
 .site-footer { border-top: 1px solid var(--border); margin-top: 48px; padding: 24px 0; color: var(--muted); font-size: .88rem; }
+
+/* ===== Lección ===== */
+.leccion h3 { font-size: 1.3rem; margin: 2.4rem 0 .6rem; padding-top: .4rem; border-top: 1px solid var(--border); }
+.leccion h3:first-of-type { border-top: 0; }
+.leccion p, .leccion li { max-width: 72ch; }
+.indice { padding: 14px 18px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); margin: 8px 0 16px; }
+.indice ol { margin: 6px 0 0; columns: 2 260px; column-gap: 24px; }
+.indice li { break-inside: avoid; margin: 3px 0; }
+.indice a { color: var(--text); text-decoration: none; }
+.indice a:hover { color: var(--accent); }
+kbd { font: 500 .8em var(--mono); padding: .1em .45em; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px; background: var(--surface); }
+.callout.tip { border-color: color-mix(in srgb, var(--ok) 45%, var(--border)); background: color-mix(in srgb, var(--ok) 9%, var(--surface)); }
+table.data { width: 100%; border-collapse: collapse; font-size: .93rem; }
+table.data th { text-align: left; padding: 9px 14px; background: var(--surface-2); border-bottom: 1px solid var(--border); font-weight: 600; }
+table.data td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+table.data tr:last-child td { border-bottom: 0; }
+.leccion .table-wrap { margin: 14px 0; }
+figure.code.term { background: #0c0b10; }
+figure.code.term figcaption span::before { content: "● ● ● "; color: #5d5870; letter-spacing: -1px; margin-right: 4px; }
+
+/* ===== Test ===== */
+.quiz { display: grid; gap: 14px; }
+.quiz fieldset.q { margin: 0; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); padding: 16px 18px; min-width: 0; }
+.quiz legend { display: flex; gap: 10px; align-items: flex-start; font-weight: 600; padding: 0; float: left; width: 100%; margin-bottom: 12px; }
+.quiz legend + * { clear: both; }
+.qn { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: .85rem; }
+.opts { display: grid; gap: 8px; }
+.opt { display: flex; gap: 10px; align-items: flex-start; text-align: left; font: inherit; color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; cursor: pointer; transition: border-color .15s, background .15s; }
+.opt:hover:not(:disabled) { border-color: var(--accent); }
+.opt:disabled { cursor: default; }
+.quiz .txt { min-width: 0; overflow-wrap: anywhere; }
+.opt .letra { flex: none; font: 600 .8rem var(--mono); color: var(--muted); padding-top: 3px; }
+.opt.correcta { border-color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, var(--surface)); }
+.opt.incorrecta { border-color: #d0447a; background: color-mix(in srgb, #d0447a 12%, var(--surface)); }
+.exp { margin: 12px 0 0; padding: 10px 12px; border-radius: 8px; background: var(--surface-2); font-size: .93rem; }
+.q.acierto .verdict { color: var(--ok); }
+.q.fallo .verdict { color: #d0447a; }
+.quiz-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px; border-radius: var(--radius); background: var(--accent-soft); }
+.quiz-result { margin: 0; font-weight: 600; }
+.btn.small { padding: 7px 14px; font-size: .9rem; cursor: pointer; font-family: inherit; }
+.score-badge { color: var(--accent); font-weight: 600; }
+
+/* ===== Retos ===== */
+.reto { border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: var(--radius); background: var(--surface); padding: 4px 18px 14px; margin: 14px 0; }
+.reto h3 { margin-top: 14px; }
+.reto details { margin-top: 10px; }
+.reto summary { cursor: pointer; font-weight: 600; color: var(--accent); padding: 4px 0; }
+.reto details[open] summary { margin-bottom: 4px; }

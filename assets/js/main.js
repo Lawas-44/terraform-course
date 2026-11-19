@@ -67,10 +67,73 @@
     if (txt) txt.textContent = hechos + " de " + cards.length + " módulos completados";
   }
 
+  // Tests de autoevaluación
+  var TEST_KEY = "tf-curso-tests";
+  function leerTests() { try { return JSON.parse(localStorage.getItem(TEST_KEY)) || {}; } catch (e) { return {}; } }
+
+  document.querySelectorAll(".quiz").forEach(function (quiz) {
+    var total = parseInt(quiz.dataset.total, 10);
+    var resultado = quiz.querySelector(".quiz-result");
+    var mensajeInicial = resultado.textContent;
+
+    function actualizar() {
+      var resp = quiz.querySelectorAll(".q.respondida").length;
+      var ok = quiz.querySelectorAll(".q.acierto").length;
+      if (resp < total) { resultado.textContent = "Llevas " + ok + " de " + resp + " correctas (" + (total - resp) + " pendientes)."; return; }
+      var pct = Math.round(ok / total * 100);
+      resultado.textContent = "Resultado: " + ok + "/" + total + " (" + pct + " %). " +
+        (pct >= 80 ? "¡Módulo superado! Ya puedes marcarlo como completado." : "Repasa la lección y vuelve a intentarlo.");
+      var t = leerTests();
+      if (!t[quiz.dataset.mod] || t[quiz.dataset.mod].ok < ok) t[quiz.dataset.mod] = { ok: ok, total: total };
+      try { localStorage.setItem(TEST_KEY, JSON.stringify(t)); } catch (e) {}
+    }
+
+    quiz.addEventListener("click", function (ev) {
+      var opt = ev.target.closest(".opt");
+      if (opt) {
+        var q = opt.closest(".q");
+        if (q.classList.contains("respondida")) return;
+        var correcta = parseInt(q.dataset.ok, 10);
+        var elegida = parseInt(opt.dataset.i, 10);
+        q.classList.add("respondida", elegida === correcta ? "acierto" : "fallo");
+        q.querySelectorAll(".opt").forEach(function (b) {
+          b.disabled = true;
+          var i = parseInt(b.dataset.i, 10);
+          if (i === correcta) b.classList.add("correcta");
+          else if (i === elegida) b.classList.add("incorrecta");
+        });
+        var exp = q.querySelector(".exp");
+        exp.querySelector(".verdict").textContent = elegida === correcta ? "✔ ¡Correcto!" : "✘ No es correcto.";
+        exp.hidden = false;
+        actualizar();
+        return;
+      }
+      if (ev.target.closest(".quiz-reset")) {
+        quiz.querySelectorAll(".q").forEach(function (q) {
+          q.classList.remove("respondida", "acierto", "fallo");
+          q.querySelector(".exp").hidden = true;
+          q.querySelectorAll(".opt").forEach(function (b) { b.disabled = false; b.classList.remove("correcta", "incorrecta"); });
+        });
+        resultado.textContent = mensajeInicial;
+        quiz.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
+
+  // Nota del test en las tarjetas del temario
+  if (cards.length) {
+    var tests = leerTests();
+    cards.forEach(function (c) {
+      var t = tests[c.dataset.mod];
+      var badge = c.querySelector(".score-badge");
+      if (t && badge) badge.textContent = "Test " + t.ok + "/" + t.total;
+    });
+  }
+
   // Buscador de comandos
   var buscar = document.getElementById("buscar");
   if (buscar) {
-    var normal = function (s) { return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); };
+    var normal = function (s) { return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); };
     buscar.addEventListener("input", function () {
       var q = normal(buscar.value.trim());
       var total = 0;

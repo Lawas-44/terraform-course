@@ -1,0 +1,11 @@
+#!/bin/bash
+dnf install -y nginx
+cat > /usr/share/nginx/html/index.html <<HTML
+<h1>${titulo}</h1>
+<ul>
+%{ for s in servicios ~}
+  <li>${s}</li>
+%{ endfor ~}
+</ul>
+HTML
+systemctl enable --now nginx

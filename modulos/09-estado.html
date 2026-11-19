@@ -27,19 +27,138 @@
   <p class="eyebrow">Módulo 09</p>
   <h1>El estado (state) en profundidad</h1>
   <p class="lead">Qué guarda el estado, el drift y cómo manipularlo sin romper nada.</p>
-  <div class="chips"><span class="chip nivel-intermedio">Intermedio</span><span class="chip">⏱ 2 h</span></div>
+  <div class="chips"><span class="chip nivel-intermedio">Intermedio</span><span class="chip">⏱ 2 h</span><span class="chip">📝 6 preguntas</span><span class="chip">🏋️ 2 retos</span></div>
 </header>
-<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
-<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong><a href="#objetivos">Objetivos</a><a href="#leccion">Lección</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#test">Test</a><a href="#retos">Retos</a></nav>
 
 <section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Explicar para qué sirve el estado y qué riesgos tiene.</li><li>Detectar y corregir el drift (cambios fuera de Terraform).</li><li>Usar los subcomandos de <code>terraform state</code> de forma segura.</li></ul></section>
-<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Funciones del estado: mapear código ↔ recursos reales, metadatos, dependencias, rendimiento.</li><li>Formato JSON del estado; <code>serial</code> y <code>lineage</code>.</li><li>Datos sensibles en el estado: contraseñas, claves… en texto plano.</li><li>Drift: <code>terraform plan -refresh-only</code> y <code>terraform apply -refresh-only</code>.</li><li><code>terraform state list | show | mv | rm | pull | push</code> (con precaución).</li><li>Copias de seguridad: <code>terraform.tfstate.backup</code> y versionado del backend.</li><li>Reglas: nunca editar el estado a mano; nunca compartirlo por email o Git.</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
-<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
-</section>
+<section id="leccion" class="leccion"><h2>📚 Lección</h2><nav class="indice" aria-label="Índice de la lección"><strong>Índice de la lección</strong><ol><li><a href="#para-que-sirve-el-estado">Para qué sirve el estado</a></li><li><a href="#por-dentro-del-archivo-de-estado">Por dentro del archivo de estado</a></li><li><a href="#drift-cuando-la-realidad-cambia-por-su-cuenta">Drift: cuando la realidad cambia por su cuenta</a></li><li><a href="#comandos-de-estado">Comandos de estado</a></li><li><a href="#que-pasa-si-pierdo-el-estado">¿Qué pasa si pierdo el estado?</a></li></ol></nav><h3 id="para-que-sirve-el-estado">Para qué sirve el estado</h3>
+<p>El archivo <code>terraform.tfstate</code> es la <strong>memoria</strong> de Terraform. Cumple cuatro funciones:</p>
+<ol><li><strong>Mapear código ↔ realidad</strong>: sabe que <code>aws_instance.web</code> es la instancia <code>i-0123abcd</code>. Sin esto no podría saber qué recurso real corresponde a cada bloque.</li><li><strong>Guardar metadatos</strong>: dependencias entre recursos, para poder destruir en el orden correcto aunque ya hayas borrado el código.</li><li><strong>Rendimiento</strong>: guarda los atributos para no tener que preguntar todo a la API en cada operación (en proyectos grandes, miles de llamadas).</li><li><strong>Detectar cambios</strong>: comparando estado, código y realidad sabe qué ha cambiado y quién lo cambió.</li></ol>
+<p>En cada <code>plan</code> Terraform hace tres comparaciones:</p>
+<figure class="code"><figcaption><span>cómo calcula un plan</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">             1. refresh                     2. diff
+  REALIDAD  ───────────────►  ESTADO  ◄──────────────────  CÓDIGO
+ (API AWS)   actualiza el     (tfstate)  ¿qué hay que cambiar   (.tf)
+             estado con lo               para que el estado
+             que hay de verdad           sea igual que el código?</code></pre></figure>
+<h3 id="por-dentro-del-archivo-de-estado">Por dentro del archivo de estado</h3>
+<p>Crea algo sencillo y abre el estado. Son unos pocos campos importantes:</p>
+<figure class="code"><figcaption><span>terraform.tfstate</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-json">{
+  "version": 4,
+  "terraform_version": "1.10.5",
+  "serial": 7,
+  "lineage": "8a6b0c2e-1f3d-4e5a-9b7c-6d8e0f1a2b3c",
+  "outputs": { ... },
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "random_password",
+      "name": "db",
+      "provider": "provider[\"registry.terraform.io/hashicorp/random\"]",
+      "instances": [
+        {
+          "attributes": {
+            "length": 16,
+            "result": "x7#Kq9!mP2$vL4@n"
+          },
+          "sensitive_attributes": [ ... ]
+        }
+      ]
+    }
+  ]
+}</code></pre></figure>
+<div class="table-wrap"><table class="data"><thead><tr><th>Campo</th><th>Significado</th></tr></thead><tbody><tr><td><code>serial</code></td><td>Se incrementa en cada cambio del estado</td></tr><tr><td><code>lineage</code></td><td>Identificador único de este estado desde su creación (evita mezclar estados distintos)</td></tr><tr><td><code>mode</code></td><td><code>managed</code> (resource) o <code>data</code> (data source)</td></tr><tr><td><code>attributes</code></td><td>Todos los atributos del recurso… <strong>incluidos los secretos</strong></td></tr></tbody></table></div>
+<div class="callout aviso"><strong>⚠️ Cuidado.</strong> Fíjate en <code>"result": "x7#Kq9!mP2$vL4@n"</code>: la contraseña está <strong>en texto plano</strong>, aunque la marcaras como <code>sensitive</code>. Quien tenga acceso al estado tiene acceso a todos los secretos que gestiona Terraform.</div>
+<p>Reglas de oro del estado:</p>
+<ul><li><strong>Nunca</strong> lo edites a mano. Usa los comandos <code>terraform state</code>.</li><li><strong>Nunca</strong> lo subas a Git ni lo compartas por email/chat.</li><li>En equipo, siempre en un <strong>backend remoto</strong> cifrado, con versionado y bloqueo (módulo 10).</li><li>Terraform guarda la versión anterior en <code>terraform.tfstate.backup</code> (solo en estado local).</li></ul>
+<h3 id="drift-cuando-la-realidad-cambia-por-su-cuenta">Drift: cuando la realidad cambia por su cuenta</h3>
+<p>El <strong>drift</strong> (deriva) ocurre cuando alguien modifica la infraestructura fuera de Terraform: desde la consola web, con la CLI, con un script… Vamos a provocarlo:</p>
+<figure class="code"><figcaption><span>main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "aws_s3_bucket" "drift" {
+  bucket_prefix = "curso-drift-"
+  force_destroy = true
+
+  tags = {
+    Equipo = "plataforma"
+  }
+}
+
+output "bucket" {
+  value = aws_s3_bucket.drift.bucket
+}</code></pre></figure>
+<p>Aplica, y después cambia la etiqueta <code>Equipo</code> a <code>datos</code> <strong>desde la consola de AWS</strong> (o con la CLI):</p>
+<figure class="code"><figcaption><span>provocar drift</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">aws s3api put-bucket-tagging --bucket $(terraform output -raw bucket) \
+  --tagging 'TagSet=[{Key=Equipo,Value=datos}]'</code></pre></figure>
+<p>Ahora tienes dos opciones para ver qué ha pasado:</p>
+<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform plan -refresh-only
+
+Note: Objects have changed outside of Terraform
+
+Terraform detected the following changes made outside of Terraform since the
+last "terraform apply":
+
+  # aws_s3_bucket.drift has changed
+  ~ resource "aws_s3_bucket" "drift" {
+      ~ tags = {
+          ~ "Equipo" = "plataforma" -&gt; "datos"
+        }
+    }
+
+This is a refresh-only plan, so Terraform will not take any actions to undo
+these. If you were expecting these changes then you can apply this plan to
+record the updated values in the Terraform state without changing any remote
+objects.</code></pre></figure>
+<p>Y decidir:</p>
+<div class="table-wrap"><table class="data"><thead><tr><th>Si el cambio manual…</th><th>Haz esto</th><th>Resultado</th></tr></thead><tbody><tr><td>Era un error</td><td><code>terraform apply</code></td><td>Terraform <strong>revierte</strong> la realidad a lo que dice el código</td></tr><tr><td>Era correcto y quieres conservarlo</td><td>Actualiza el código (<code>Equipo = "datos"</code>) y <code>terraform plan</code> → sin cambios</td><td>Código y realidad vuelven a coincidir</td></tr><tr><td>Solo quieres que el estado lo refleje</td><td><code>terraform apply -refresh-only</code></td><td>Actualiza el estado sin tocar la infraestructura (el siguiente <code>plan</code> querrá revertirlo si el código no cambia)</td></tr></tbody></table></div>
+<div class="callout "><strong>ℹ️ Nota.</strong> <code>terraform refresh</code> (a secas) está obsoleto porque actualizaba el estado sin enseñarte nada. Usa <code>apply -refresh-only</code>, que te muestra los cambios y pide confirmación.</div>
+<h3 id="comandos-de-estado">Comandos de estado</h3>
+<p>Los subcomandos de <code>terraform state</code> permiten consultar y reorganizar el estado de forma segura:</p>
+<figure class="code"><figcaption><span>consultar</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform state list                       # todos los recursos
+terraform state list 'aws_s3_bucket.*'     # filtrar
+terraform state show aws_s3_bucket.drift   # atributos de uno
+terraform show                             # todo el estado legible
+terraform show -json | jq '.values.root_module.resources[].address'</code></pre></figure>
+<p><strong>Mover/renombrar</strong> un recurso: has cambiado el nombre en el código de <code>aws_s3_bucket.drift</code> a <code>aws_s3_bucket.datos</code>. Sin hacer nada, Terraform destruiría el viejo y crearía uno nuevo. Con <code>state mv</code> le dices que es el mismo:</p>
+<figure class="code"><figcaption><span>renombrar</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform state mv aws_s3_bucket.drift aws_s3_bucket.datos
+# Move "aws_s3_bucket.drift" to "aws_s3_bucket.datos"
+# Successfully moved 1 object(s).
+terraform plan   # No changes.</code></pre></figure>
+<div class="callout tip"><strong>💡 Consejo.</strong> Desde Terraform 1.1 hay una forma mejor y declarativa de hacer esto: el bloque <code>moved</code>, que queda en el código y funciona para todo el equipo. Lo verás en el módulo 12.</div>
+<p><strong>Dejar de gestionar</strong> un recurso sin borrarlo (por ejemplo, porque lo va a gestionar otro equipo):</p>
+<figure class="code"><figcaption><span>olvidar</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform state rm aws_s3_bucket.datos
+# Removed aws_s3_bucket.datos
+# El bucket SIGUE EXISTIENDO en AWS. Terraform simplemente lo olvida.
+# Si no quitas también el bloque del código, el próximo plan intentará crearlo.</code></pre></figure>
+<p><strong>Copias de seguridad</strong> manuales antes de operaciones delicadas:</p>
+<figure class="code"><figcaption><span>backup</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform state pull &gt; backup-$(date +%Y%m%d-%H%M).tfstate
+# ...operación delicada...
+# Si algo sale mal (último recurso):
+terraform state push backup-20261119-1030.tfstate</code></pre></figure>
+<div class="callout aviso"><strong>⚠️ Cuidado.</strong> <code>state push</code> sobrescribe el estado. Úsalo solo en emergencias y nunca con un estado de otro proyecto (Terraform lo impide comparando el <code>lineage</code>, salvo con <code>-force</code>).</div>
+<h3 id="que-pasa-si-pierdo-el-estado">¿Qué pasa si pierdo el estado?</h3>
+<p>Si borras <code>terraform.tfstate</code> (y su backup), Terraform «olvida» todo. Los recursos siguen existiendo (¡y cobrando!), pero el siguiente <code>plan</code> querrá crearlos de nuevo, provocando errores de nombre duplicado o recursos repetidos. La solución sería <strong>importarlos</strong> uno a uno (módulo 12). Por eso el estado se guarda en un backend remoto con versionado.</p></section>
 <section id="practica"><h2>🛠 Práctica guiada: Provoca y corrige drift</h2><ol class="pasos"><li>Crea un bucket S3 con etiquetas desde Terraform.</li><li>Modifica una etiqueta desde la consola de AWS.</li><li>Ejecuta <code>terraform plan -refresh-only</code> e interpreta la salida.</li><li>Decide: aceptar el cambio (<code>apply -refresh-only</code>) o revertirlo (<code>apply</code>).</li><li>Renombra el recurso en el código y usa <code>terraform state mv</code> para evitar recrearlo.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
 <section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform show</code></td><td>Muestra el estado actual de forma legible.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform show" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform show -json | jq</code></td><td>Estado completo en JSON.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform show -json | jq" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform plan -refresh-only</code></td><td>Muestra el drift sin proponer cambios de infraestructura.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -refresh-only" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state mv aws_s3_bucket.a aws_s3_bucket.b</code></td><td>Renombra un recurso en el estado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state mv aws_s3_bucket.a aws_s3_bucket.b" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state rm aws_s3_bucket.demo</code></td><td>Deja de gestionar un recurso (no lo borra).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state rm aws_s3_bucket.demo" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state pull &gt; backup.tfstate</code></td><td>Descarga una copia del estado (incluido remoto).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state pull &gt; backup.tfstate" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
 <section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt>Perder el archivo de estado</dt><dd>Terraform «olvida» los recursos; habrá que importarlos. Por eso se usa backend remoto con versionado.</dd></div><div><dt><code>state rm</code> pensando que borra el recurso</dt><dd>Solo lo quita del estado; el recurso sigue existiendo (y cobrando).</dd></div></dl></section>
-<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>¿Qué pasa si dos personas aplican a la vez con un estado local?</li><li>¿Qué diferencia hay entre <code>state rm</code> y <code>destroy</code>?</li></ol></section>
+<section id="test"><h2>✅ Test de autoevaluación</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="09" data-total="6"><fieldset class="q" data-ok="2"><legend><span class="qn">1</span><span class="txt">¿Cuál NO es una función del estado?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Mejorar el rendimiento</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Mapear recursos del código con objetos reales</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Guardar el código fuente .tf</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Guardar dependencias</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El código vive en los .tf; el estado guarda información sobre los recursos reales.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">2</span><span class="txt">Una contraseña generada con <code>random_password</code> y marcada sensitive…</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">no se guarda en el estado</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">se guarda cifrada</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">se guarda en AWS</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">se guarda en texto plano en el estado</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Por eso el estado debe protegerse como un secreto.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">3</span><span class="txt">¿Qué es el drift?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Un error de sintaxis</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Diferencias entre la realidad y el estado causadas por cambios fuera de Terraform</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Una versión del provider</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Un tipo de backend</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Ocurre cuando alguien modifica recursos manualmente o con otras herramientas.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">4</span><span class="txt">¿Qué comando muestra el drift sin proponer cambios en la infraestructura?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform refresh</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform validate</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform plan -refresh-only</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">terraform show</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Enseña solo qué ha cambiado fuera de Terraform.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">5</span><span class="txt">¿Qué hace <code>terraform state rm aws_instance.web</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Recrea la instancia</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Borra el código</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Destruye la instancia</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Quita la instancia del estado sin destruirla</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El recurso sigue existiendo; Terraform deja de gestionarlo.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">6</span><span class="txt">Has renombrado un recurso en el código. ¿Qué evitas con <code>terraform state mv</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Que Terraform lo destruya y lo vuelva a crear</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Que se cifre</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Nada</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Que se formatee</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Le indicas que el recurso con el nombre nuevo es el mismo objeto real.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>🏋️ Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1: Detective de drift</h3><p>Crea un <code>local_file</code> y luego edita a mano su contenido (con tu editor). ¿Qué muestra <code>terraform plan -refresh-only</code>? ¿Y <code>terraform plan</code>? Explica la diferencia.</p><details><summary>💡 Ver pista</summary><p>El provider local detecta si el contenido del archivo ha cambiado.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">plan -refresh-only → informa de que local_file ya no existe tal como estaba
+                      (el provider lo detecta por el hash del contenido) y
+                      propone actualizar el estado.
+
+plan                → propone RECREAR el archivo (+ create) con el contenido
+                      del código, deshaciendo tu edición manual.
+
+Diferencia: -refresh-only solo sincroniza el estado con la realidad;
+plan normal intenta que la realidad vuelva a ser igual que el código.</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2: Renombrado seguro</h3><p>Tienes <code>random_pet.mascota</code> en el estado. Renómbralo en el código a <code>random_pet.animal</code> y consigue que <code>terraform plan</code> diga <em>No changes</em>. Hazlo primero con <code>terraform state mv</code> y, tras deshacerlo, con un bloque <code>moved</code>.</p><details><summary>💡 Ver pista</summary><p>El bloque <code>moved</code> tiene <code>from</code> y <code>to</code>.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl"># Opción 1 (imperativa):
+#   terraform state mv random_pet.mascota random_pet.animal
+
+# Opción 2 (declarativa, recomendada):
+resource "random_pet" "animal" {}
+
+moved {
+  from = random_pet.mascota
+  to   = random_pet.animal
+}</code></pre></figure></details></article></section>
 <div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="09"> He completado este módulo</label></div>
 <nav class="pager" aria-label="Módulos"><a class="prev" href="08-expresiones-funciones.html"><small>← Anterior</small>Expresiones y funciones</a><a class="next" href="10-backends-workspaces.html"><small>Siguiente →</small>Backends remotos, bloqueo y workspaces</a></nav></div>
 </main>
@@ -52,6 +171,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 <script src="../assets/js/main.js"></script>
 </body>
 </html>

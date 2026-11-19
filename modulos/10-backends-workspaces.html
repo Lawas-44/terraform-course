@@ -27,28 +27,219 @@
   <p class="eyebrow">Módulo 10</p>
   <h1>Backends remotos, bloqueo y workspaces</h1>
   <p class="lead">Guardar el estado en S3 o HCP Terraform, bloquearlo y gestionar varios entornos.</p>
-  <div class="chips"><span class="chip nivel-intermedio">Intermedio</span><span class="chip">⏱ 2 h</span></div>
+  <div class="chips"><span class="chip nivel-intermedio">Intermedio</span><span class="chip">⏱ 2 h</span><span class="chip">📝 7 preguntas</span><span class="chip">🏋️ 2 retos</span></div>
 </header>
-<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
-<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#ejemplo">Ejemplo</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong><a href="#objetivos">Objetivos</a><a href="#leccion">Lección</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#test">Test</a><a href="#retos">Retos</a></nav>
 
 <section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Configurar un backend remoto en S3 con cifrado, versionado y bloqueo.</li><li>Migrar un estado local a remoto.</li><li>Comparar workspaces vs carpetas por entorno.</li><li>Leer outputs de otra configuración con <code>terraform_remote_state</code>.</li></ul></section>
-<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Backends: <code>local</code>, <code>s3</code>, <code>azurerm</code>, <code>gcs</code>, <code>remote</code>/<code>cloud</code> (HCP Terraform).</li><li>Backend S3: bucket con versionado y cifrado; bloqueo nativo con <code>use_lockfile = true</code> (Terraform 1.10+). La tabla DynamoDB es el método antiguo, hoy obsoleto.</li><li>El problema huevo-gallina: crear el bucket del estado (bootstrap).</li><li><code>terraform init -migrate-state</code> y <code>-reconfigure</code>. Configuración parcial con <code>-backend-config</code>.</li><li>Bloqueos atascados: <code>terraform force-unlock</code>.</li><li>Workspaces CLI (<code>terraform.workspace</code>) vs un directorio por entorno: ventajas e inconvenientes.</li><li>HCP Terraform (antes Terraform Cloud): estado remoto, ejecuciones remotas, variables, plan gratuito.</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
-<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
-</section>
-<section id="ejemplo"><h2>🧩 Ejemplo</h2><figure class="code"><figcaption><span>backend.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
+<section id="leccion" class="leccion"><h2>📚 Lección</h2><nav class="indice" aria-label="Índice de la lección"><strong>Índice de la lección</strong><ol><li><a href="#el-problema-del-estado-local">El problema del estado local</a></li><li><a href="#paso-1-crear-el-bucket-del-estado-bootstrap">Paso 1: crear el bucket del estado (bootstrap)</a></li><li><a href="#paso-2-configurar-el-backend-s3">Paso 2: configurar el backend S3</a></li><li><a href="#paso-3-migrar-el-estado">Paso 3: migrar el estado</a></li><li><a href="#el-bloqueo-en-accion">El bloqueo en acción</a></li><li><a href="#configuracion-parcial-del-backend">Configuración parcial del backend</a></li><li><a href="#leer-outputs-de-otro-proyecto">Leer outputs de otro proyecto</a></li><li><a href="#workspaces">Workspaces</a></li><li><a href="#hcp-terraform">HCP Terraform</a></li></ol></nav><h3 id="el-problema-del-estado-local">El problema del estado local</h3>
+<p>Hasta ahora el estado vivía en tu ordenador. Eso tiene problemas serios en cuanto trabajas con más gente (o con un sistema de CI):</p>
+<ul><li><strong>Compartir</strong>: tu compañera no tiene tu <code>terraform.tfstate</code>, así que para su Terraform la infraestructura no existe.</li><li><strong>Concurrencia</strong>: si dos personas hacen <code>apply</code> a la vez sobre el mismo estado, lo corrompen.</li><li><strong>Pérdida</strong>: si se rompe tu disco, pierdes el estado.</li><li><strong>Seguridad</strong>: el estado tiene secretos y está en un portátil sin cifrar.</li></ul>
+<p>La solución es un <strong>backend remoto</strong>: un lugar compartido donde guardar el estado, con <strong>bloqueo</strong> (<em>locking</em>) para que solo una operación pueda modificarlo a la vez.</p>
+<div class="table-wrap"><table class="data"><thead><tr><th>Backend</th><th>Dónde guarda el estado</th><th>Bloqueo</th></tr></thead><tbody><tr><td><code>local</code></td><td>Archivo en disco (por defecto)</td><td>Solo en tu máquina</td></tr><tr><td><code>s3</code></td><td>Bucket de Amazon S3</td><td>Archivo <code>.tflock</code> en S3 (<code>use_lockfile</code>)</td></tr><tr><td><code>azurerm</code></td><td>Azure Blob Storage</td><td>Lease del blob</td></tr><tr><td><code>gcs</code></td><td>Google Cloud Storage</td><td>Nativo</td></tr><tr><td>HCP Terraform (<code>cloud</code>)</td><td>Servicio de HashiCorp</td><td>Nativo + ejecuciones remotas</td></tr></tbody></table></div>
+<h3 id="paso-1-crear-el-bucket-del-estado-bootstrap">Paso 1: crear el bucket del estado (bootstrap)</h3>
+<p>Hay un problema del huevo y la gallina: necesitas un bucket para guardar el estado, pero quieres crear ese bucket con Terraform. La solución habitual es una pequeña configuración <strong>bootstrap</strong> con estado local, que se ejecuta una sola vez:</p>
+<figure class="code"><figcaption><span>bootstrap/main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~&gt; 6.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "eu-west-1"
+}
+
+data "aws_caller_identity" "actual" {}
+
+resource "aws_s3_bucket" "estado" {
+  # incluir el ID de cuenta ayuda a que el nombre sea único
+  bucket = "tfstate-${data.aws_caller_identity.actual.account_id}-eu-west-1"
+
+  lifecycle {
+    prevent_destroy = true # ¡nunca borrar el estado por accidente!
+  }
+}
+
+resource "aws_s3_bucket_versioning" "estado" {
+  bucket = aws_s3_bucket.estado.id
+  versioning_configuration {
+    status = "Enabled" # permite recuperar versiones anteriores del estado
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "estado" {
+  bucket = aws_s3_bucket.estado.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
+    }
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "estado" {
+  bucket                  = aws_s3_bucket.estado.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+output "bucket_estado" {
+  value = aws_s3_bucket.estado.bucket
+}</code></pre></figure>
+<figure class="code"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">cd bootstrap
+terraform init &amp;&amp; terraform apply
+terraform output -raw bucket_estado
+# tfstate-123456789012-eu-west-1</code></pre></figure>
+<h3 id="paso-2-configurar-el-backend-s3">Paso 2: configurar el backend S3</h3>
+<p>En tu proyecto, añade un bloque <code>backend</code> dentro de <code>terraform {}</code>:</p>
+<figure class="code"><figcaption><span>backend.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
   backend "s3" {
-    bucket       = "mi-empresa-terraform-state"
-    key          = "curso/dev/terraform.tfstate"
+    bucket       = "tfstate-123456789012-eu-west-1"
+    key          = "curso/web/terraform.tfstate"  # ruta dentro del bucket
     region       = "eu-west-1"
     encrypt      = true
-    use_lockfile = true # bloqueo nativo en S3 (Terraform &gt;= 1.10)
+    use_lockfile = true   # bloqueo nativo en S3 (Terraform &gt;= 1.10)
   }
-}</code></pre></figure></section>
+}</code></pre></figure>
+<ul><li><code>key</code> es la ruta del archivo dentro del bucket. Usa una por proyecto y entorno: <code>red/prod/terraform.tfstate</code>, <code>web/dev/terraform.tfstate</code>…</li><li><code>use_lockfile = true</code> crea un archivo <code>terraform.tfstate.tflock</code> mientras alguien está operando.</li></ul>
+<div class="callout "><strong>ℹ️ Nota.</strong> Antes de Terraform 1.10, el bloqueo en S3 requería una tabla de <strong>DynamoDB</strong> (<code>dynamodb_table = "..."</code>). Lo verás en muchos tutoriales y proyectos existentes; hoy está obsoleto en favor de <code>use_lockfile</code>.</div>
+<div class="callout aviso"><strong>⚠️ Cuidado.</strong> Dentro del bloque <code>backend</code> <strong>no se pueden usar variables</strong> (<code>var.x</code>) ni locals: se evalúa antes que todo lo demás.</div>
+<h3 id="paso-3-migrar-el-estado">Paso 3: migrar el estado</h3>
+<p>Al cambiar de backend hay que volver a ejecutar <code>init</code>. Terraform detecta que ya tienes un estado local y te ofrece copiarlo:</p>
+<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">$ terraform init -migrate-state
+
+Initializing the backend...
+Do you want to copy existing state to the new backend?
+  Pre-existing state was found while migrating the previous "local" backend to the
+  newly configured "s3" backend. No existing state was found in the newly
+  configured "s3" backend. Do you want to copy this state to the new "s3"
+  backend? Enter "yes" to copy and "no" to start with an empty state.
+
+  Enter a value: yes
+
+Successfully configured the backend "s3"! Terraform will automatically
+use this backend unless the backend configuration changes.</code></pre></figure>
+<p>Comprueba que funcionó: <code>terraform plan</code> debe decir <em>No changes</em> y el estado ya está en S3:</p>
+<figure class="code"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">aws s3 ls s3://tfstate-123456789012-eu-west-1/curso/web/
+# 2026-11-19 11:02:10      4521 terraform.tfstate
+rm terraform.tfstate terraform.tfstate.backup   # ya no hacen falta en local</code></pre></figure>
+<h3 id="el-bloqueo-en-accion">El bloqueo en acción</h3>
+<p>Abre dos terminales en la misma carpeta y lanza <code>terraform apply</code> en ambas. La segunda verá:</p>
+<figure class="code term"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">╷
+│ Error: Error acquiring the state lock
+│
+│ Error message: operation error S3: PutObject, ... PreconditionFailed
+│ Lock Info:
+│   ID:        a1b2c3d4-e5f6-7890-abcd-ef1234567890
+│   Path:      tfstate-123456789012-eu-west-1/curso/web/terraform.tfstate
+│   Operation: OperationTypeApply
+│   Who:       ana@portatil
+│   Version:   1.10.5
+│   Created:   2026-11-19 11:05:31 UTC
+│
+│ Terraform acquires a state lock to protect the state from being written
+│ by multiple users at the same time.
+╵</code></pre></figure>
+<p>Esa protección evita corromper el estado. Si un proceso murió a medias (se cerró el portátil, se cayó el CI) y el bloqueo quedó atascado, puedes liberarlo:</p>
+<figure class="code"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform force-unlock a1b2c3d4-e5f6-7890-abcd-ef1234567890
+# o esperar en vez de fallar:
+terraform apply -lock-timeout=5m</code></pre></figure>
+<div class="callout aviso"><strong>⚠️ Cuidado.</strong> Antes de <code>force-unlock</code>, <strong>asegúrate</strong> de que nadie está aplicando de verdad. Si lo liberas mientras otra persona aplica, podéis corromper el estado.</div>
+<h3 id="configuracion-parcial-del-backend">Configuración parcial del backend</h3>
+<p>Como no se pueden usar variables en el backend, para reutilizar el mismo código en varios entornos se usa <strong>configuración parcial</strong>: dejas el bloque casi vacío y pasas el resto en <code>init</code>:</p>
+<figure class="code"><figcaption><span>backend.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
+  backend "s3" {}
+}</code></pre></figure>
+<figure class="code"><figcaption><span>dev.s3.tfbackend</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">bucket       = "tfstate-123456789012-eu-west-1"
+key          = "web/dev/terraform.tfstate"
+region       = "eu-west-1"
+encrypt      = true
+use_lockfile = true</code></pre></figure>
+<figure class="code"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform init -backend-config=dev.s3.tfbackend
+# cambiar a prod (otro estado):
+terraform init -reconfigure -backend-config=prod.s3.tfbackend</code></pre></figure>
+<h3 id="leer-outputs-de-otro-proyecto">Leer outputs de otro proyecto</h3>
+<p>En proyectos grandes, la infraestructura se divide en varias configuraciones (red, bases de datos, aplicaciones), cada una con su estado. Una puede leer los outputs de otra con el data source <code>terraform_remote_state</code>:</p>
+<figure class="code"><figcaption><span>app/main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">data "terraform_remote_state" "red" {
+  backend = "s3"
+  config = {
+    bucket = "tfstate-123456789012-eu-west-1"
+    key    = "red/prod/terraform.tfstate"
+    region = "eu-west-1"
+  }
+}
+
+resource "aws_instance" "app" {
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = "t3.micro"
+  subnet_id     = data.terraform_remote_state.red.outputs.subred_privada_id
+}</code></pre></figure>
+<div class="callout tip"><strong>💡 Consejo.</strong> Alternativa con menos acoplamiento: usar data sources normales que busquen por etiquetas (<code>data "aws_subnet"</code> con <code>filter</code>), o guardar valores en SSM Parameter Store.</div>
+<h3 id="workspaces">Workspaces</h3>
+<p>Los <strong>workspaces</strong> permiten tener <strong>varios estados con el mismo código</strong> en el mismo backend. Siempre existe uno llamado <code>default</code>:</p>
+<figure class="code"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform workspace list          # * default
+terraform workspace new dev       # crea y cambia a dev
+terraform workspace new prod
+terraform workspace select dev
+terraform workspace show          # dev</code></pre></figure>
+<p>Dentro del código, <code>terraform.workspace</code> devuelve el nombre del workspace actual:</p>
+<figure class="code"><figcaption><span>main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">locals {
+  entorno = terraform.workspace
+  tamanos = {
+    dev  = "t3.micro"
+    prod = "t3.medium"
+  }
+}
+
+resource "aws_instance" "web" {
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = lookup(local.tamanos, local.entorno, "t3.micro")
+  tags          = { Name = "web-${local.entorno}" }
+}</code></pre></figure>
+<p>En S3, los estados de cada workspace se guardan en <code>env:/NOMBRE/&lt;key&gt;</code>.</p>
+<div class="table-wrap"><table class="data"><thead><tr><th></th><th>Workspaces</th><th>Una carpeta por entorno</th></tr></thead><tbody><tr><td>Código</td><td>Idéntico para todos</td><td>Puede diferir (o compartir módulos)</td></tr><tr><td>Riesgo</td><td>Fácil equivocarse de workspace y aplicar en prod</td><td>Es explícito: <code>cd envs/prod</code></td></tr><tr><td>Diferencias entre entornos</td><td>Con condicionales y <code>lookup</code></td><td>Con archivos <code>.tfvars</code>/código distinto</td></tr><tr><td>Ideal para</td><td>Entornos efímeros idénticos (una rama, una demo)</td><td>dev / staging / prod con diferencias reales</td></tr></tbody></table></div>
+<div class="callout "><strong>ℹ️ Nota.</strong> Para entornos tipo dev/prod, la mayoría de equipos prefiere <strong>carpetas por entorno</strong> que reutilizan módulos (módulos 11 y 14). Los workspaces CLI brillan para copias temporales idénticas.</div>
+<h3 id="hcp-terraform">HCP Terraform</h3>
+<p><strong>HCP Terraform</strong> (antes Terraform Cloud) es el servicio de HashiCorp que, además de guardar el estado, ejecuta los <code>plan</code> y <code>apply</code> en sus servidores, guarda variables y secretos, se integra con GitHub y permite aprobar cambios desde la web. Tiene un plan gratuito limitado.</p>
+<figure class="code"><figcaption><span>versions.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
+  cloud {
+    organization = "mi-organizacion"
+    workspaces {
+      name = "curso-web-dev"
+    }
+  }
+}</code></pre></figure>
+<figure class="code"><figcaption><span>terminal</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">terraform login   # abre el navegador para obtener un token
+terraform init    # conecta con HCP Terraform
+terraform plan    # se ejecuta en remoto; ves la salida en tu terminal</code></pre></figure>
+<p>Alternativas al estilo de HCP Terraform: Spacelift, env0, Scalr o el open source Atlantis.</p></section>
 <section id="practica"><h2>🛠 Práctica guiada: Estado remoto</h2><ol class="pasos"><li>Crea (con Terraform, en una carpeta <code>bootstrap/</code>) un bucket con versionado y cifrado.</li><li>Añade el bloque <code>backend "s3"</code> a tu proyecto y ejecuta <code>terraform init -migrate-state</code>.</li><li>Abre dos terminales y lanza <code>apply</code> a la vez para ver el bloqueo.</li><li>Crea los workspaces <code>dev</code> y <code>prod</code> y usa <code>terraform.workspace</code> en un nombre.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
 <section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform init -migrate-state</code></td><td>Mueve el estado al nuevo backend.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -migrate-state" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform init -reconfigure</code></td><td>Reinicializa el backend ignorando la configuración anterior.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -reconfigure" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform init -backend-config=dev.s3.tfbackend</code></td><td>Configuración parcial del backend desde archivo.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -backend-config=dev.s3.tfbackend" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform force-unlock LOCK_ID</code></td><td>Libera un bloqueo atascado (¡asegúrate de que nadie está aplicando!).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform force-unlock LOCK_ID" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform workspace list</code></td><td>Lista workspaces.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform workspace list" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform workspace new dev</code></td><td>Crea un workspace.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform workspace new dev" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform workspace select prod</code></td><td>Cambia de workspace.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform workspace select prod" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform workspace show</code></td><td>Muestra el workspace actual.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform workspace show" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform login</code></td><td>Inicia sesión en HCP Terraform.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform login" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
 <section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt><code>Error acquiring the state lock</code></dt><dd>Alguien (o un proceso caído) tiene el bloqueo. Espera o usa <code>force-unlock</code> con cuidado.</dd></div><div><dt>Usar variables dentro del bloque <code>backend</code></dt><dd>No se permite. Usa <code>-backend-config</code> o archivos <code>.tfbackend</code>.</dd></div></dl></section>
-<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>¿Por qué el backend debe tener versionado activado?</li><li>¿Cuándo preferirías carpetas por entorno en lugar de workspaces?</li></ol></section>
+<section id="test"><h2>✅ Test de autoevaluación</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="10" data-total="7"><fieldset class="q" data-ok="1"><legend><span class="qn">1</span><span class="txt">¿Qué problema resuelve el bloqueo (locking) del estado?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Que se borren recursos</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Que dos operaciones modifiquen el estado a la vez</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Que el estado sea grande</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Que el estado sea legible</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Solo una operación puede escribir el estado a la vez.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">2</span><span class="txt">Con Terraform 1.10+, ¿cómo se activa el bloqueo en el backend S3?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">use_lockfile = true</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Viene siempre activado</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">lock = "s3"</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">dynamodb_table = "locks"</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>use_lockfile</code> usa un archivo .tflock en el propio bucket. DynamoDB es el método antiguo.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">3</span><span class="txt">¿Por qué el bucket del estado debe tener versionado?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Para el bloqueo</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para poder recuperar versiones anteriores si el estado se corrompe</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para que sea más barato</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Es obligatorio en S3</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El versionado es tu copia de seguridad del estado.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">4</span><span class="txt">Has añadido un bloque backend a un proyecto con estado local. ¿Qué comando ejecutas?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform apply</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform state push</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform init -migrate-state</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">terraform workspace new</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Copia el estado local al nuevo backend.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">5</span><span class="txt">¿Puedes usar <code>var.region</code> dentro del bloque backend?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Sí</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">No; se usa configuración parcial con -backend-config</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Solo en S3</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Solo con locals</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El backend se configura antes de evaluar variables.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">6</span><span class="txt">¿Qué devuelve <code>terraform.workspace</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">La región</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">El nombre del workspace seleccionado</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">El nombre del bucket</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">La carpeta actual</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Útil para nombrar recursos o elegir tamaños según el workspace.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">7</span><span class="txt">Un apply en CI se cortó y el estado quedó bloqueado. Nadie más está aplicando. ¿Qué haces?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform force-unlock ID</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform init -upgrade</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Borrar el bucket</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">terraform destroy</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Libera el bloqueo usando el ID que aparece en el mensaje de error.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>🏋️ Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1: Estado remoto completo</h3><p>Aplica el bootstrap, migra el proyecto del módulo 6 a S3 con <code>use_lockfile</code>, verifica en S3 que existe el archivo y prueba el bloqueo con dos terminales.</p><details><summary>💡 Ver pista</summary><p>Mientras dure el apply de la primera terminal, verás un archivo <code>.tflock</code> junto al estado con <code>aws s3 ls</code>.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">cd bootstrap &amp;&amp; terraform init &amp;&amp; terraform apply &amp;&amp; cd ..
+# añade backend.tf con bucket/key/region/use_lockfile
+terraform init -migrate-state
+aws s3 ls s3://BUCKET/curso/web/
+# terminal 1: terraform apply  (no respondas al prompt todavía)
+# terminal 2: terraform plan   → Error acquiring the state lock
+aws s3 ls s3://BUCKET/curso/web/   # terraform.tfstate y terraform.tfstate.tflock</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2: Dos entornos con workspaces</h3><p>Usando <code>local_file</code>, crea una configuración que genere <code>config-&lt;workspace&gt;.txt</code> con un número de réplicas distinto en <code>dev</code> (1) y <code>prod</code> (3). Crea ambos workspaces y aplica en cada uno. ¿Cuántos archivos hay al final?</p><details><summary>💡 Ver pista</summary><p>Cada workspace tiene su propio estado, así que los archivos no se pisan.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">locals {
+  replicas = { dev = 1, prod = 3 }
+}
+
+resource "local_file" "config" {
+  filename = "${path.module}/config-${terraform.workspace}.txt"
+  content  = "replicas=${lookup(local.replicas, terraform.workspace, 1)}\n"
+}
+
+# terraform workspace new dev  &amp;&amp; terraform apply
+# terraform workspace new prod &amp;&amp; terraform apply
+# → config-dev.txt y config-prod.txt (2 archivos, 2 estados)</code></pre></figure></details></article></section>
 <div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="10"> He completado este módulo</label></div>
 <nav class="pager" aria-label="Módulos"><a class="prev" href="09-estado.html"><small>← Anterior</small>El estado (state) en profundidad</a><a class="next" href="11-modulos.html"><small>Siguiente →</small>Módulos</a></nav></div>
 </main>
@@ -61,6 +252,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 <script src="../assets/js/main.js"></script>
 </body>
 </html>

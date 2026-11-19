@@ -3,7 +3,8 @@
 Curso gratuito de **Terraform para principiantes**, en español, publicado como web estática.
 
 - 16 módulos (~35 h) organizados en 4 fases: fundamentos → construir → escalar → profesional.
-- Cada módulo: objetivos, contenido, ejemplo, práctica guiada, comandos clave, errores frecuentes y autoevaluación.
+- Cada módulo: objetivos, lección completa con ejemplos de código y salidas de terminal, práctica guiada, comandos clave, errores frecuentes, **test interactivo autocorregido** y **retos con pista y solución**.
+- Código de todas las prácticas en [`labs/`](labs/), validado automáticamente con GitHub Actions.
 - [Chuleta de comandos](comandos.html) (Terraform, terminal Bash/PowerShell, Git, AWS CLI, herramientas) con buscador y botón de copiar.
 - [Glosario](glosario.html) y progreso del alumno guardado en el navegador.
 
@@ -35,16 +36,17 @@ modulos/          Una página por módulo (00–15)
 labs/             Código de las prácticas
 assets/           CSS, JS e imágenes
 docs/             Análisis y diseño del curso
+src/              Generador y contenido de las lecciones
 ```
 
-## Cómo añadir contenido a un módulo
+## Cómo editar el contenido
 
-Cada página de `modulos/` ya tiene el guion. Para desarrollar la lección, busca el comentario
-`<!-- ESCRIBE AQUÍ LA LECCIÓN -->`, añade un `<h3>` por cada punto del contenido y elimina el aviso «Lección en desarrollo».
+Las páginas se generan a partir de `src/` (ver [`src/README.md`](src/README.md)):
 
-Para bloques de código usa:
+1. Edita la lección, el test o los retos en `src/contenido/mNN.py` (o la ficha del módulo en `src/temario.py`).
+2. Ejecuta `python3 src/build.py`.
+3. Revisa la página en local y haz commit de los `.py` y de los `.html` generados.
 
-```html
-<figure class="code"><figcaption><span>main.tf</span><button class="copy" type="button">Copiar</button></figcaption>
-<pre><code class="language-hcl">resource "random_pet" "x" {}</code></pre></figure>
-```
+## Laboratorios
+
+El código de las prácticas está en [`labs/`](labs/). Un workflow de GitHub Actions comprueba en cada push que todos pasan `terraform fmt`, `validate` y `test`.

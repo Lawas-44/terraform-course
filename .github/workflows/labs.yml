@@ -1,0 +1,64 @@
+name: labs
+
+on:
+  push:
+    paths: ["labs/**", ".github/workflows/labs.yml"]
+  pull_request:
+    paths: ["labs/**", ".github/workflows/labs.yml"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  validar:
+    name: fmt, validate y test
+    runs-on: ubuntu-latest
+    env:
+      TF_IN_AUTOMATION: "1"
+      TF_PLUGIN_CACHE_DIR: ${{ github.workspace }}/.tf-plugin-cache
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "~1.10"
+          terraform_wrapper: false
+
+      - run: mkdir -p "$TF_PLUGIN_CACHE_DIR"
+
+      - name: terraform fmt
+        run: terraform fmt -check -recursive -diff labs
+
+      - name: terraform validate (cada carpeta con .tf)
+        run: |
+          set -e
+          fallos=0
+          for dir in $(find labs -name '*.tf' -not -path '*/.terraform/*' -exec dirname {} \; | sort -u); do
+            echo "::group::$dir"
+            if terraform -chdir="$dir" init -backend=false -input=false -no-color >/dev/null \
+               && terraform -chdir="$dir" validate -no-color; then
+              echo "OK $dir"
+            else
+              echo "::error::Falla la validación en $dir"
+              fallos=$((fallos + 1))
+            fi
+            echo "::endgroup::"
+          done
+          exit $fallos
+
+      - name: terraform test (carpetas con tests/)
+        run: |
+          set -e
+          fallos=0
+          for dir in $(find labs -name '*.tftest.hcl' -exec dirname {} \; | xargs -n1 dirname | sort -u); do
+            echo "::group::$dir"
+            if terraform -chdir="$dir" test -no-color; then
+              echo "OK $dir"
+            else
+              echo "::error::Fallan los tests en $dir"
+              fallos=$((fallos + 1))
+            fi
+            echo "::endgroup::"
+          done
+          exit $fallos

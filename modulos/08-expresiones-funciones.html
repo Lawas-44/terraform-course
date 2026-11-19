@@ -27,47 +27,212 @@
   <p class="eyebrow">Módulo 08</p>
   <h1>Expresiones y funciones</h1>
   <p class="lead">Condicionales, bucles <code>for</code>, splat, bloques dinámicos y funciones integradas.</p>
-  <div class="chips"><span class="chip nivel-intermedio">Intermedio</span><span class="chip">⏱ 2 h</span></div>
+  <div class="chips"><span class="chip nivel-intermedio">Intermedio</span><span class="chip">⏱ 2 h</span><span class="chip">📝 7 preguntas</span><span class="chip">🏋️ 2 retos</span></div>
 </header>
-<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
-<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#ejemplo">Ejemplo</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong><a href="#objetivos">Objetivos</a><a href="#leccion">Lección</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#test">Test</a><a href="#retos">Retos</a></nav>
 
 <section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Escribir condicionales y expresiones <code>for</code> para transformar datos.</li><li>Generar bloques anidados con <code>dynamic</code>.</li><li>Usar las funciones más comunes y probarlas en <code>terraform console</code>.</li></ul></section>
-<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Operadores aritméticos, de comparación y lógicos.</li><li>Condicional ternario: <code>condicion ? a : b</code>.</li><li>Expresiones <code>for</code> para listas <code>[for x in lista : upper(x)]</code> y mapas <code>{for k, v in mapa : k =&gt; v}</code>, con filtro <code>if</code>.</li><li>Splat: <code>aws_instance.web[*].id</code>.</li><li>Bloques <code>dynamic</code> (reglas, etiquetas, ajustes repetidos).</li><li>Funciones: strings (<code>format</code>, <code>join</code>, <code>split</code>, <code>replace</code>, <code>lower</code>), colecciones (<code>length</code>, <code>merge</code>, <code>lookup</code>, <code>concat</code>, <code>flatten</code>, <code>toset</code>, <code>keys</code>, <code>values</code>), red (<code>cidrsubnet</code>), archivos (<code>file</code>, <code>templatefile</code>), codificación (<code>jsonencode</code>, <code>yamldecode</code>), <code>try</code>, <code>coalesce</code>.</li><li>Nota: Terraform no admite funciones definidas por el usuario (salvo funciones aportadas por providers).</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
-<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
-</section>
-<section id="ejemplo"><h2>🧩 Ejemplo</h2><figure class="code"><figcaption><span>expresiones.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">locals {
-  entornos = ["dev", "staging", "prod"]
+<section id="leccion" class="leccion"><h2>📚 Lección</h2><nav class="indice" aria-label="Índice de la lección"><strong>Índice de la lección</strong><ol><li><a href="#operadores">Operadores</a></li><li><a href="#condicionales">Condicionales</a></li><li><a href="#expresiones-for">Expresiones for</a></li><li><a href="#splat">Splat</a></li><li><a href="#bloques-dynamic">Bloques dynamic</a></li><li><a href="#funciones-integradas">Funciones integradas</a></li><li><a href="#funciones-de-red-cidrsubnet">Funciones de red: cidrsubnet</a></li><li><a href="#plantillas-templatefile-y-jsonencode">Plantillas: templatefile y jsonencode</a></li><li><a href="#manejo-de-errores-try-can-y-coalesce">Manejo de errores: try, can y coalesce</a></li></ol></nav><h3 id="operadores">Operadores</h3>
+<p>HCL tiene los operadores habituales. Pruébalos todos en <code>terraform console</code>:</p>
+<div class="table-wrap"><table class="data"><thead><tr><th>Tipo</th><th>Operadores</th><th>Ejemplo</th><th>Resultado</th></tr></thead><tbody><tr><td>Aritméticos</td><td><code>+ - * / %</code></td><td><code>10 % 3</code></td><td><code>1</code></td></tr><tr><td>Comparación</td><td><code>== != &lt; &gt; &lt;= &gt;=</code></td><td><code>5 &gt;= 3</code></td><td><code>true</code></td></tr><tr><td>Lógicos</td><td><code>&amp;&amp; || !</code></td><td><code>true &amp;&amp; !false</code></td><td><code>true</code></td></tr></tbody></table></div>
+<h3 id="condicionales">Condicionales</h3>
+<p>La única estructura condicional es el <strong>operador ternario</strong>: <code>condición ? valor_si_true : valor_si_false</code>.</p>
+<figure class="code"><figcaption><span>condicionales</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "entorno" {
+  type    = string
+  default = "dev"
+}
 
-  nombres = [for e in local.entornos : "app-${e}"]
+locals {
+  es_prod        = var.entorno == "prod"
+  tipo_instancia = local.es_prod ? "t3.medium" : "t3.micro"
+  replicas       = local.es_prod ? 3 : 1
+  dominio        = local.es_prod ? "midominio.com" : "${var.entorno}.midominio.com"
+}</code></pre></figure>
+<div class="callout aviso"><strong>⚠️ Cuidado.</strong> Las dos ramas deben devolver el <strong>mismo tipo</strong>. <code>local.es_prod ? 3 : "uno"</code> da error <em>Inconsistent conditional result types</em>.</div>
+<h3 id="expresiones-for">Expresiones for</h3>
+<p>Las expresiones <code>for</code> transforman colecciones. Si van entre <code>[ ]</code> devuelven una <strong>lista</strong>; entre <code>{ }</code>, un <strong>map</strong>:</p>
+<figure class="code"><figcaption><span>for</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">locals {
+  nombres = ["ana", "luis", "marta"]
 
-  solo_prod = [for e in local.entornos : e if e == "prod"]
+  # lista → lista
+  mayusculas = [for n in local.nombres : upper(n)]
+  # ["ANA", "LUIS", "MARTA"]
 
-  subredes = {
-    for i, az in ["a", "b", "c"] :
-    az =&gt; cidrsubnet("10.0.0.0/16", 8, i)
-  }
+  # con filtro if
+  largos = [for n in local.nombres : n if length(n) &gt; 3]
+  # ["luis", "marta"]
 
-  tipo_instancia = var.entorno == "prod" ? "t3.medium" : "t3.micro"
+  # con índice
+  numerados = [for i, n in local.nombres : "${i + 1}. ${n}"]
+  # ["1. ana", "2. luis", "3. marta"]
+
+  # lista → map
+  longitudes = { for n in local.nombres : n =&gt; length(n) }
+  # { ana = 3, luis = 4, marta = 5 }
+
+  # map → map
+  precios     = { cafe = 1.5, te = 1.2, zumo = 3 }
+  con_iva     = { for k, v in local.precios : k =&gt; v * 1.21 }
+  solo_caros  = { for k, v in local.precios : k =&gt; v if v &gt; 2 }
+}</code></pre></figure>
+<p>Un caso muy práctico: convertir una lista de objetos en un map para usarlo con <code>for_each</code>:</p>
+<figure class="code"><figcaption><span>lista de objetos → map</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "buckets" {
+  default = [
+    { nombre = "fotos", versionado = true },
+    { nombre = "logs",  versionado = false },
+  ]
+}
+
+resource "aws_s3_bucket" "this" {
+  for_each      = { for b in var.buckets : b.nombre =&gt; b }
+  bucket_prefix = "${each.key}-"
+}</code></pre></figure>
+<h3 id="splat">Splat</h3>
+<p>El operador <strong>splat</strong> <code>[*]</code> es un atajo para sacar un atributo de todos los elementos de una lista:</p>
+<figure class="code"><figcaption><span>splat</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "aws_instance" "web" {
+  count         = 3
+  ami           = data.aws_ami.amazon_linux.id
+  instance_type = "t3.micro"
+}
+
+output "ips" {
+  value = aws_instance.web[*].public_ip
+  # equivale a: [for i in aws_instance.web : i.public_ip]
+}</code></pre></figure>
+<div class="callout "><strong>ℹ️ Nota.</strong> El splat solo funciona con listas (recursos con <code>count</code>). Para recursos con <code>for_each</code> (que son maps) usa una expresión <code>for</code> o <code>values(recurso)[*].atributo</code>.</div>
+<h3 id="bloques-dynamic">Bloques dynamic</h3>
+<p>Algunos recursos tienen <strong>bloques anidados</strong> que se repiten (reglas, etiquetas, ajustes). <code>dynamic</code> los genera a partir de una colección:</p>
+<figure class="code"><figcaption><span>dynamic</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "puertos" {
+  type    = list(number)
+  default = [80, 443, 8080]
 }
 
 resource "aws_security_group" "web" {
   name_prefix = "web-"
 
   dynamic "ingress" {
-    for_each = [80, 443]
+    for_each = var.puertos
     content {
+      description = "Puerto ${ingress.value}"
       from_port   = ingress.value
       to_port     = ingress.value
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+# Genera 3 bloques ingress { ... }</code></pre></figure>
+<p>Dentro de <code>content</code>, el iterador se llama como el bloque (<code>ingress.value</code>, <code>ingress.key</code>). Puedes renombrarlo con <code>iterator = puerto</code>.</p>
+<div class="callout tip"><strong>💡 Consejo.</strong> No abuses de <code>dynamic</code>: el código se vuelve difícil de leer. Si solo son dos bloques fijos, escríbelos a mano.</div>
+<h3 id="funciones-integradas">Funciones integradas</h3>
+<p>Terraform trae más de 100 funciones. <strong>No puedes crear las tuyas propias</strong> (salvo las que aporten algunos providers). Estas son las que más usarás:</p>
+<div class="table-wrap"><table class="data"><thead><tr><th>Función</th><th>Ejemplo</th><th>Resultado</th></tr></thead><tbody><tr><td><code>upper</code> / <code>lower</code></td><td><code>lower("WEB")</code></td><td><code>"web"</code></td></tr><tr><td><code>format</code></td><td><code>format("app-%03d", 7)</code></td><td><code>"app-007"</code></td></tr><tr><td><code>join</code> / <code>split</code></td><td><code>join(",", ["a","b"])</code></td><td><code>"a,b"</code></td></tr><tr><td><code>replace</code></td><td><code>replace("a_b", "_", "-")</code></td><td><code>"a-b"</code></td></tr><tr><td><code>substr</code></td><td><code>substr("terraform", 0, 5)</code></td><td><code>"terra"</code></td></tr><tr><td><code>length</code></td><td><code>length([1,2,3])</code></td><td><code>3</code></td></tr><tr><td><code>contains</code></td><td><code>contains(["a","b"], "b")</code></td><td><code>true</code></td></tr><tr><td><code>concat</code></td><td><code>concat([1], [2,3])</code></td><td><code>[1,2,3]</code></td></tr><tr><td><code>flatten</code></td><td><code>flatten([[1,2],[3]])</code></td><td><code>[1,2,3]</code></td></tr><tr><td><code>distinct</code></td><td><code>distinct([1,1,2])</code></td><td><code>[1,2]</code></td></tr><tr><td><code>merge</code></td><td><code>merge({a=1}, {b=2})</code></td><td><code>{a=1, b=2}</code></td></tr><tr><td><code>lookup</code></td><td><code>lookup({a=1}, "b", 0)</code></td><td><code>0</code></td></tr><tr><td><code>keys</code> / <code>values</code></td><td><code>keys({a=1, b=2})</code></td><td><code>["a","b"]</code></td></tr><tr><td><code>toset</code> / <code>tolist</code></td><td><code>toset(["a","a"])</code></td><td><code>["a"]</code></td></tr><tr><td><code>min</code> / <code>max</code></td><td><code>max(3, 7, 2)</code></td><td><code>7</code></td></tr><tr><td><code>coalesce</code></td><td><code>coalesce("", "defecto")</code></td><td><code>"defecto"</code></td></tr><tr><td><code>try</code></td><td><code>try(var.x.campo, "n/a")</code></td><td>valor o <code>"n/a"</code></td></tr><tr><td><code>cidrsubnet</code></td><td><code>cidrsubnet("10.0.0.0/16", 8, 2)</code></td><td><code>"10.0.2.0/24"</code></td></tr><tr><td><code>jsonencode</code></td><td><code>jsonencode({a=1})</code></td><td><code>"{\"a\":1}"</code></td></tr><tr><td><code>file</code></td><td><code>file("${path.module}/script.sh")</code></td><td>contenido del archivo</td></tr><tr><td><code>templatefile</code></td><td>ver abajo</td><td>texto renderizado</td></tr><tr><td><code>timestamp</code></td><td><code>timestamp()</code></td><td>fecha actual (cambia en cada plan)</td></tr></tbody></table></div>
+<h3 id="funciones-de-red-cidrsubnet">Funciones de red: cidrsubnet</h3>
+<p><code>cidrsubnet(prefijo, bits_nuevos, número)</code> divide una red en subredes. Con una VPC <code>/16</code> y 8 bits nuevos obtienes subredes <code>/24</code>:</p>
+<figure class="code"><figcaption><span>subredes automáticas</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">locals {
+  vpc_cidr = "10.0.0.0/16"
+  zonas    = ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+
+  subredes_publicas = {
+    for i, az in local.zonas : az =&gt; cidrsubnet(local.vpc_cidr, 8, i)
+  }
+  # { eu-west-1a = "10.0.0.0/24", eu-west-1b = "10.0.1.0/24", eu-west-1c = "10.0.2.0/24" }
+
+  subredes_privadas = {
+    for i, az in local.zonas : az =&gt; cidrsubnet(local.vpc_cidr, 8, i + 10)
+  }
+  # { eu-west-1a = "10.0.10.0/24", ... }
+}</code></pre></figure>
+<h3 id="plantillas-templatefile-y-jsonencode">Plantillas: templatefile y jsonencode</h3>
+<p>Para textos largos (scripts, configuraciones) es mejor tenerlos en archivos aparte y rellenarlos con <code>templatefile</code>:</p>
+<figure class="code"><figcaption><span>templates/user_data.sh.tftpl</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-bash">#!/bin/bash
+dnf install -y nginx
+cat &gt; /usr/share/nginx/html/index.html &lt;&lt;HTML
+&lt;h1&gt;${titulo}&lt;/h1&gt;
+&lt;ul&gt;
+%{ for s in servicios ~}
+  &lt;li&gt;${s}&lt;/li&gt;
+%{ endfor ~}
+&lt;/ul&gt;
+HTML
+systemctl enable --now nginx</code></pre></figure>
+<figure class="code"><figcaption><span>main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "aws_instance" "web" {
+  # ...
+  user_data = templatefile("${path.module}/templates/user_data.sh.tftpl", {
+    titulo    = "Entorno ${var.entorno}"
+    servicios = ["web", "api", "worker"]
+  })
+}</code></pre></figure>
+<p>Y para JSON (por ejemplo, políticas IAM), <strong>nunca escribas JSON a mano dentro de un string</strong>: usa <code>jsonencode</code>, que garantiza que sea válido:</p>
+<figure class="code"><figcaption><span>política IAM con jsonencode</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">resource "aws_iam_policy" "lectura_s3" {
+  name = "lectura-s3"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect   = "Allow"
+      Action   = ["s3:GetObject", "s3:ListBucket"]
+      Resource = [
+        aws_s3_bucket.demo.arn,
+        "${aws_s3_bucket.demo.arn}/*",
+      ]
+    }]
+  })
+}</code></pre></figure>
+<h3 id="manejo-de-errores-try-can-y-coalesce">Manejo de errores: try, can y coalesce</h3>
+<figure class="code"><figcaption><span>valores opcionales</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "config" {
+  type    = any
+  default = { nombre = "web" }
+}
+
+locals {
+  # try: devuelve la primera expresión que no falle
+  puerto = try(var.config.puerto, 80)              # 80, porque no existe
+
+  # can: true/false según si la expresión funciona (útil en validaciones)
+  es_ip = can(regex("^\\d+\\.\\d+\\.\\d+\\.\\d+$", "10.0.0.1"))  # true
+
+  # coalesce: primer valor no nulo ni vacío
+  nombre = coalesce(var.nombre_personalizado, "nombre-por-defecto")
 }</code></pre></figure></section>
 <section id="practica"><h2>🛠 Práctica guiada: Juega en la consola</h2><ol class="pasos"><li>En <code>terraform console</code> calcula 4 subredes /24 dentro de <code>10.0.0.0/16</code> con <code>cidrsubnet</code>.</li><li>Convierte una lista de nombres en un mapa nombre → longitud.</li><li>Genera un JSON de política IAM con <code>jsonencode</code>.</li><li>Renderiza un <code>user_data</code> con <code>templatefile</code>.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
 <section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">echo &#x27;cidrsubnet(&quot;10.0.0.0/16&quot;, 8, 2)&#x27; | terraform console</code></td><td>Evalúa una expresión sin abrir la consola interactiva.</td><td class="copy-cell"><button class="copy" type="button" data-copy="echo &#x27;cidrsubnet(&quot;10.0.0.0/16&quot;, 8, 2)&#x27; | terraform console" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform console -var-file=dev.tfvars</code></td><td>Consola con las variables cargadas.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform console -var-file=dev.tfvars" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
 <section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt><code>Inconsistent conditional result types</code></dt><dd>Las dos ramas del ternario deben devolver el mismo tipo.</dd></div><div><dt><code>dynamic</code> en exceso</dt><dd>Si el código se vuelve ilegible, simplifica o separa en recursos independientes.</dd></div></dl></section>
-<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>Escribe un <code>for</code> que filtre los números pares de una lista.</li><li>¿Qué devuelve <code>cidrsubnet("10.0.0.0/16", 8, 1)</code>?</li></ol></section>
+<section id="test"><h2>✅ Test de autoevaluación</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="08" data-total="7"><fieldset class="q" data-ok="2"><legend><span class="qn">1</span><span class="txt">¿Qué devuelve <code>[for n in ["a", "bb", "ccc"] : length(n)]</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">["a", "bb", "ccc"]</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">{a = 1, bb = 2, ccc = 3}</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">[1, 2, 3]</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">3</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Una lista con la longitud de cada string.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">2</span><span class="txt">¿Qué devuelve <code>{ for n in ["a", "bb"] : n =&gt; upper(n) }</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">["A", "BB"]</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">{ a = "A", bb = "BB" }</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">{ "A", "BB" }</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Error</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Con llaves y <code>=&gt;</code> se construye un map.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">3</span><span class="txt">¿Qué devuelve <code>cidrsubnet("10.0.0.0/16", 8, 5)</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">10.0.0.5/24</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">10.0.5.0/24</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">10.0.8.0/21</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">10.5.0.0/16</span></button></div><p class="exp" hidden><strong class="verdict"></strong> /16 + 8 bits = /24; la subred número 5 es 10.0.5.0/24.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">4</span><span class="txt">¿Por qué <code>var.x ? 1 : "no"</code> da error?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Faltan paréntesis</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Falta un if</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Las dos ramas devuelven tipos distintos</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">No se puede usar var en condicionales</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Ambas ramas deben ser del mismo tipo (o convertibles).</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">5</span><span class="txt">¿Para qué sirve un bloque <code>dynamic</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Para variables dinámicas</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para generar bloques anidados repetidos dentro de un recurso</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para crear varios recursos</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para cargar archivos</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Genera bloques como <code>ingress</code>, <code>setting</code>… a partir de una colección.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">6</span><span class="txt">¿Cuál es la mejor forma de escribir una política IAM en Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Un comentario</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Un archivo .txt</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">jsonencode() con un objeto HCL</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Un heredoc con JSON escrito a mano</span></button></div><p class="exp" hidden><strong class="verdict"></strong> jsonencode garantiza JSON válido y permite usar referencias y expresiones.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">7</span><span class="txt">¿Qué devuelve <code>try(local.mapa.no_existe, "defecto")</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">"no_existe"</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">"defecto"</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Error</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">null</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>try</code> devuelve la primera expresión que se evalúa sin error.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>🏋️ Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1: Plan de direcciones IP</h3><p>Dada la VPC <code>10.20.0.0/16</code> y las zonas <code>a</code>, <code>b</code>, <code>c</code>, genera en <code>locals</code> un map con, para cada zona, un objeto <code>{ publica = ..., privada = ... }</code>. Las públicas deben ser 10.20.0-2.0/24 y las privadas 10.20.100-102.0/24. Compruébalo en <code>terraform console</code>.</p><details><summary>💡 Ver pista</summary><p><code>cidrsubnet(cidr, 8, i)</code> y <code>cidrsubnet(cidr, 8, i + 100)</code> dentro de un <code>for</code> con índice.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">locals {
+  cidr  = "10.20.0.0/16"
+  zonas = ["a", "b", "c"]
+
+  red = {
+    for i, z in local.zonas : z =&gt; {
+      publica = cidrsubnet(local.cidr, 8, i)
+      privada = cidrsubnet(local.cidr, 8, i + 100)
+    }
+  }
+}
+# &gt; local.red.b
+# { privada = "10.20.101.0/24", publica = "10.20.1.0/24" }</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2: Etiquetas normalizadas</h3><p>Recibes <code>var.etiquetas = { "Centro Coste" = "1234", "OWNER" = "Ana" }</code>. Genera un map con las claves en minúsculas y con guiones en vez de espacios, y añade siempre <code>gestion = "terraform"</code>.</p><details><summary>💡 Ver pista</summary><p><code>replace(lower(k), " ", "-")</code> dentro de un <code>for</code>, y <code>merge</code> al final.</p></details><details><summary>✅ Ver solución</summary><figure class="code"><figcaption><span>solución</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "etiquetas" {
+  type = map(string)
+  default = {
+    "Centro Coste" = "1234"
+    "OWNER"        = "Ana"
+  }
+}
+
+locals {
+  etiquetas_normalizadas = merge(
+    { for k, v in var.etiquetas : replace(lower(k), " ", "-") =&gt; v },
+    { gestion = "terraform" }
+  )
+}
+# { "centro-coste" = "1234", gestion = "terraform", owner = "Ana" }</code></pre></figure></details></article></section>
 <div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="08"> He completado este módulo</label></div>
 <nav class="pager" aria-label="Módulos"><a class="prev" href="07-meta-argumentos.html"><small>← Anterior</small>Meta-argumentos: count, for_each y lifecycle</a><a class="next" href="09-estado.html"><small>Siguiente →</small>El estado (state) en profundidad</a></nav></div>
 </main>
@@ -80,6 +245,7 @@ resource "aws_security_group" "web" {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
 <script src="../assets/js/main.js"></script>
 </body>
 </html>
