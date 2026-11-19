@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>05 · Providers y conexión con la nube | Terraform desde cero</title>
+<meta name="description" content="Configurar el provider de AWS, versiones, lock file, alias y autenticación segura.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
+    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<main id="contenido">
+<div class="wrap narrow">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 05</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 05</p>
+  <h1>Providers y conexión con la nube</h1>
+  <p class="lead">Configurar el provider de AWS, versiones, lock file, alias y autenticación segura.</p>
+  <div class="chips"><span class="chip nivel-básico">Básico</span><span class="chip">⏱ 1,5 h</span></div>
+</header>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
+<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#ejemplo">Ejemplo</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+
+<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Configurar el provider de AWS y autenticarse sin escribir claves en el código.</li><li>Entender restricciones de versión (<code>=</code>, <code>&gt;=</code>, <code>~&gt;</code>) y el lock file.</li><li>Usar varios providers y alias (por ejemplo, dos regiones).</li><li>Crear el primer recurso real en la nube (un bucket S3).</li></ul></section>
+<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Qué es un provider: plugin que traduce HCL a llamadas API. Tiers: official, partner, community.</li><li>Leer la documentación del Registry: argumentos, atributos exportados, import.</li><li>Version constraints y <code>.terraform.lock.hcl</code>; <code>terraform init -upgrade</code>.</li><li>Autenticación AWS: cadena de credenciales (variables de entorno, perfiles, SSO, roles). Nunca claves en <code>.tf</code>.</li><li><code>default_tags</code> para etiquetar todos los recursos.</li><li>Alias de providers: multi-región y multi-cuenta.</li><li>Otros providers útiles para practicar: <code>docker</code>, <code>github</code>, <code>kubernetes</code>, <code>azurerm</code>, <code>google</code>.</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
+<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
+</section>
+<section id="ejemplo"><h2>🧩 Ejemplo</h2><figure class="code"><figcaption><span>providers.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~&gt; 6.0"
+    }
+  }
+}
+
+provider "aws" {
+  region  = "eu-west-1"
+  profile = "curso-terraform" # o usa AWS_PROFILE
+
+  default_tags {
+    tags = {
+      Gestion = "terraform"
+      Curso   = "terraform-desde-cero"
+    }
+  }
+}
+
+# Segunda región con alias
+provider "aws" {
+  alias  = "virginia"
+  region = "us-east-1"
+}
+
+resource "aws_s3_bucket" "demo" {
+  bucket_prefix = "curso-tf-demo-"
+}</code></pre></figure></section>
+<section id="practica"><h2>🛠 Práctica guiada: Tu primer bucket S3</h2><ol class="pasos"><li>Configura un perfil con <code>aws configure --profile curso-terraform</code>.</li><li>Crea el bucket del ejemplo y localízalo en la consola de AWS.</li><li>Revisa el contenido de <code>.terraform.lock.hcl</code>.</li><li>Cambia la restricción de versión y prueba <code>terraform init -upgrade</code>.</li><li>Destruye el bucket.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
+<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform providers</code></td><td>Lista los providers que requiere la configuración.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform providers" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform init -upgrade</code></td><td>Actualiza providers dentro de las restricciones.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -upgrade" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform providers lock -platform=linux_amd64 -platform=darwin_arm64 -platform=windows_amd64</code></td><td>Añade hashes para varios sistemas al lock file.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform providers lock -platform=linux_amd64 -platform=darwin_arm64 -platform=windows_amd64" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">export AWS_PROFILE=curso-terraform</code></td><td>Selecciona el perfil de AWS (bash).</td><td class="copy-cell"><button class="copy" type="button" data-copy="export AWS_PROFILE=curso-terraform" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt><code>No valid credential sources found</code></dt><dd>No hay credenciales. Revisa <code>AWS_PROFILE</code> y <code>aws sts get-caller-identity</code>.</dd></div><div><dt><code>BucketAlreadyExists</code></dt><dd>Los nombres de bucket son globales. Usa <code>bucket_prefix</code> o un sufijo aleatorio.</dd></div></dl></section>
+<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>¿Qué permite <code>~&gt; 6.0</code> y qué no?</li><li>¿Para qué sirve un alias de provider?</li></ol></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="05"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="04-variables-outputs-locals.html"><small>← Anterior</small>Variables, outputs y locals</a><a class="next" href="06-recursos-dependencias.html"><small>Siguiente →</small>Recursos, data sources y dependencias</a></nav></div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

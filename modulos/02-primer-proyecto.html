@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02 · Tu primer proyecto: el flujo de trabajo | Terraform desde cero</title>
+<meta name="description" content="init → plan → apply → destroy, sin gastar un céntimo, usando providers locales.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
+    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<main id="contenido">
+<div class="wrap narrow">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 02</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 02</p>
+  <h1>Tu primer proyecto: el flujo de trabajo</h1>
+  <p class="lead">init → plan → apply → destroy, sin gastar un céntimo, usando providers locales.</p>
+  <div class="chips"><span class="chip nivel-básico">Básico</span><span class="chip">⏱ 1,5 h</span></div>
+</header>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
+<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#ejemplo">Ejemplo</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+
+<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Crear un proyecto mínimo y entender qué archivos genera Terraform.</li><li>Ejecutar el flujo completo <code>init</code>, <code>plan</code>, <code>apply</code> y <code>destroy</code>.</li><li>Leer e interpretar la salida de un plan (<code>+</code>, <code>~</code>, <code>-</code>, <code>-/+</code>).</li><li>Entender qué es el archivo de estado y para qué sirve.</li></ul></section>
+<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Estructura de carpeta: un directorio = una configuración (root module).</li><li>El bloque <code>terraform {}</code> y <code>required_providers</code>.</li><li>Providers sin nube: <code>hashicorp/local</code> y <code>hashicorp/random</code>.</li><li><code>terraform init</code>: descarga providers, crea <code>.terraform/</code> y <code>.terraform.lock.hcl</code>.</li><li><code>terraform plan</code>: compara código vs estado vs realidad. Símbolos del plan.</li><li><code>terraform apply</code>: confirmación, <code>-auto-approve</code> y por qué evitarlo al aprender.</li><li><code>terraform.tfstate</code>: primer vistazo al estado.</li><li>Cambiar el código y volver a planificar: actualización en sitio vs reemplazo.</li><li><code>terraform destroy</code>.</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
+<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
+</section>
+<section id="ejemplo"><h2>🧩 Ejemplo</h2><figure class="code"><figcaption><span>main.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">terraform {
+  required_version = "&gt;= 1.6"
+
+  required_providers {
+    local = {
+      source  = "hashicorp/local"
+      version = "~&gt; 2.5"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~&gt; 3.6"
+    }
+  }
+}
+
+resource "random_pet" "nombre" {
+  length = 2
+}
+
+resource "local_file" "saludo" {
+  filename = "${path.module}/saludo.txt"
+  content  = "¡Hola, ${random_pet.nombre.id}! Este archivo lo creó Terraform.\n"
+}
+
+output "nombre_mascota" {
+  value = random_pet.nombre.id
+}</code></pre></figure></section>
+<section id="practica"><h2>🛠 Práctica guiada: Hola, Terraform (carpeta <code>labs/02-primer-proyecto</code>)</h2><ol class="pasos"><li>Copia el <code>main.tf</code> de ejemplo en una carpeta nueva.</li><li>Ejecuta <code>terraform init</code> y explora la carpeta <code>.terraform/</code>.</li><li>Ejecuta <code>terraform plan</code> y lee cada línea del plan.</li><li>Ejecuta <code>terraform apply</code> y abre <code>saludo.txt</code>.</li><li>Cambia <code>length = 3</code>, vuelve a planificar y observa el reemplazo (<code>-/+</code>).</li><li>Borra a mano <code>saludo.txt</code> y ejecuta <code>terraform plan</code>: Terraform detecta la diferencia.</li><li>Termina con <code>terraform destroy</code>.</li></ol></section>
+<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform init</code></td><td>Inicializa el directorio: descarga providers y módulos.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform plan</code></td><td>Muestra qué cambios se harían sin aplicarlos.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform apply</code></td><td>Aplica los cambios (pide confirmación).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform destroy</code></td><td>Destruye todo lo gestionado por esta configuración.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform destroy" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform output</code></td><td>Muestra los outputs.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform output" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt><code>Error: Inconsistent dependency lock file</code></dt><dd>Has cambiado versiones de providers. Ejecuta <code>terraform init -upgrade</code>.</dd></div><div><dt>Ejecutar comandos fuera de la carpeta del proyecto</dt><dd>Terraform trabaja sobre el directorio actual (<code>pwd</code>). Usa <code>cd</code> o <code>-chdir=ruta</code>.</dd></div></dl></section>
+<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>¿Qué significa el símbolo <code>-/+</code> en un plan?</li><li>¿Qué carpeta y qué archivo crea <code>terraform init</code>?</li><li>Si borras un recurso a mano, ¿qué hará el siguiente <code>plan</code>?</li></ol></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="02"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="01-entorno.html"><small>← Anterior</small>Preparación del entorno</a><a class="next" href="03-hcl.html"><small>Siguiente →</small>El lenguaje HCL</a></nav></div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

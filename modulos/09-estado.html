@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>09 · El estado (state) en profundidad | Terraform desde cero</title>
+<meta name="description" content="Qué guarda el estado, el drift y cómo manipularlo sin romper nada.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
+    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<main id="contenido">
+<div class="wrap narrow">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 09</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 09</p>
+  <h1>El estado (state) en profundidad</h1>
+  <p class="lead">Qué guarda el estado, el drift y cómo manipularlo sin romper nada.</p>
+  <div class="chips"><span class="chip nivel-intermedio">Intermedio</span><span class="chip">⏱ 2 h</span></div>
+</header>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
+<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+
+<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Explicar para qué sirve el estado y qué riesgos tiene.</li><li>Detectar y corregir el drift (cambios fuera de Terraform).</li><li>Usar los subcomandos de <code>terraform state</code> de forma segura.</li></ul></section>
+<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Funciones del estado: mapear código ↔ recursos reales, metadatos, dependencias, rendimiento.</li><li>Formato JSON del estado; <code>serial</code> y <code>lineage</code>.</li><li>Datos sensibles en el estado: contraseñas, claves… en texto plano.</li><li>Drift: <code>terraform plan -refresh-only</code> y <code>terraform apply -refresh-only</code>.</li><li><code>terraform state list | show | mv | rm | pull | push</code> (con precaución).</li><li>Copias de seguridad: <code>terraform.tfstate.backup</code> y versionado del backend.</li><li>Reglas: nunca editar el estado a mano; nunca compartirlo por email o Git.</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
+<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
+</section>
+<section id="practica"><h2>🛠 Práctica guiada: Provoca y corrige drift</h2><ol class="pasos"><li>Crea un bucket S3 con etiquetas desde Terraform.</li><li>Modifica una etiqueta desde la consola de AWS.</li><li>Ejecuta <code>terraform plan -refresh-only</code> e interpreta la salida.</li><li>Decide: aceptar el cambio (<code>apply -refresh-only</code>) o revertirlo (<code>apply</code>).</li><li>Renombra el recurso en el código y usa <code>terraform state mv</code> para evitar recrearlo.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
+<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform show</code></td><td>Muestra el estado actual de forma legible.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform show" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform show -json | jq</code></td><td>Estado completo en JSON.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform show -json | jq" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform plan -refresh-only</code></td><td>Muestra el drift sin proponer cambios de infraestructura.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -refresh-only" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state mv aws_s3_bucket.a aws_s3_bucket.b</code></td><td>Renombra un recurso en el estado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state mv aws_s3_bucket.a aws_s3_bucket.b" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state rm aws_s3_bucket.demo</code></td><td>Deja de gestionar un recurso (no lo borra).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state rm aws_s3_bucket.demo" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state pull &gt; backup.tfstate</code></td><td>Descarga una copia del estado (incluido remoto).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state pull &gt; backup.tfstate" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt>Perder el archivo de estado</dt><dd>Terraform «olvida» los recursos; habrá que importarlos. Por eso se usa backend remoto con versionado.</dd></div><div><dt><code>state rm</code> pensando que borra el recurso</dt><dd>Solo lo quita del estado; el recurso sigue existiendo (y cobrando).</dd></div></dl></section>
+<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>¿Qué pasa si dos personas aplican a la vez con un estado local?</li><li>¿Qué diferencia hay entre <code>state rm</code> y <code>destroy</code>?</li></ol></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="09"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="08-expresiones-funciones.html"><small>← Anterior</small>Expresiones y funciones</a><a class="next" href="10-backends-workspaces.html"><small>Siguiente →</small>Backends remotos, bloqueo y workspaces</a></nav></div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

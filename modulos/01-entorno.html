@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01 · Preparación del entorno | Terraform desde cero</title>
+<meta name="description" content="Terminal, instalación de Terraform, editor, Git y la cuenta en la nube preparada de forma segura.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
+    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<main id="contenido">
+<div class="wrap narrow">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 01</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 01</p>
+  <h1>Preparación del entorno</h1>
+  <p class="lead">Terminal, instalación de Terraform, editor, Git y la cuenta en la nube preparada de forma segura.</p>
+  <div class="chips"><span class="chip nivel-básico">Básico</span><span class="chip">⏱ 1,5 h</span></div>
+</header>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
+<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#ejemplo">Ejemplo</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+
+<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Moverse con soltura por la terminal (Linux/macOS y PowerShell).</li><li>Instalar Terraform y gestionar varias versiones.</li><li>Configurar VS Code con la extensión oficial de HashiCorp.</li><li>Preparar Git y un repositorio para los ejercicios.</li><li>Crear una cuenta en AWS con un usuario no-root, MFA y alertas de presupuesto.</li></ul></section>
+<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Terminal mínima: <code>pwd</code>, <code>ls</code>, <code>cd</code>, <code>mkdir</code>, <code>cat</code>, rutas relativas/absolutas, variables de entorno.</li><li>Instalar Terraform: gestor de paquetes (<code>brew</code>, <code>apt</code>, <code>winget</code>/<code>choco</code>) o binario manual; añadirlo al <code>PATH</code>.</li><li>Gestores de versiones: <code>tfenv</code> o <code>tenv</code> y el archivo <code>.terraform-version</code>.</li><li>VS Code + extensión «HashiCorp Terraform»: resaltado, autocompletado, formateo al guardar.</li><li>Git básico y un <code>.gitignore</code> correcto para Terraform (qué nunca se sube).</li><li>Cuenta AWS segura: MFA en root, usuario IAM/IAM Identity Center, AWS CLI y perfiles.</li><li>Control de costes: capa gratuita, AWS Budgets, y la regla de oro «<code>terraform destroy</code> al terminar».</li><li>Alternativa sin coste: Docker Desktop / provider <code>local</code> para los primeros módulos.</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
+<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
+</section>
+<section id="ejemplo"><h2>🧩 Ejemplo</h2><figure class="code"><figcaption><span>.gitignore recomendado</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none"># Carpeta de plugins y módulos descargados
+.terraform/
+
+# Estado: contiene datos sensibles. Nunca a Git.
+*.tfstate
+*.tfstate.*
+
+# Planes guardados y logs
+*.tfplan
+crash.log
+crash.*.log
+
+# Variables con secretos
+*.tfvars
+*.tfvars.json
+!example.tfvars
+
+# Overrides locales
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# OJO: .terraform.lock.hcl SÍ se sube al repositorio</code></pre></figure></section>
+<section id="practica"><h2>🛠 Práctica guiada: Entorno listo</h2><ol class="pasos"><li>Instala Terraform y comprueba la versión con <code>terraform version</code>.</li><li>Activa el autocompletado: <code>terraform -install-autocomplete</code>.</li><li>Instala la AWS CLI y ejecuta <code>aws configure</code> (o <code>aws configure sso</code>).</li><li>Verifica la identidad con <code>aws sts get-caller-identity</code>.</li><li>Crea un presupuesto de 5 USD con alerta por email en AWS Budgets.</li><li>Crea un repositorio <code>terraform-labs</code> con el <code>.gitignore</code> anterior.</li></ol></section>
+<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform version</code></td><td>Muestra la versión de Terraform y de los providers.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform version" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform -install-autocomplete</code></td><td>Instala el autocompletado en bash/zsh.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform -install-autocomplete" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">aws sts get-caller-identity</code></td><td>Comprueba con qué cuenta y usuario estás autenticado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="aws sts get-caller-identity" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">tfenv install 1.9.8 &amp;&amp; tfenv use 1.9.8</code></td><td>Instala y activa una versión concreta (ejemplo).</td><td class="copy-cell"><button class="copy" type="button" data-copy="tfenv install 1.9.8 &amp;&amp; tfenv use 1.9.8" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt><code>terraform: command not found</code></dt><dd>El binario no está en el <code>PATH</code>. Reabre la terminal o añade la carpeta al <code>PATH</code>.</dd></div><div><dt>Usar la cuenta root de AWS con access keys</dt><dd>Nunca. Crea un usuario/rol con permisos y activa MFA en root.</dd></div><div><dt>Subir <code>terraform.tfstate</code> o claves a GitHub</dt><dd>Configura el <code>.gitignore</code> antes del primer commit y usa <code>git status</code> antes de cada <code>git add</code>.</dd></div></dl></section>
+<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>¿Por qué el archivo <code>.terraform.lock.hcl</code> sí se versiona y el <code>.tfstate</code> no?</li><li>¿Qué comando te dice con qué identidad estás usando AWS?</li></ol></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="01"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="00-introduccion.html"><small>← Anterior</small>Introducción a la Infraestructura como Código</a><a class="next" href="02-primer-proyecto.html"><small>Siguiente →</small>Tu primer proyecto: el flujo de trabajo</a></nav></div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

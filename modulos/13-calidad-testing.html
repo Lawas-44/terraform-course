@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>13 · Validación, testing y seguridad | Terraform desde cero</title>
+<meta name="description" content="Condiciones, tests nativos, linters y escáneres de seguridad.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
+    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<main id="contenido">
+<div class="wrap narrow">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 13</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 13</p>
+  <h1>Validación, testing y seguridad</h1>
+  <p class="lead">Condiciones, tests nativos, linters y escáneres de seguridad.</p>
+  <div class="chips"><span class="chip nivel-avanzado">Avanzado</span><span class="chip">⏱ 2,5 h</span></div>
+</header>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
+<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#ejemplo">Ejemplo</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+
+<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Añadir <code>precondition</code>, <code>postcondition</code> y bloques <code>check</code>.</li><li>Escribir tests con <code>terraform test</code> (archivos <code>.tftest.hcl</code>).</li><li>Integrar TFLint, Trivy/Checkov y pre-commit.</li><li>Gestionar secretos correctamente.</li></ul></section>
+<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Niveles de validación: <code>validation</code> en variables → <code>precondition</code>/<code>postcondition</code> → <code>check</code> → tests.</li><li><code>terraform test</code>: bloques <code>run</code>, <code>command = plan|apply</code>, <code>assert</code>, <code>mock_provider</code> (1.7+).</li><li>Análisis estático: <code>tflint</code> (errores y buenas prácticas del provider).</li><li>Seguridad: <code>trivy config</code> (sucesor de tfsec) y <code>checkov</code>.</li><li>Automatizar con <code>pre-commit</code> (fmt, validate, tflint, docs).</li><li>Secretos: variables de entorno, AWS Secrets Manager/SSM, <code>ephemeral</code> y argumentos write-only en versiones recientes.</li><li>Estimar costes con <code>infracost</code>.</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
+<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
+</section>
+<section id="ejemplo"><h2>🧩 Ejemplo</h2><figure class="code"><figcaption><span>tests/bucket.tftest.hcl</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variables {
+  entorno = "dev"
+}
+
+run "nombre_correcto" {
+  command = plan
+
+  assert {
+    condition     = startswith(aws_s3_bucket.web.bucket_prefix, "web-dev")
+    error_message = "El prefijo del bucket debe empezar por web-dev"
+  }
+}
+
+run "entorno_invalido" {
+  command = plan
+
+  variables {
+    entorno = "pruebas"
+  }
+
+  expect_failures = [var.entorno]
+}</code></pre></figure></section>
+<section id="practica"><h2>🛠 Práctica guiada: Red de seguridad</h2><ol class="pasos"><li>Añade una <code>postcondition</code> que verifique que la instancia tiene IP pública.</li><li>Escribe dos tests con <code>terraform test</code> (uno que pase, uno con <code>expect_failures</code>).</li><li>Ejecuta <code>tflint --init &amp;&amp; tflint</code> y corrige los avisos.</li><li>Pasa <code>trivy config .</code> y arregla al menos un hallazgo.</li><li>Configura <code>pre-commit</code> con los hooks de <code>antonbabenko/pre-commit-terraform</code>.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
+<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform test</code></td><td>Ejecuta los archivos *.tftest.hcl.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform test" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform test -filter=tests/bucket.tftest.hcl -verbose</code></td><td>Ejecuta un test concreto con detalle.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform test -filter=tests/bucket.tftest.hcl -verbose" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">tflint --init &amp;&amp; tflint --recursive</code></td><td>Descarga plugins y analiza el código.</td><td class="copy-cell"><button class="copy" type="button" data-copy="tflint --init &amp;&amp; tflint --recursive" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">trivy config .</code></td><td>Escanea configuraciones inseguras.</td><td class="copy-cell"><button class="copy" type="button" data-copy="trivy config ." aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">checkov -d .</code></td><td>Escáner de políticas de seguridad.</td><td class="copy-cell"><button class="copy" type="button" data-copy="checkov -d ." aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">pre-commit run --all-files</code></td><td>Lanza todos los hooks sobre el repositorio.</td><td class="copy-cell"><button class="copy" type="button" data-copy="pre-commit run --all-files" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">infracost breakdown --path .</code></td><td>Estimación de costes mensuales.</td><td class="copy-cell"><button class="copy" type="button" data-copy="infracost breakdown --path ." aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt>Tests con <code>command = apply</code> que crean recursos caros</dt><dd>Usa <code>plan</code> o <code>mock_provider</code> siempre que sea posible.</dd></div><div><dt>Ignorar avisos de seguridad sin justificar</dt><dd>Si suprimes una regla, deja un comentario explicando por qué.</dd></div></dl></section>
+<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>¿Diferencia entre una <code>postcondition</code> y un bloque <code>check</code>?</li><li>¿Qué herramienta usarías para detectar un bucket público?</li></ol></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="13"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="12-import-refactor.html"><small>← Anterior</small>Importar y refactorizar</a><a class="next" href="14-equipo-cicd.html"><small>Siguiente →</small>Trabajo en equipo y CI/CD</a></nav></div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

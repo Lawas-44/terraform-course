@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>14 · Trabajo en equipo y CI/CD | Terraform desde cero</title>
+<meta name="description" content="Flujo con Git y Pull Requests, GitHub Actions con OIDC y HCP Terraform.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
+    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<main id="contenido">
+<div class="wrap narrow">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 14</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 14</p>
+  <h1>Trabajo en equipo y CI/CD</h1>
+  <p class="lead">Flujo con Git y Pull Requests, GitHub Actions con OIDC y HCP Terraform.</p>
+  <div class="chips"><span class="chip nivel-avanzado">Avanzado</span><span class="chip">⏱ 2,5 h</span></div>
+</header>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
+<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#ejemplo">Ejemplo</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+
+<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Organizar un repositorio de infraestructura para varios entornos.</li><li>Automatizar <code>fmt</code>, <code>validate</code>, <code>plan</code> en cada Pull Request.</li><li>Autenticar GitHub Actions en AWS sin claves (OIDC).</li><li>Conocer HCP Terraform y alternativas (Atlantis, Spacelift, env0).</li></ul></section>
+<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Estructura de repositorio: <code>modules/</code>, <code>envs/dev</code>, <code>envs/prod</code>, <code>bootstrap/</code>.</li><li>Flujo GitOps: rama → PR → plan automático → revisión → merge → apply.</li><li>Guardar el plan (<code>-out</code>) y aplicar exactamente ese plan.</li><li>GitHub Actions: <code>hashicorp/setup-terraform</code>, caché de plugins, comentarios con el plan.</li><li>OIDC: rol IAM de confianza para GitHub, sin secretos de larga duración.</li><li><code>TF_IN_AUTOMATION</code>, <code>-input=false</code>, <code>-no-color</code>, códigos de salida (<code>-detailed-exitcode</code>).</li><li>Políticas como código: Sentinel / OPA (visión general).</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
+<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
+</section>
+<section id="ejemplo"><h2>🧩 Ejemplo</h2><figure class="code"><figcaption><span>.github/workflows/terraform.yml</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-yaml">name: terraform
+on:
+  pull_request:
+    paths: ["envs/**", "modules/**"]
+
+permissions:
+  id-token: write   # necesario para OIDC
+  contents: read
+  pull-requests: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: envs/dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::123456789012:role/github-terraform
+          aws-region: eu-west-1
+      - run: terraform fmt -check -recursive
+      - run: terraform init -input=false
+      - run: terraform validate
+      - run: terraform plan -input=false -out=tfplan</code></pre></figure></section>
+<section id="practica"><h2>🛠 Práctica guiada: Pipeline de infraestructura</h2><ol class="pasos"><li>Reorganiza tus labs en <code>modules/</code> + <code>envs/dev</code> + <code>envs/prod</code>.</li><li>Crea el proveedor OIDC y el rol IAM para GitHub (¡con Terraform!).</li><li>Añade el workflow de ejemplo y abre un PR para ver el plan.</li><li>Añade un job de <code>apply</code> que solo se ejecute al hacer merge en <code>main</code>.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
+<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform plan -out=tfplan</code></td><td>Guarda el plan en un archivo.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -out=tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform show tfplan</code></td><td>Muestra el contenido de un plan guardado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform show tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform apply tfplan</code></td><td>Aplica exactamente el plan guardado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform plan -detailed-exitcode</code></td><td>Sale con 0 (sin cambios), 1 (error) o 2 (hay cambios).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -detailed-exitcode" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform -chdir=envs/dev plan</code></td><td>Ejecuta en otra carpeta sin hacer <code>cd</code>.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform -chdir=envs/dev plan" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt>Guardar access keys de AWS como secretos de GitHub</dt><dd>Usa OIDC con un rol de permisos mínimos.</dd></div><div><dt>Aplicar desde el portátil y desde CI a la vez</dt><dd>Define una única vía de despliegue y respétala.</dd></div></dl></section>
+<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>¿Por qué conviene aplicar un plan guardado en lugar de lanzar <code>apply</code> de nuevo?</li><li>¿Qué aporta OIDC frente a claves estáticas?</li></ol></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="14"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="13-calidad-testing.html"><small>← Anterior</small>Validación, testing y seguridad</a><a class="next" href="15-proyecto-final.html"><small>Siguiente →</small>Proyecto final y certificación</a></nav></div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

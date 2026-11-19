@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>15 · Proyecto final y certificación | Terraform desde cero</title>
+<meta name="description" content="Integrar todo en una infraestructura completa y preparar la certificación oficial.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
+    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<main id="contenido">
+<div class="wrap narrow">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 15</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 15</p>
+  <h1>Proyecto final y certificación</h1>
+  <p class="lead">Integrar todo en una infraestructura completa y preparar la certificación oficial.</p>
+  <div class="chips"><span class="chip nivel-avanzado">Avanzado</span><span class="chip">⏱ 4–6 h</span></div>
+</header>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
+<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#ejemplo">Ejemplo</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+
+<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Diseñar y desplegar una infraestructura de varios componentes con buenas prácticas.</li><li>Documentar el proyecto como lo haría un equipo profesional.</li><li>Conocer el temario de la certificación HashiCorp Certified: Terraform Associate.</li></ul></section>
+<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Arquitectura propuesta: VPC con subredes públicas/privadas, Application Load Balancer, Auto Scaling Group con EC2, bucket S3 para estáticos, (opcional) RDS.</li><li>Requisitos: módulos propios + Registry, backend remoto, dos entornos, variables validadas, tests, CI con plan en PR.</li><li>Entregables: código, README con diagrama, outputs útiles, evidencia de <code>destroy</code>.</li><li>Rúbrica de evaluación: funcionalidad, organización, seguridad, documentación, coste.</li><li>Certificación Terraform Associate: dominios del examen, formato, simulacros y recursos oficiales (consulta la versión vigente del examen en la web de HashiCorp).</li><li>Siguientes pasos: Kubernetes con Terraform, Terragrunt, OpenTofu, otras nubes, CDK for Terraform.</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
+<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
+</section>
+<section id="ejemplo"><h2>🧩 Ejemplo</h2><figure class="code"><figcaption><span>Estructura sugerida</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-none">proyecto-final/
+├── bootstrap/            # bucket del estado remoto
+├── modules/
+│   ├── network/          # VPC, subredes, NAT
+│   ├── web/              # ALB + ASG + security groups
+│   └── static-site/      # S3 (+ CloudFront opcional)
+├── envs/
+│   ├── dev/
+│   │   ├── main.tf
+│   │   ├── backend.tf
+│   │   └── dev.tfvars
+│   └── prod/
+├── tests/
+├── .github/workflows/terraform.yml
+├── .pre-commit-config.yaml
+├── .tflint.hcl
+└── README.md</code></pre></figure></section>
+<section id="practica"><h2>🛠 Práctica guiada: Web escalable en AWS</h2><ol class="pasos"><li>Dibuja el diagrama de arquitectura antes de escribir código.</li><li>Implementa los módulos <code>network</code>, <code>web</code> y <code>static-site</code>.</li><li>Despliega <code>dev</code> desde CI y comprueba la URL del balanceador.</li><li>Ejecuta <code>infracost</code> y documenta el coste estimado.</li><li>Destruye todo y deja constancia en el README.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
+<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform plan -var-file=prod.tfvars -out=prod.tfplan</code></td><td>Plan de producción guardado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -var-file=prod.tfvars -out=prod.tfplan" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform destroy -var-file=dev.tfvars</code></td><td>Limpieza final del entorno.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform destroy -var-file=dev.tfvars" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt>Olvidar destruir el NAT Gateway o el ALB</dt><dd>Son de los recursos que más cobran por hora. Revisa la factura al día siguiente.</dd></div></dl></section>
+<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>Explica tu decisión entre workspaces y carpetas por entorno.</li><li>¿Qué mejorarías para llevar este proyecto a producción real?</li></ol></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="15"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="14-equipo-cicd.html"><small>← Anterior</small>Trabajo en equipo y CI/CD</a><span></span></nav></div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

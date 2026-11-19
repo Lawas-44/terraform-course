@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>07 · Meta-argumentos: count, for_each y lifecycle | Terraform desde cero</title>
+<meta name="description" content="Crear múltiples recursos y controlar su ciclo de vida.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
+    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<main id="contenido">
+<div class="wrap narrow">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 07</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 07</p>
+  <h1>Meta-argumentos: count, for_each y lifecycle</h1>
+  <p class="lead">Crear múltiples recursos y controlar su ciclo de vida.</p>
+  <div class="chips"><span class="chip nivel-intermedio">Intermedio</span><span class="chip">⏱ 2 h</span></div>
+</header>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
+<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#ejemplo">Ejemplo</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+
+<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Crear N recursos con <code>count</code> y con <code>for_each</code>, y elegir entre ellos.</li><li>Controlar el ciclo de vida con <code>lifecycle</code>.</li><li>Proteger recursos críticos contra borrados accidentales.</li></ul></section>
+<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Meta-argumentos disponibles en todo recurso: <code>count</code>, <code>for_each</code>, <code>depends_on</code>, <code>provider</code>, <code>lifecycle</code>.</li><li><code>count</code> + <code>count.index</code>; creación condicional con <code>count = var.crear ? 1 : 0</code>.</li><li><code>for_each</code> con map o set: <code>each.key</code>, <code>each.value</code>.</li><li>Por qué <code>for_each</code> suele ser mejor: eliminar un elemento de en medio con <code>count</code> desplaza índices y recrea recursos.</li><li><code>lifecycle</code>: <code>create_before_destroy</code>, <code>prevent_destroy</code>, <code>ignore_changes</code>, <code>replace_triggered_by</code>.</li><li>Forzar un reemplazo: <code>terraform apply -replace=DIRECCION</code> (sustituye al antiguo <code>taint</code>).</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
+<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
+</section>
+<section id="ejemplo"><h2>🧩 Ejemplo</h2><figure class="code"><figcaption><span>usuarios.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">variable "usuarios" {
+  type    = set(string)
+  default = ["ana", "luis", "marta"]
+}
+
+resource "aws_iam_user" "equipo" {
+  for_each = var.usuarios
+  name     = each.key
+}
+
+resource "aws_s3_bucket" "logs" {
+  bucket_prefix = "logs-"
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [tags["UltimaRevision"]]
+  }
+}</code></pre></figure></section>
+<section id="practica"><h2>🛠 Práctica guiada: count vs for_each</h2><ol class="pasos"><li>Crea 3 archivos locales con <code>count</code> a partir de una lista.</li><li>Elimina el elemento del medio y observa el plan.</li><li>Repite con <code>for_each</code> y compara.</li><li>Añade <code>prevent_destroy</code> a un recurso e intenta destruirlo.</li></ol><div class="callout aviso"><strong>💸 Recuerda:</strong> si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar.</div></section>
+<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform apply -replace=&quot;aws_instance.web&quot;</code></td><td>Fuerza la recreación de un recurso.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply -replace=&quot;aws_instance.web&quot;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state list &#x27;aws_iam_user.equipo&#x27;</code></td><td>Lista las instancias de un recurso con for_each.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state list &#x27;aws_iam_user.equipo&#x27;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform plan -target=&#x27;aws_iam_user.equipo[&quot;ana&quot;]&#x27;</code></td><td>Planifica solo un recurso (uso excepcional).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -target=&#x27;aws_iam_user.equipo[&quot;ana&quot;]&#x27;" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt><code>The "for_each" value depends on resource attributes that cannot be determined until apply</code></dt><dd>Las claves de <code>for_each</code> deben conocerse en el plan; usa valores estáticos o variables.</dd></div><div><dt>Abusar de <code>-target</code></dt><dd>Es para emergencias; deja el estado desalineado con el código si se usa como rutina.</dd></div></dl></section>
+<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>¿Por qué quitar un elemento de una lista con <code>count</code> puede recrear recursos?</li><li>¿Qué hace <code>create_before_destroy</code>?</li></ol></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="07"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="06-recursos-dependencias.html"><small>← Anterior</small>Recursos, data sources y dependencias</a><a class="next" href="08-expresiones-funciones.html"><small>Siguiente →</small>Expresiones y funciones</a></nav></div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03 · El lenguaje HCL | Terraform desde cero</title>
+<meta name="description" content="Sintaxis, bloques, tipos de datos, referencias y convenciones de estilo.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
+    <nav class="main-nav" aria-label="Principal"><a href="../index.html">Inicio</a><a href="../index.html#temario" aria-current="page">Temario</a><a href="../comandos.html">Comandos</a><a href="../glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<main id="contenido">
+<div class="wrap narrow">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 03</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 03</p>
+  <h1>El lenguaje HCL</h1>
+  <p class="lead">Sintaxis, bloques, tipos de datos, referencias y convenciones de estilo.</p>
+  <div class="chips"><span class="chip nivel-básico">Básico</span><span class="chip">⏱ 1,5 h</span></div>
+</header>
+<nav class="toc" aria-label="En esta página"><strong>En esta página</strong>
+<a href="#objetivos">Objetivos</a><a href="#contenido-mod">Contenido</a><a href="#ejemplo">Ejemplo</a><a href="#practica">Práctica</a><a href="#comandos">Comandos</a><a href="#errores">Errores frecuentes</a><a href="#autoevaluacion">Autoevaluación</a></nav>
+
+<section id="objetivos"><h2>🎯 Objetivos de aprendizaje</h2><p>Al terminar este módulo serás capaz de:</p><ul class="check"><li>Reconocer la anatomía de un bloque: tipo, etiquetas y cuerpo.</li><li>Conocer los tipos de datos: string, number, bool, list, set, map, object, tuple.</li><li>Usar interpolación, heredocs y referencias entre recursos.</li><li>Aplicar <code>terraform fmt</code> y <code>terraform validate</code>.</li></ul></section>
+<section id="contenido-mod"><h2>📚 Contenido</h2><ol class="temas"><li>Bloques, argumentos y atributos. Bloques de nivel superior: <code>terraform</code>, <code>provider</code>, <code>resource</code>, <code>data</code>, <code>variable</code>, <code>output</code>, <code>locals</code>, <code>module</code>.</li><li>Identificadores y referencias: <code>TIPO.NOMBRE.ATRIBUTO</code>.</li><li>Tipos primitivos y complejos. Conversión implícita.</li><li>Strings: interpolación <code>${...}</code>, directivas <code>%{ if }</code> / <code>%{ for }</code>, heredoc <code>&lt;&lt;-EOT</code>.</li><li>Comentarios: <code>#</code>, <code>//</code>, <code>/* */</code>.</li><li>Cómo organizar archivos: <code>main.tf</code>, <code>variables.tf</code>, <code>outputs.tf</code>, <code>providers.tf</code>, <code>versions.tf</code>, <code>locals.tf</code>.</li><li>Terraform carga todos los <code>.tf</code> del directorio: el orden de archivos no importa.</li><li>Estilo: indentación de 2 espacios, alinear <code>=</code>, nombres en snake_case.</li></ol><div class="callout pendiente"><strong>✍️ Lección en desarrollo.</strong> Este es el guion del módulo. Ve sustituyendo este aviso por la explicación completa de cada punto.</div>
+<!-- ESCRIBE AQUÍ LA LECCIÓN: un <h3> por cada punto del contenido -->
+</section>
+<section id="ejemplo"><h2>🧩 Ejemplo</h2><figure class="code"><figcaption><span>tipos.tf</span><button class="copy" type="button" aria-label="Copiar código">Copiar</button></figcaption><pre><code class="language-hcl">locals {
+  texto  = "hola"
+  numero = 42
+  activo = true
+  lista  = ["a", "b", "c"]
+  mapa   = { entorno = "dev", equipo = "plataforma" }
+  objeto = { nombre = "web", puertos = [80, 443] }
+
+  mensaje = &lt;&lt;-EOT
+    Entorno: ${local.mapa.entorno}
+    Primer puerto: ${local.objeto.puertos[0]}
+  EOT
+}</code></pre></figure></section>
+<section id="practica"><h2>🛠 Práctica guiada: Explora tipos con la consola</h2><ol class="pasos"><li>Pega los <code>locals</code> del ejemplo en un proyecto vacío.</li><li>Abre <code>terraform console</code> y evalúa <code>local.lista[1]</code>, <code>local.mapa["equipo"]</code>, <code>local.mensaje</code>.</li><li>Desordena la indentación a propósito y ejecuta <code>terraform fmt -diff</code>.</li><li>Introduce un error de sintaxis y lee el mensaje de <code>terraform validate</code>.</li></ol></section>
+<section id="comandos"><h2>⌨️ Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform fmt</code></td><td>Formatea los .tf del directorio actual.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform fmt -recursive -diff</code></td><td>Formatea subcarpetas y muestra los cambios.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt -recursive -diff" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform fmt -check</code></td><td>Falla si algo no está formateado (útil en CI).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt -check" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform validate</code></td><td>Valida sintaxis y coherencia interna.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform validate" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform console</code></td><td>Consola interactiva para probar expresiones.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform console" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>⚠️ Errores frecuentes</h2><dl class="errores"><div><dt><code>Error: Unsupported argument</code></dt><dd>Argumento mal escrito o que no existe en ese recurso. Revisa la documentación del provider.</dd></div><div><dt>Usar comillas simples <code>'texto'</code></dt><dd>HCL solo acepta comillas dobles.</dd></div></dl></section>
+<section id="autoevaluacion"><h2>✅ Autoevaluación</h2><ol><li>¿Diferencia entre <code>list</code> y <code>set</code>?</li><li>¿En qué orden lee Terraform los archivos .tf?</li></ol></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="03"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="02-primer-proyecto.html"><small>← Anterior</small>Tu primer proyecto: el flujo de trabajo</a><a class="next" href="04-variables-outputs-locals.html"><small>Siguiente →</small>Variables, outputs y locals</a></nav></div>
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

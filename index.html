@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terraform desde cero · Curso para principiantes</title>
+<meta name="description" content="Curso gratuito de Terraform en español para principiantes: temario completo, prácticas y chuleta de comandos.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html"><span class="logo" aria-hidden="true">tf</span> Terraform desde cero</a>
+    <nav class="main-nav" aria-label="Principal"><a href="index.html" aria-current="page">Inicio</a><a href="index.html#temario">Temario</a><a href="comandos.html">Comandos</a><a href="glosario.html">Glosario</a><a href="https://github.com/lawas-44/terraform-course" rel="noopener">GitHub</a></nav>
+    <button class="theme-toggle" type="button" aria-label="Cambiar tema claro/oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg></button>
+  </div>
+</header>
+<main id="contenido">
+
+<section class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Curso gratuito · En español · Desde cero</p>
+    <h1>Aprende Terraform<br>sin dar nada por sabido</h1>
+    <p class="lead">Infraestructura como Código paso a paso: de tu primer <code>terraform init</code> a un pipeline de CI/CD desplegando en AWS. Teoría corta, mucha práctica y comandos listos para copiar.</p>
+    <div class="cta"><a class="btn primary" href="modulos/00-introduccion.html">Empezar el curso</a><a class="btn" href="comandos.html">Ver chuleta de comandos</a></div>
+    <ul class="stats">
+      <li><strong>16</strong><span>módulos</span></li>
+      <li><strong>~35 h</strong><span>de contenido y prácticas</span></li>
+      <li><strong>0 €</strong><span>para empezar (módulos 0–4 sin nube)</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="wrap" id="enfoque">
+  <h2>Cómo está pensado el curso</h2>
+  <div class="grid-3">
+    <article class="card"><h3>👤 Para quién</h3><p>Personas sin experiencia en Terraform ni en la nube: estudiantes, desarrolladores, sysadmins o perfiles de soporte que quieren dar el salto a DevOps/Cloud.</p></article>
+    <article class="card"><h3>🧰 Qué necesitas</h3><p>Un ordenador (Windows, macOS o Linux), ganas de usar la terminal y, a partir del módulo 5, una cuenta de AWS con alertas de presupuesto. No hace falta saber programar.</p></article>
+    <article class="card"><h3>🔁 Cómo se aprende</h3><p>Cada módulo sigue el mismo patrón: <em>objetivos → teoría breve → ejemplo → práctica guiada → comandos → errores frecuentes → autoevaluación</em>.</p></article>
+    <article class="card"><h3>💸 Sin sustos en la factura</h3><p>Empezamos con providers locales (<code>local</code>, <code>random</code>), luego usamos recursos de la capa gratuita y cada práctica termina con <code>terraform destroy</code>.</p></article>
+    <article class="card"><h3>🔀 Terraform u OpenTofu</h3><p>Usamos Terraform (1.10 o superior). Casi todo lo aprendido funciona igual en OpenTofu cambiando <code>terraform</code> por <code>tofu</code>.</p></article>
+    <article class="card"><h3>🎓 Hacia la certificación</h3><p>El temario cubre los dominios del examen <em>HashiCorp Certified: Terraform Associate</em> y termina con un proyecto para tu portfolio.</p></article>
+  </div>
+</section>
+
+<section class="wrap" id="temario">
+  <div class="temario-head">
+    <h2>Temario</h2>
+    <div class="progress" aria-live="polite"><div class="bar"><span id="progress-fill"></span></div><span id="progress-text">0 de 16 módulos completados</span></div>
+  </div>
+  <div class="fase"><h3>Fase 1 · Fundamentos</h3><p class="muted">Del cero absoluto a tu primer recurso en la nube.</p><div class="mod-grid"><a class="mod-card" href="modulos/00-introduccion.html" data-mod="00"><span class="mod-num">00</span><span class="mod-body"><strong>Introducción a la Infraestructura como Código</strong><span>Qué problema resuelve Terraform, qué es la IaC y cómo encaja Terraform frente a otras herramientas.</span><span class="meta">Básico · 1 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/01-entorno.html" data-mod="01"><span class="mod-num">01</span><span class="mod-body"><strong>Preparación del entorno</strong><span>Terminal, instalación de Terraform, editor, Git y la cuenta en la nube preparada de forma segura.</span><span class="meta">Básico · 1,5 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/02-primer-proyecto.html" data-mod="02"><span class="mod-num">02</span><span class="mod-body"><strong>Tu primer proyecto: el flujo de trabajo</strong><span>init → plan → apply → destroy, sin gastar un céntimo, usando providers locales.</span><span class="meta">Básico · 1,5 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/03-hcl.html" data-mod="03"><span class="mod-num">03</span><span class="mod-body"><strong>El lenguaje HCL</strong><span>Sintaxis, bloques, tipos de datos, referencias y convenciones de estilo.</span><span class="meta">Básico · 1,5 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/04-variables-outputs-locals.html" data-mod="04"><span class="mod-num">04</span><span class="mod-body"><strong>Variables, outputs y locals</strong><span>Parametrizar configuraciones, exponer resultados y evitar repetición.</span><span class="meta">Básico · 2 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/05-providers.html" data-mod="05"><span class="mod-num">05</span><span class="mod-body"><strong>Providers y conexión con la nube</strong><span>Configurar el provider de AWS, versiones, lock file, alias y autenticación segura.</span><span class="meta">Básico · 1,5 h<span class="done-badge">✓ Completado</span></span></span></a></div></div><div class="fase"><h3>Fase 2 · Construir infraestructura</h3><p class="muted">Recursos reales, repetición y lógica.</p><div class="mod-grid"><a class="mod-card" href="modulos/06-recursos-dependencias.html" data-mod="06"><span class="mod-num">06</span><span class="mod-body"><strong>Recursos, data sources y dependencias</strong><span>Construir una pequeña red y un servidor en AWS entendiendo el grafo de dependencias.</span><span class="meta">Básico · 2,5 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/07-meta-argumentos.html" data-mod="07"><span class="mod-num">07</span><span class="mod-body"><strong>Meta-argumentos: count, for_each y lifecycle</strong><span>Crear múltiples recursos y controlar su ciclo de vida.</span><span class="meta">Intermedio · 2 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/08-expresiones-funciones.html" data-mod="08"><span class="mod-num">08</span><span class="mod-body"><strong>Expresiones y funciones</strong><span>Condicionales, bucles <code>for</code>, splat, bloques dinámicos y funciones integradas.</span><span class="meta">Intermedio · 2 h<span class="done-badge">✓ Completado</span></span></span></a></div></div><div class="fase"><h3>Fase 3 · Escalar y mantener</h3><p class="muted">Estado, entornos, reutilización y código heredado.</p><div class="mod-grid"><a class="mod-card" href="modulos/09-estado.html" data-mod="09"><span class="mod-num">09</span><span class="mod-body"><strong>El estado (state) en profundidad</strong><span>Qué guarda el estado, el drift y cómo manipularlo sin romper nada.</span><span class="meta">Intermedio · 2 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/10-backends-workspaces.html" data-mod="10"><span class="mod-num">10</span><span class="mod-body"><strong>Backends remotos, bloqueo y workspaces</strong><span>Guardar el estado en S3 o HCP Terraform, bloquearlo y gestionar varios entornos.</span><span class="meta">Intermedio · 2 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/11-modulos.html" data-mod="11"><span class="mod-num">11</span><span class="mod-body"><strong>Módulos</strong><span>Empaquetar y reutilizar infraestructura: crear, versionar y consumir módulos.</span><span class="meta">Intermedio · 3 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/12-import-refactor.html" data-mod="12"><span class="mod-num">12</span><span class="mod-body"><strong>Importar y refactorizar</strong><span>Traer infraestructura existente a Terraform y reorganizar el código sin destruir nada.</span><span class="meta">Intermedio · 1,5 h<span class="done-badge">✓ Completado</span></span></span></a></div></div><div class="fase"><h3>Fase 4 · Nivel profesional</h3><p class="muted">Calidad, automatización y proyecto final.</p><div class="mod-grid"><a class="mod-card" href="modulos/13-calidad-testing.html" data-mod="13"><span class="mod-num">13</span><span class="mod-body"><strong>Validación, testing y seguridad</strong><span>Condiciones, tests nativos, linters y escáneres de seguridad.</span><span class="meta">Avanzado · 2,5 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/14-equipo-cicd.html" data-mod="14"><span class="mod-num">14</span><span class="mod-body"><strong>Trabajo en equipo y CI/CD</strong><span>Flujo con Git y Pull Requests, GitHub Actions con OIDC y HCP Terraform.</span><span class="meta">Avanzado · 2,5 h<span class="done-badge">✓ Completado</span></span></span></a><a class="mod-card" href="modulos/15-proyecto-final.html" data-mod="15"><span class="mod-num">15</span><span class="mod-body"><strong>Proyecto final y certificación</strong><span>Integrar todo en una infraestructura completa y preparar la certificación oficial.</span><span class="meta">Avanzado · 4–6 h<span class="done-badge">✓ Completado</span></span></span></a></div></div>
+</section>
+
+<section class="wrap" id="antes">
+  <h2>Checklist antes de empezar</h2>
+  <ul class="check two-col">
+    <li>Sé abrir una terminal y moverme entre carpetas (<a href="comandos.html#terminal">repaso aquí</a>).</li>
+    <li>Tengo Git instalado y una cuenta de GitHub.</li>
+    <li>Tengo un editor (recomendado: VS Code + extensión HashiCorp Terraform).</li>
+    <li>Sé que <strong>nunca</strong> se suben claves ni archivos <code>.tfstate</code> a GitHub.</li>
+    <li>(Módulo 5+) Cuenta de AWS con MFA, usuario no-root y presupuesto con alertas.</li>
+    <li>Reservo 2–4 horas por semana: el curso completo cabe en 2–3 meses.</li>
+  </ul>
+</section>
+
+<section class="wrap" id="recursos">
+  <h2>Recursos complementarios</h2>
+  <div class="grid-3">
+    <a class="card link" href="comandos.html"><h3>⌨️ Chuleta de comandos</h3><p>Terraform, terminal, Git, AWS CLI y herramientas, con buscador y botón de copiar.</p></a>
+    <a class="card link" href="glosario.html"><h3>📖 Glosario</h3><p>Todos los términos del curso explicados en una línea.</p></a>
+    <a class="card link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><h3>🧪 Laboratorios</h3><p>El código de cada práctica en la carpeta <code>labs/</code> del repositorio.</p></a>
+  </div>
+</section>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <p>Curso abierto de Terraform para principiantes · Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</p>
+  </div>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
