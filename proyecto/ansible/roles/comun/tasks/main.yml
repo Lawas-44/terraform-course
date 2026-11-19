@@ -1,0 +1,21 @@
+---
+- name: Actualizar la lista de paquetes
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Instalar paquetes básicos
+  ansible.builtin.apt:
+    name:
+      - curl
+      - htop
+      - unzip
+    state: present
+
+- name: Mensaje de bienvenida al entrar por SSH
+  ansible.builtin.template:
+    src: motd.j2
+    dest: /etc/motd
+    owner: root
+    group: root
+    mode: "0644"

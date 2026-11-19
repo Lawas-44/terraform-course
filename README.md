@@ -1,11 +1,12 @@
-# Terraform desde cero
+# Terraform y Ansible desde cero
 
-Curso gratuito de **Terraform para principiantes**, en español, publicado como web estática.
+Curso gratuito de **Terraform y Ansible para principiantes**, en español, publicado como web estática. A lo largo del curso se construye paso a paso un proyecto real: una web personal en AWS creada con Terraform y configurada con Ansible.
 
-- 16 módulos (~35 h) organizados en 4 fases: fundamentos → construir → escalar → profesional.
-- Cada módulo: objetivos, lección completa con ejemplos de código y salidas de terminal, práctica guiada, comandos clave, errores frecuentes, **test interactivo autocorregido** y **retos con pista y solución**.
+- 23 módulos (~50 h) en 4 partes: primeros pasos, Terraform, Ansible y todo junto.
+- [Proyecto guiado](proyecto.html) de 22 pasos, con el código terminado en [`proyecto/`](proyecto/).
+- Cada módulo: objetivos, lección con ejemplos de código y salidas de terminal, **paso del proyecto**, práctica guiada, comandos clave, errores frecuentes, **test autocorregido** y **retos con pista y solución**.
 - Código de todas las prácticas en [`labs/`](labs/), validado automáticamente con GitHub Actions.
-- [Chuleta de comandos](comandos.html) (Terraform, terminal Bash/PowerShell, Git, AWS CLI, herramientas) con buscador y botón de copiar.
+- [Chuleta de comandos](comandos.html) (Terraform, Ansible, SSH, terminal Bash/PowerShell, Git, AWS CLI, herramientas) con buscador y botón de copiar.
 - [Glosario](glosario.html) y progreso del alumno guardado en el navegador.
 
 El análisis completo del curso (público, decisiones, metodología, mapa del temario, costes, evaluación y hoja de ruta) está en [`docs/ANALISIS.md`](docs/ANALISIS.md).
@@ -34,6 +35,8 @@ comandos.html     Chuleta de comandos
 glosario.html     Glosario
 modulos/          Una página por módulo (00–15)
 labs/             Código de las prácticas
+proyecto/         Proyecto guiado terminado (Terraform + Ansible)
+proyecto.html     Página del proyecto guiado
 assets/           CSS, JS e imágenes
 docs/             Análisis y diseño del curso
 src/              Generador y contenido de las lecciones
@@ -49,4 +52,4 @@ Las páginas se generan a partir de `src/` (ver [`src/README.md`](src/README.md)
 
 ## Laboratorios
 
-El código de las prácticas está en [`labs/`](labs/). Un workflow de GitHub Actions comprueba en cada push que todos pasan `terraform fmt`, `validate` y `test`.
+El código de las prácticas está en [`labs/`](labs/). Un workflow de GitHub Actions comprueba en cada push el código de Terraform (`fmt`, `validate`, `test`) y el de Ansible (`ansible-lint`, idempotencia y una ejecución real del playbook del proyecto).

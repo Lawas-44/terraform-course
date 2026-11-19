@@ -1,0 +1,9 @@
+# Copia este archivo como terraform.tfvars y cambia los valores.
+proyecto = "miweb"
+entorno  = "dev"
+region   = "eu-west-1"
+
+# Tu IP pública: ejecuta  curl -s https://checkip.amazonaws.com  y añade /32
+mi_ip = "81.45.10.20/32"
+
+ruta_clave_publica = "~/.ssh/id_ed25519.pub"

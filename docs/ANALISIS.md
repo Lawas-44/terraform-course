@@ -1,4 +1,4 @@
-# Análisis y diseño del curso «Terraform desde cero»
+# Análisis y diseño del curso «Terraform y Ansible desde cero»
 
 Documento de diseño: qué hay que enseñar, en qué orden, cómo y por qué. Sirve de guía para ir escribiendo las lecciones de la web.
 
@@ -29,7 +29,7 @@ Que una persona **sin experiencia previa en Terraform ni en la nube** termine el
 
 | Decisión | Elección | Motivo |
 |---|---|---|
-| Herramienta | Terraform ≥ 1.10 | Estándar del mercado; 1.10 añade bloqueo nativo en S3 (`use_lockfile`). Se menciona OpenTofu en cada punto relevante. |
+| Herramientas | Terraform ≥ 1.10 y Ansible (ansible-core) | Estándar del mercado; 1.10 añade bloqueo nativo en S3 (`use_lockfile`). Se menciona OpenTofu en cada punto relevante. |
 | Nube principal | AWS | Mayor cuota de mercado, capa gratuita y más ejemplos/ofertas de empleo. Los conceptos son trasladables a Azure/GCP. |
 | Primeros pasos | Providers `local` y `random` | Cero coste y cero configuración: el alumno aprende el flujo sin miedo a la factura. |
 | Idioma | Español, términos técnicos en inglés | Los mensajes de error y la documentación están en inglés; conviene reconocer los términos originales. |
@@ -58,31 +58,49 @@ Principios:
 
 ## 5. Mapa del temario
 
-| # | Módulo | Nivel | Horas | Conceptos clave |
-|---|---|---|---|---|
-| 00 | Introducción a la IaC | Básico | 1 | IaC, declarativo, Terraform vs otras herramientas, OpenTofu |
-| 01 | Preparación del entorno | Básico | 1,5 | Terminal, instalación, tfenv, VS Code, Git, AWS CLI, Budgets |
-| 02 | Primer proyecto | Básico | 1,5 | init/plan/apply/destroy, providers locales, lectura del plan |
-| 03 | Lenguaje HCL | Básico | 1,5 | Bloques, tipos, interpolación, fmt, validate, console |
-| 04 | Variables, outputs, locals | Básico | 2 | Tipos, validation, tfvars, precedencia, sensitive |
-| 05 | Providers | Básico | 1,5 | Versiones, lock file, autenticación AWS, alias, default_tags |
-| 06 | Recursos y dependencias | Básico | 2,5 | Referencias, data sources, grafo, EC2 + SG, user_data |
-| 07 | Meta-argumentos | Intermedio | 2 | count, for_each, lifecycle, -replace |
-| 08 | Expresiones y funciones | Intermedio | 2 | for, condicionales, splat, dynamic, funciones |
-| 09 | El estado | Intermedio | 2 | Drift, refresh-only, state mv/rm/pull, secretos en estado |
-| 10 | Backends y workspaces | Intermedio | 2 | S3 + use_lockfile, migración, force-unlock, workspaces, HCP Terraform |
-| 11 | Módulos | Intermedio | 3 | Inputs/outputs, Registry, versiones, terraform-docs |
-| 12 | Importar y refactorizar | Intermedio | 1,5 | Bloque import, generate-config-out, moved, removed |
-| 13 | Validación, testing y seguridad | Avanzado | 2,5 | pre/postconditions, check, terraform test, tflint, trivy, checkov |
-| 14 | Trabajo en equipo y CI/CD | Avanzado | 2,5 | Estructura de repo, GitHub Actions, OIDC, planes guardados |
-| 15 | Proyecto final y certificación | Avanzado | 4–6 | Integración completa, rúbrica, preparación del examen |
+| # | Módulo | Nivel | Horas |
+|---|---|---|---|
+| 00 | Introducción a la Infraestructura como Código | Básico | 1 h |
+| 01 | Preparación del entorno | Básico | 1,5 h |
+| 02 | Tu primer proyecto: el flujo de trabajo | Básico | 1,5 h |
+| 03 | El lenguaje HCL | Básico | 1,5 h |
+| 04 | Variables, outputs y locals | Básico | 2 h |
+| 05 | Providers y conexión con la nube | Básico | 1,5 h |
+| 06 | Recursos, data sources y dependencias | Básico | 2,5 h |
+| 07 | Meta-argumentos: count, for_each y lifecycle | Intermedio | 2 h |
+| 08 | Expresiones y funciones | Intermedio | 2 h |
+| 09 | El estado (state) en profundidad | Intermedio | 2 h |
+| 10 | Backends remotos, bloqueo y workspaces | Intermedio | 2 h |
+| 11 | Módulos | Intermedio | 3 h |
+| 12 | Importar y refactorizar | Intermedio | 1,5 h |
+| 13 | Introducción a Ansible | Básico | 1,5 h |
+| 14 | Playbooks | Básico | 2 h |
+| 15 | Variables, facts y plantillas | Básico | 2 h |
+| 16 | Handlers, condiciones y bucles | Intermedio | 1,5 h |
+| 17 | Roles y colecciones | Intermedio | 2 h |
+| 18 | Ansible Vault y buenas prácticas | Intermedio | 1,5 h |
+| 19 | Terraform y Ansible juntos | Intermedio | 2 h |
+| 20 | Calidad, tests y seguridad | Avanzado | 2,5 h |
+| 21 | Trabajo en equipo y CI/CD | Avanzado | 2,5 h |
+| 22 | Proyecto final y siguientes pasos | Avanzado | 3 h |
 
-Agrupación en fases (así aparece en la web):
+Agrupación en partes (así aparece en la web):
 
-- **Fase 1 · Fundamentos** (00–05): del cero al primer recurso en la nube.
-- **Fase 2 · Construir infraestructura** (06–08).
-- **Fase 3 · Escalar y mantener** (09–12).
-- **Fase 4 · Nivel profesional** (13–15).
+- **Parte 1 · Primeros pasos** (00–01): qué es la IaC, qué hacen Terraform y Ansible, preparación del entorno.
+- **Parte 2 · Terraform** (02–12): crear la infraestructura.
+- **Parte 3 · Ansible** (13–18): configurar los servidores.
+- **Parte 4 · Todo junto** (19–22): integración, calidad, CI/CD y proyecto final.
+
+## 5 bis. Proyecto guiado
+
+Para que el alumno vea un resultado real y no solo conocimientos, todo el curso construye un único proyecto: **una web personal en dos servidores de AWS**.
+
+- Cada módulo (salvo el 12) termina con un **paso del proyecto**: código concreto que se añade al repositorio del alumno y un resultado comprobable.
+- Pasos de Terraform (módulos 01–11): repositorio, variables, conexión con AWS, primer servidor, `for_each`, inventario generado, estado en S3, módulos y red propia.
+- Pasos de Ansible (13–18): conexión, primer playbook con nginx (primer resultado visible en el navegador), plantillas con datos del alumno y facts, handlers, roles y zona privada con Vault.
+- Pasos finales (19–22): despliegue con un comando, tests con AWS simulado, GitHub Actions y entrega.
+- El código terminado está en `proyecto/` y se verifica en CI: tests de Terraform con `mock_provider`, `ansible-lint` y una ejecución real del playbook en una máquina Ubuntu de GitHub Actions comprobando la web, la página de estado, la zona privada y la idempotencia.
+- Se usa Ubuntu en los servidores para que los roles (apt) se puedan probar igual en CI y en WSL.
 
 ## 6. Cobertura de la certificación Terraform Associate
 

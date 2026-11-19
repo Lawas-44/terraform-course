@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>03 · El lenguaje HCL | Terraform desde cero</title>
+<title>03 · El lenguaje HCL | Terraform y Ansible desde cero</title>
 <meta name="description" content="Sintaxis, bloques, tipos de datos, referencias y convenciones de estilo.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,7 @@
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="topbar">
   <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
-  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
   <span class="spacer"></span>
   <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
   <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
@@ -26,34 +26,33 @@
 <div class="progress-box" aria-live="polite">
   <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
   <div class="bar"><span class="fill js-fill"></span></div>
-  <small class="js-count">0 de 16 módulos completados</small>
+  <small class="js-count">0 de 23 módulos completados</small>
 </div>
 <nav aria-label="Contenido del curso">
-<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
-<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
 </li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html" aria-current="page"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
-<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#los-bloques">Los bloques</a></li><li><a href="#tipos-de-datos">Tipos de datos</a></li><li><a href="#meter-valores-dentro-de-un-texto">Meter valores dentro de un texto</a></li><li><a href="#usar-datos-de-otro-recurso">Usar datos de otro recurso</a></li><li><a href="#comentarios-y-organizacion">Comentarios y organización</a></li><li><a href="#ordenar-y-comprobar-el-codigo">Ordenar y comprobar el código</a></li><li><a href="#la-consola-de-terraform">La consola de Terraform</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#los-bloques">Los bloques</a></li><li><a href="#tipos-de-datos">Tipos de datos</a></li><li><a href="#meter-valores-dentro-de-un-texto">Meter valores dentro de un texto</a></li><li><a href="#usar-datos-de-otro-recurso">Usar datos de otro recurso</a></li><li><a href="#comentarios-y-organizacion">Comentarios y organización</a></li><li><a href="#ordenar-y-comprobar-el-codigo">Ordenar y comprobar el código</a></li><li><a href="#la-consola-de-terraform">La consola de Terraform</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 4</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
 </li>
 <li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
 </li>
-</ul>
-<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
 </li>
-</ul>
-<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
@@ -63,12 +62,28 @@
 <li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
-<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
-<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
 <p class="sb-group">Referencia</p><ul class="sb-list">
@@ -90,7 +105,7 @@
   <p class="eyebrow">Módulo 03</p>
   <h1>El lenguaje HCL</h1>
   <p class="lead">Sintaxis, bloques, tipos de datos, referencias y convenciones de estilo.</p>
-  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 1,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span></div>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 1,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 4</span></div>
 </header>
 <section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Reconocer la anatomía de un bloque: tipo, etiquetas y cuerpo.</li><li>Conocer los tipos de datos: string, number, bool, list, set, map, object, tuple.</li><li>Usar interpolación, heredocs y referencias entre recursos.</li><li>Aplicar <code>terraform fmt</code> y <code>terraform validate</code>.</li></ul></section>
 <section id="leccion"><h2>Lección</h2><h3 id="los-bloques">Los bloques</h3>
@@ -177,6 +192,28 @@ terraform validate">Copiar</button></div><pre><code class="plain"><span class="p
 <span class="out">&gt; upper("hola")</span>
 <span class="out">"HOLA"</span>
 <span class="out">&gt; exit</span></code></pre></figure></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 4 de 22</p><h3 class="paso-titulo">Nombres y etiquetas comunes</h3><p>Todos los recursos del proyecto tendrán un nombre que empieza igual (por ejemplo <code>miweb-dev-...</code>) y las mismas etiquetas. Lo definimos una vez en <code>locals</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/locals.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">locals {
+  prefijo = "${var.proyecto}-${var.entorno}"
+
+  etiquetas = {
+    Proyecto = var.proyecto
+    Entorno  = var.entorno
+    Gestion  = "terraform"
+  }
+}</code></pre></figure>
+<p>Usa <code>var.proyecto</code> y <code>var.entorno</code>, que crearás en el próximo paso. Por eso <code>terraform validate</code> dará un error de momento:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform fmt
+terraform validate">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform fmt</span>
+<span class="prompt">$ </span><span class="cmdline">terraform validate</span>
+<span class="out">Error: Reference to undeclared input variable</span>
+<span class="out"></span>
+<span class="out">  on locals.tf line 2, in locals:</span>
+<span class="out">   2:   prefijo = "${var.proyecto}-${var.entorno}"</span>
+<span class="out"></span>
+<span class="out">An input variable with the name "proyecto" has not been declared.</span></code></pre></figure>
+<p>Es normal: lo arreglas en el módulo 4. Aprender a leer este tipo de errores es parte del trabajo.</p>
+<p>Resultado de este paso: los nombres y etiquetas del proyecto están definidos en un solo sitio.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
 <section id="practica"><h2>Práctica guiada</h2><p><strong>Explora tipos con la consola</strong></p><ol class="pasos"><li>Pega los <code>locals</code> del ejemplo en un proyecto vacío.</li><li>Abre <code>terraform console</code> y evalúa <code>local.lista[1]</code>, <code>local.mapa["equipo"]</code>, <code>local.mensaje</code>.</li><li>Desordena la indentación a propósito y ejecuta <code>terraform fmt -diff</code>.</li><li>Introduce un error de sintaxis y lee el mensaje de <code>terraform validate</code>.</li></ol></section>
 <section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform fmt</code></td><td>Formatea los .tf del directorio actual.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform fmt -recursive -diff</code></td><td>Formatea subcarpetas y muestra los cambios.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt -recursive -diff" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform fmt -check</code></td><td>Falla si algo no está formateado (útil en CI).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform fmt -check" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform validate</code></td><td>Valida sintaxis y coherencia interna.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform validate" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform console</code></td><td>Consola interactiva para probar expresiones.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform console" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
 <section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>Error: Unsupported argument</code></dt><dd>Argumento mal escrito o que no existe en ese recurso. Revisa la documentación del provider.</dd></div><div><dt>Usar comillas simples <code>'texto'</code></dt><dd>HCL solo acepta comillas dobles.</dd></div></dl></section>

@@ -172,3 +172,43 @@ output "buckets" {
   }
 }""")},
 ]
+
+
+PROYECTO = {'titulo': 'Conecta con AWS',
+ 'bloques': [('p',
+              'Configura el provider de AWS. Gracias a `default_tags`, todos los recursos llevarán las '
+              'etiquetas del paso del módulo 3:'),
+             ('code',
+              'hcl',
+              'terraform/providers.tf',
+              'provider "aws" {\n'
+              '  region = var.region\n'
+              '\n'
+              '  default_tags {\n'
+              '    tags = local.etiquetas\n'
+              '  }\n'
+              '}'),
+             ('p', 'Para comprobar que Terraform llega a tu cuenta, añade un output temporal:'),
+             ('code',
+              'hcl',
+              'terraform/prueba.tf',
+              'data "aws_caller_identity" "actual" {}\n'
+              '\n'
+              'output "cuenta" {\n'
+              '  value = data.aws_caller_identity.actual.account_id\n'
+              '}'),
+             ('term',
+              '$ export AWS_PROFILE=curso-terraform\n'
+              '$ terraform apply\n'
+              '...\n'
+              'Apply complete! Resources: 0 added, 0 changed, 0 destroyed.\n'
+              '\n'
+              'Outputs:\n'
+              'cuenta = "123456789012"'),
+             ('p',
+              'Si ves tu número de cuenta, todo funciona. Borra `prueba.tf`: era solo para comprobarlo.'),
+             ('term',
+              '$ rm prueba.tf\n'
+              '$ git add providers.tf variables.tf locals.tf terraform.tfvars.example\n'
+              '$ git commit -m "Configura AWS y variables"'),
+             ('p', 'Resultado de este paso: Terraform está conectado a tu cuenta de AWS.')]}

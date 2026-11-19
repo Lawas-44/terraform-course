@@ -2,17 +2,17 @@ name: labs
 
 on:
   push:
-    paths: ["labs/**", ".github/workflows/labs.yml"]
+    paths: ["labs/**", "proyecto/**", ".github/workflows/labs.yml"]
   pull_request:
-    paths: ["labs/**", ".github/workflows/labs.yml"]
+    paths: ["labs/**", "proyecto/**", ".github/workflows/labs.yml"]
   workflow_dispatch: {}
 
 permissions:
   contents: read
 
 jobs:
-  validar:
-    name: fmt, validate y test
+  terraform:
+    name: Terraform (fmt, validate y test)
     runs-on: ubuntu-latest
     env:
       TF_IN_AUTOMATION: "1"
@@ -28,13 +28,12 @@ jobs:
       - run: mkdir -p "$TF_PLUGIN_CACHE_DIR"
 
       - name: terraform fmt
-        run: terraform fmt -check -recursive -diff labs
+        run: terraform fmt -check -recursive -diff labs proyecto/terraform
 
       - name: terraform validate (cada carpeta con .tf)
         run: |
-          set -e
           fallos=0
-          for dir in $(find labs -name '*.tf' -not -path '*/.terraform/*' -exec dirname {} \; | sort -u); do
+          for dir in $(find labs proyecto/terraform -name '*.tf' -not -path '*/.terraform/*' -exec dirname {} \; | sort -u); do
             echo "::group::$dir"
             if terraform -chdir="$dir" init -backend=false -input=false -no-color >/dev/null \
                && terraform -chdir="$dir" validate -no-color; then
@@ -49,9 +48,8 @@ jobs:
 
       - name: terraform test (carpetas con tests/)
         run: |
-          set -e
           fallos=0
-          for dir in $(find labs -name '*.tftest.hcl' -exec dirname {} \; | xargs -n1 dirname | sort -u); do
+          for dir in $(find labs proyecto/terraform -name '*.tftest.hcl' -exec dirname {} \; | xargs -n1 dirname | sort -u); do
             echo "::group::$dir"
             if terraform -chdir="$dir" test -no-color; then
               echo "OK $dir"
@@ -62,3 +60,57 @@ jobs:
             echo "::endgroup::"
           done
           exit $fallos
+
+  ansible:
+    name: Ansible (lint, labs y proyecto)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Instalar Ansible
+        run: pipx install --include-deps ansible-core && pipx install ansible-lint
+
+      - name: ansible-lint
+        run: |
+          fallos=0
+          for dir in labs/1[3-8]-ansible-* proyecto/ansible; do
+            echo "::group::$dir"
+            (cd "$dir" && ansible-lint) || { echo "::error::ansible-lint falla en $dir"; fallos=$((fallos + 1)); }
+            echo "::endgroup::"
+          done
+          exit $fallos
+
+      - name: Ejecutar los labs dos veces (idempotencia)
+        run: |
+          fallos=0
+          for pb in labs/14-ansible-playbooks/playbook.yml labs/1[5-8]-ansible-*/site.yml; do
+            dir=$(dirname "$pb"); file=$(basename "$pb")
+            echo "::group::$pb"
+            (cd "$dir" && ansible-playbook "$file") || fallos=$((fallos + 1))
+            (cd "$dir" && ansible-playbook "$file" | tee /tmp/salida.txt)
+            grep -q "changed=0" /tmp/salida.txt || { echo "::error::$pb no es idempotente"; fallos=$((fallos + 1)); }
+            echo "::endgroup::"
+          done
+          exit $fallos
+
+      - name: Proyecto - syntax check
+        working-directory: proyecto/ansible
+        run: ansible-playbook -i inventario/local.ini site.yml --syntax-check
+
+      - name: Proyecto - aplicar el playbook en esta máquina
+        working-directory: proyecto/ansible
+        run: ansible-playbook -i inventario/local.ini site.yml -e web_privado_password=prueba-ci
+
+      - name: Proyecto - comprobar la web
+        run: |
+          curl -sf http://localhost/ | grep -q "<h1>Ana García</h1>"
+          curl -sf http://localhost/estado.html | grep -q "Estado del servidor"
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost/privado/)" = "401"
+          curl -sf -u admin:prueba-ci http://localhost/privado/ | grep -q "Zona privada"
+          echo "La web, la página de estado y la zona privada funcionan"
+
+      - name: Proyecto - idempotencia
+        working-directory: proyecto/ansible
+        run: |
+          ansible-playbook -i inventario/local.ini site.yml -e web_privado_password=prueba-ci | tee /tmp/salida.txt
+          grep -q "changed=0" /tmp/salida.txt

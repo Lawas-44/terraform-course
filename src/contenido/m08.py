@@ -170,3 +170,61 @@ locals {
 }
 # { "centro-coste" = "1234", gestion = "terraform", owner = "Ana" }""")},
 ]
+
+
+PROYECTO = {'titulo': 'Genera el inventario de Ansible',
+ 'bloques': [('p',
+              'Ansible necesitará la lista de servidores con sus IPs. En lugar de escribirla a mano, haz que '
+              'Terraform la genere con una plantilla.'),
+             ('code',
+              'text',
+              'terraform/templates/inventario.ini.tftpl',
+              '# Archivo generado por Terraform. No lo edites a mano.\n'
+              '[web]\n'
+              '%{ for nombre, ip in servidores ~}\n'
+              '${nombre} ansible_host=${ip}\n'
+              '%{ endfor ~}\n'
+              '\n'
+              '[web:vars]\n'
+              'ansible_user=ubuntu'),
+             ('p', '`%{ for }` repite la línea por cada servidor. Añade a `main.tf`:'),
+             ('code',
+              'hcl',
+              'terraform/main.tf (añadir)',
+              'resource "local_file" "inventario" {\n'
+              '  filename        = "${path.module}/../ansible/inventario/hosts.ini"\n'
+              '  file_permission = "0644"\n'
+              '  content = templatefile("${path.module}/templates/inventario.ini.tftpl", {\n'
+              '    servidores = { for nombre, servidor in aws_instance.web : nombre => servidor.public_ip }\n'
+              '  })\n'
+              '}'),
+             ('p', 'Añade también dos outputs útiles con expresiones `for`:'),
+             ('code',
+              'hcl',
+              'terraform/outputs.tf (añadir)',
+              'output "urls" {\n'
+              '  description = "Dirección web de cada servidor"\n'
+              '  value       = { for nombre, servidor in aws_instance.web : nombre => '
+              '"http://${servidor.public_ip}" }\n'
+              '}\n'
+              '\n'
+              'output "ssh" {\n'
+              '  description = "Comando para entrar en cada servidor"\n'
+              '  value       = { for nombre, servidor in aws_instance.web : nombre => "ssh '
+              'ubuntu@${servidor.public_ip}" }\n'
+              '}'),
+             ('term',
+              '$ terraform apply\n'
+              '...\n'
+              'Plan: 1 to add, 0 to change, 0 to destroy.\n'
+              '$ cat ../ansible/inventario/hosts.ini\n'
+              '# Archivo generado por Terraform. No lo edites a mano.\n'
+              '[web]\n'
+              'web1 ansible_host=54.170.10.20\n'
+              'web2 ansible_host=54.170.10.21\n'
+              '\n'
+              '[web:vars]\n'
+              'ansible_user=ubuntu'),
+             ('p',
+              'Resultado de este paso: Terraform escribe solo el inventario que usará Ansible a partir del '
+              'módulo 13.')]}

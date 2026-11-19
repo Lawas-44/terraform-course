@@ -1,235 +1,188 @@
 # -*- coding: utf-8 -*-
-# Módulo 13 · Validación, testing y seguridad
+# Módulo 13 · Introducción a Ansible
 
 LECCION = [
- ("h", "Detectar errores pronto"),
- ("p", "Cuanto antes encuentres un error, más fácil es arreglarlo. Terraform y otras herramientas te ayudan en cada momento:"),
- ("table", ["Herramienta", "Qué detecta"], [
-  ["`terraform validate`", "Errores al escribir el código"],
-  ["`validation` en variables", "Valores de entrada incorrectos"],
-  ["`precondition` y `postcondition`", "Que se cumplan condiciones antes y después de crear algo"],
-  ["Bloques `check`", "Avisos sobre el estado de la infraestructura"],
-  ["`terraform test`", "Que tu código hace lo que esperas"],
-  ["TFLint", "Valores que no existen y malas prácticas"],
-  ["Trivy y Checkov", "Configuraciones inseguras"],
+ ("h", "Qué es Ansible"),
+ ("p", "Con Terraform ya sabes **crear** servidores. Pero un servidor recién creado está vacío: no tiene tu web, ni nginx, ni nada configurado. **Ansible** se encarga de eso: entra en los servidores y los **configura** (instala programas, copia archivos, arranca servicios...)."),
+ ("table", ["", "Terraform", "Ansible"], [
+  ["Para qué", "Crear infraestructura: redes, servidores, firewalls", "Configurar lo que hay dentro de los servidores"],
+  ["Cómo trabaja", "Habla con la API de la nube", "Entra en los servidores por SSH"],
+  ["Lenguaje", "HCL (archivos `.tf`)", "YAML (archivos `.yml`)"],
+  ["Recuerda lo que hizo", "Sí, en el estado", "No: cada vez mira cómo está el servidor"],
  ]),
+ ("p", "Por eso se usan juntos: **Terraform crea los servidores y Ansible los configura**."),
 
- ("h", "Condiciones antes y después"),
- ("p", "Dentro de `lifecycle` puedes poner condiciones que deben cumplirse. Si no se cumplen, Terraform se para con un error:"),
- ("code", "hcl", "condiciones", """resource "aws_instance" "web" {
-  ami           = data.aws_ami.elegida.id
-  instance_type = "t3.micro"
-
-  lifecycle {
-    # Se comprueba ANTES de crear
-    precondition {
-      condition     = data.aws_ami.elegida.architecture == "x86_64"
-      error_message = "La imagen debe ser x86_64."
-    }
-
-    # Se comprueba DESPUÉS de crear (self es el propio recurso)
-    postcondition {
-      condition     = self.public_ip != ""
-      error_message = "El servidor debería tener IP pública."
-    }
-  }
-}"""),
-
- ("h", "Bloques check: avisos"),
- ("p", "Un bloque `check` comprueba algo pero **no para** el proceso: solo muestra un aviso. Por ejemplo, que la web responda:"),
- ("code", "hcl", "check.tf", """check "web_responde" {
-  data "http" "home" {
-    url = "http://${aws_instance.web.public_ip}"
-  }
-
-  assert {
-    condition     = data.http.home.status_code == 200
-    error_message = "La web no responde correctamente."
-  }
-}"""),
-
- ("h", "Tests con terraform test"),
- ("p", "Terraform tiene su propio sistema de pruebas. Los tests se escriben en archivos que terminan en `.tftest.hcl`, normalmente en una carpeta `tests/`. Este es el código que vamos a probar:"),
- ("code", "hcl", "main.tf", """variable "proyecto" {
-  type = string
-  validation {
-    condition     = length(var.proyecto) >= 3
-    error_message = "Mínimo 3 letras."
-  }
-}
-
-variable "entorno" {
-  type    = string
-  default = "dev"
-}
-
-output "prefijo" {
-  value = "${var.proyecto}-${var.entorno}"
-}"""),
- ("p", "Y estos son los tests. Cada bloque `run` es una prueba:"),
- ("code", "hcl", "tests/prefijo.tftest.hcl", """variables {
-  proyecto = "tienda"
-}
-
-run "prefijo_por_defecto" {
-  command = plan
-
-  assert {
-    condition     = output.prefijo == "tienda-dev"
-    error_message = "El prefijo debería ser tienda-dev"
-  }
-}
-
-run "rechaza_nombres_cortos" {
-  command = plan
-
-  variables {
-    proyecto = "ab"
-  }
-
-  # Esta prueba pasa si la validación FALLA
-  expect_failures = [var.proyecto]
-}"""),
+ ("h", "Cómo funciona"),
  ("ul", [
-  "`command = plan`: solo planifica, no crea nada. Rápido y gratis.",
-  "`command = apply`: crea los recursos de verdad y los borra al terminar.",
-  "`assert`: lo que debe cumplirse.",
-  "`expect_failures`: sirve para comprobar que un valor incorrecto se rechaza.",
+  "Ansible se instala **solo en tu ordenador** (el *nodo de control*). En los servidores no hay que instalar nada.",
+  "Se conecta a cada servidor por **SSH**, igual que harías tú a mano.",
+  "En los servidores solo necesita que haya Python, que ya viene en casi todos los Linux.",
  ]),
- ("term", """$ terraform test
-tests/prefijo.tftest.hcl... in progress
-  run "prefijo_por_defecto"... pass
-  run "rechaza_nombres_cortos"... pass
-tests/prefijo.tftest.hcl... pass
+ ("code", "text", "esquema", """   Tu ordenador (Ansible)
+          |
+          |  SSH
+    +-----+------+
+    |            |
+    v            v
+  web1         web2"""),
 
-Success! 2 passed, 0 failed."""),
- ("p", "Para probar código de AWS sin crear nada ni pagar, puedes simular el provider con `mock_provider`. Terraform inventa los datos en lugar de llamar a AWS:"),
- ("code", "hcl", "tests/bucket.tftest.hcl", """mock_provider "aws" {}
+ ("h", "Instalar Ansible"),
+ ("p", "Ansible funciona en Linux y macOS. En Windows se usa dentro de **WSL** (lo instalaste en el módulo 1)."),
+ ("code", "bash", "macOS", "brew install ansible"),
+ ("code", "bash", "Ubuntu / Debian / WSL", """sudo apt update
+sudo apt install -y pipx
+pipx install --include-deps ansible
+pipx ensurepath"""),
+ ("term", """$ ansible --version
+ansible [core 2.18.1]
+  python version = 3.12.3"""),
 
-run "crea_bucket" {
-  command = apply
+ ("h", "El inventario: la lista de servidores"),
+ ("p", "Ansible necesita saber a qué servidores conectarse. Esa lista se llama **inventario** y es un archivo de texto. Los servidores se agrupan con un nombre entre corchetes:"),
+ ("code", "text", "inventario.ini", """[web]
+web1 ansible_host=54.170.10.20
+web2 ansible_host=54.170.10.21
 
-  assert {
-    condition     = aws_s3_object.index.content_type == "text/html"
-    error_message = "La página debe ser text/html"
-  }
-}"""),
-
- ("h", "TFLint: detectar valores que no existen"),
- ("p", "`terraform validate` no sabe que `t3.micra` no existe; para él es solo un texto. **TFLint** sí lo sabe:"),
- ("term", """$ tflint --init
-$ tflint
-Error: "t3.micra" is an invalid value as instance_type"""),
-
- ("h", "Trivy y Checkov: seguridad"),
- ("p", "Estas herramientas revisan tu código y te avisan de problemas de seguridad: buckets públicos, discos sin cifrar, puertos abiertos a todo Internet..."),
- ("term", """$ trivy config .
-HIGH: Security group rule allows ingress from public internet.
-  main.tf:15
-$ checkov -d ."""),
- ("p", "No todos los avisos son errores: una web pública **tiene** que estar abierta a Internet. Si aceptas un aviso, deja un comentario explicando por qué."),
-
- ("h", "Comprobar todo antes de cada commit"),
- ("p", "La herramienta **pre-commit** ejecuta estas comprobaciones solas cada vez que haces `git commit`:"),
- ("code", "yaml", ".pre-commit-config.yaml", """repos:
-  - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.96.1
-    hooks:
-      - id: terraform_fmt
-      - id: terraform_validate
-      - id: terraform_tflint"""),
- ("term", """$ pip install pre-commit
-$ pre-commit install"""),
-
- ("h", "Contraseñas y secretos"),
+[web:vars]
+ansible_user=ubuntu"""),
  ("ul", [
-  "Nunca escribas contraseñas en los archivos `.tf` ni en `.tfvars` que subas a Git.",
-  "Pásalas con variables de entorno (`TF_VAR_password`) y márcalas como `sensitive`.",
-  "Mejor todavía: deja que AWS cree y guarde la contraseña. Así Terraform nunca la conoce:",
+  "`[web]` es un **grupo**. Puedes tener varios: `[web]`, `[basedatos]`...",
+  "`web1` es el nombre que tú le das; `ansible_host` es su IP.",
+  "`[web:vars]` define variables para todo el grupo. `ansible_user` es el usuario con el que entra por SSH (en Ubuntu de AWS es `ubuntu`).",
+  "Existe siempre el grupo especial `all`, que incluye a todos los servidores.",
  ]),
- ("code", "hcl", "contraseña gestionada por AWS", """resource "aws_db_instance" "app" {
-  engine              = "postgres"
-  instance_class      = "db.t4g.micro"
-  allocated_storage   = 20
-  username            = "app"
-  skip_final_snapshot = true
+ ("term", """$ ansible-inventory -i inventario.ini --graph
+@all:
+  |--@ungrouped:
+  |--@web:
+  |  |--web1
+  |  |--web2"""),
 
-  manage_master_user_password = true   # AWS genera y guarda la contraseña
+ ("h", "El archivo ansible.cfg"),
+ ("p", "Para no repetir opciones en cada comando, se crea un archivo `ansible.cfg` en la carpeta del proyecto. Ansible lo lee solo:"),
+ ("code", "text", "ansible.cfg", """[defaults]
+inventory = inventario.ini
+host_key_checking = False"""),
+ ("p", "Con esto ya no hace falta escribir `-i inventario.ini`. `host_key_checking = False` evita que Ansible pregunte si confías en cada servidor la primera vez (útil mientras aprendes)."),
+
+ ("h", "Comandos ad-hoc"),
+ ("p", "Un comando **ad-hoc** es una orden suelta que se ejecuta en varios servidores a la vez. Sirve para comprobaciones rápidas. La forma es: `ansible GRUPO -m MÓDULO -a \"OPCIONES\"`."),
+ ("p", "El primero que siempre se prueba es `ping`. No es un ping de red: comprueba que Ansible puede entrar y usar Python:"),
+ ("term", """$ ansible web -m ping
+web1 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+web2 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
 }"""),
+ ("p", "Más ejemplos:"),
+ ("term", """$ ansible web -a "uptime"
+web1 | CHANGED | rc=0 >>
+ 10:15:01 up 12 min,  1 user,  load average: 0.00, 0.01, 0.00
+web2 | CHANGED | rc=0 >>
+ 10:15:01 up 12 min,  1 user,  load average: 0.02, 0.03, 0.00
+$ ansible web -b -m apt -a "name=htop state=present update_cache=true\""""),
+ ("ul", [
+  "`-a \"uptime\"`: ejecuta un comando de Linux.",
+  "`-m apt`: usa el **módulo** `apt` para instalar un paquete.",
+  "`-b` (*become*): ejecuta como administrador, como `sudo`.",
+ ]),
+ ("info", "Un **módulo** es una acción ya preparada: instalar un paquete (`apt`), copiar un archivo (`copy`), arrancar un servicio (`service`)... Ansible trae cientos."),
+
+ ("h", "Practicar sin servidores"),
+ ("p", "Para practicar sin crear nada en AWS puedes usar **tu propio ordenador** como servidor. Se indica con `ansible_connection=local`:"),
+ ("code", "text", "inventario.ini", """[local]
+localhost ansible_connection=local"""),
+ ("term", """$ ansible local -m ping
+localhost | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}"""),
+ ("tip", "Los labs de Ansible del curso usan este inventario local, así que puedes hacerlos sin coste. En el proyecto guiado usarás los servidores de AWS que creaste con Terraform."),
 ]
 
 TEST = [
- ("¿Qué diferencia hay entre `postcondition` y un bloque `check`?",
-  ["Ninguna", "postcondition detiene la ejecución con error; check solo muestra un aviso", "check es más antiguo", "postcondition solo funciona en outputs"], 1,
-  "Las condiciones de lifecycle son bloqueantes; los check blocks son informativos."),
- ("En un `.tftest.hcl`, ¿qué hace `command = plan` en un run?",
-  ["Crea los recursos", "Solo planifica, sin crear nada", "Destruye todo", "Ejecuta terraform fmt"], 1, "Rápido y gratuito, ideal para validar lógica."),
- ("¿Para qué sirve `expect_failures = [var.proyecto]`?",
-  ["Para ignorar errores", "Para que el test pase solo si la validación de var.proyecto falla", "Para saltarse el test", "Para mockear la variable"], 1,
-  "Así se prueba que las validaciones rechazan valores incorrectos."),
- ("¿Qué permite `mock_provider \"aws\"`?",
-  ["Usar otra nube", "Ejecutar tests con apply sin llamar a AWS ni tener credenciales", "Cifrar el estado", "Simular la factura"], 1,
-  "Los recursos se «crean» con valores ficticios."),
- ("`terraform validate` acepta `instance_type = \"t3.micra\"`. ¿Qué herramienta lo detecta?",
-  ["terraform fmt", "TFLint con el plugin de AWS", "git", "terraform output"], 1,
-  "TFLint conoce los valores válidos de cada provider."),
- ("¿Qué herramienta usarías para detectar un bucket S3 público o un disco sin cifrar?",
-  ["terraform-docs", "Trivy o Checkov", "tfenv", "jq"], 1, "Son escáneres de seguridad de configuración."),
- ("¿Cuál es la forma más segura de gestionar la contraseña maestra de una base de datos RDS?",
-  ["Escribirla en el .tf", "En terraform.tfvars", "manage_master_user_password = true (la genera y guarda AWS)", "En un output"], 2,
-  "Así Terraform nunca conoce la contraseña y no termina en el estado."),
+ ("¿Qué hace Ansible?",
+  ["Crea redes y servidores en la nube", "Configura lo que hay dentro de los servidores", "Guarda el estado de Terraform", "Es un editor de código"], 1,
+  "Ansible instala programas, copia archivos y arranca servicios en servidores que ya existen."),
+ ("¿Cómo se conecta Ansible a los servidores Linux?",
+  ["Con un agente instalado en cada servidor", "Por SSH", "Por la API de AWS", "Por correo"], 1,
+  "No hay que instalar nada en los servidores: Ansible entra por SSH."),
+ ("¿Qué es el inventario?",
+  ["La lista de paquetes instalados", "La lista de servidores a los que se conecta Ansible", "El estado de Ansible", "Un tipo de módulo"], 1,
+  "Es un archivo con los servidores, agrupados por nombre."),
+ ("¿Qué significa `-b` en `ansible web -b -m apt -a \"name=htop\"`?",
+  ["Que se ejecute en segundo plano", "Que se ejecute como administrador (become)", "Que haga una copia de seguridad", "Que se ejecute en todos los grupos"], 1,
+  "`-b` equivale a usar sudo en el servidor."),
+ ("¿Qué comprueba `ansible all -m ping`?",
+  ["La velocidad de la red", "Que Ansible puede entrar en los servidores y usar Python", "Que el puerto 80 está abierto", "Que los servidores tienen Internet"], 1,
+  "Si responde pong, Ansible puede trabajar con ese servidor."),
+ ("¿Dónde se instala Ansible?",
+  ["En cada servidor", "Solo en el ordenador desde el que lo ejecutas", "En AWS", "En GitHub"], 1,
+  "Por eso se dice que Ansible no usa agentes (es *agentless*)."),
 ]
 
 RETOS = [
- {"titulo": "Suite de tests para tu módulo de etiquetas",
-  "enunciado": "Para el módulo `etiquetas` del reto del módulo 11, escribe un archivo de test con: (1) un run que compruebe que `Gestion = \"terraform\"` siempre está, (2) uno que compruebe que `extra` se combina, y (3) uno que espere fallo si `entorno` no es dev/prod (añade la validación).",
-  "pista": "Accede a los outputs con `output.todas[\"Gestion\"]`.",
-  "solucion": ("hcl", """# tests/etiquetas.tftest.hcl
-variables {
-  proyecto = "tienda"
-  entorno  = "dev"
-}
+ {"titulo": "Tu primer inventario",
+  "enunciado": "Crea un inventario con dos grupos: `web` (con localhost) y `basedatos` (vacío). Comprueba la estructura con `ansible-inventory --graph` y haz `ping` al grupo web.",
+  "pista": "Un grupo vacío se declara solo con su nombre entre corchetes.",
+  "solucion": ("text", """# inventario.ini
+[web]
+localhost ansible_connection=local
 
-run "siempre_incluye_gestion" {
-  command = plan
-  assert {
-    condition     = output.todas["Gestion"] == "terraform"
-    error_message = "Falta la etiqueta Gestion"
-  }
-}
+[basedatos]
 
-run "combina_extra" {
-  command = plan
-  variables {
-    extra = { Equipo = "web" }
-  }
-  assert {
-    condition     = output.todas["Equipo"] == "web" && output.todas["Proyecto"] == "tienda"
-    error_message = "No se combinan las etiquetas extra"
-  }
-}
-
-run "entorno_invalido" {
-  command = plan
-  variables {
-    entorno = "qa"
-  }
-  expect_failures = [var.entorno]
-}""")},
- {"titulo": "Arregla los hallazgos",
-  "enunciado": "Ejecuta `trivy config .` sobre el proyecto del módulo 6 y corrige al menos dos hallazgos (por ejemplo IMDSv2 y cifrado del disco raíz). Para la regla de HTTP desde Internet, añade una excepción justificada.",
-  "pista": "Busca `metadata_options` y `root_block_device { encrypted = true }` en la documentación de `aws_instance`.",
-  "solucion": ("hcl", """resource "aws_instance" "web" {
-  ami                    = data.aws_ami.amazon_linux.id
-  instance_type          = "t3.micro"
-  vpc_security_group_ids = [aws_security_group.web.id]
-
-  metadata_options {
-    http_tokens = "required"   # IMDSv2
-  }
-
-  root_block_device {
-    encrypted = true
-  }
-}""")},
+# Comandos:
+# ansible-inventory -i inventario.ini --graph
+# ansible -i inventario.ini web -m ping""")},
+ {"titulo": "Información del sistema",
+  "enunciado": "Con un comando ad-hoc, muestra la versión del sistema operativo de tu máquina usando el módulo `setup` y un filtro.",
+  "pista": "Los datos que empiezan por `ansible_distribution` contienen el nombre y la versión.",
+  "solucion": ("bash", """ansible local -m setup -a "filter=ansible_distribution*"
+# localhost | SUCCESS => {
+#     "ansible_facts": {
+#         "ansible_distribution": "Ubuntu",
+#         "ansible_distribution_version": "24.04",
+#         ...""")},
 ]
+
+PROYECTO = {
+ "titulo": "Conecta Ansible con tus servidores",
+ "bloques": [
+  ("p", "Ya tienes dos servidores en AWS creados con Terraform y un inventario que Terraform genera solo (paso del módulo 8). Ahora vas a comprobar que Ansible puede entrar en ellos."),
+  ("p", "Primero, levanta la infraestructura si la habías destruido:"),
+  ("term", """$ cd terraform
+$ terraform apply
+$ cat ../ansible/inventario/hosts.ini
+# Archivo generado por Terraform. No lo edites a mano.
+[web]
+web1 ansible_host=54.170.10.20
+web2 ansible_host=54.170.10.21
+
+[web:vars]
+ansible_user=ubuntu"""),
+  ("p", "Crea el archivo de configuración de Ansible en la carpeta `ansible/`:"),
+  ("code", "text", "ansible/ansible.cfg", """[defaults]
+inventory = inventario/hosts.ini
+roles_path = roles
+host_key_checking = False
+interpreter_python = auto_silent
+
+[ssh_connection]
+pipelining = True"""),
+  ("p", "Comprueba la conexión y prueba algunos comandos:"),
+  ("term", """$ cd ../ansible
+$ ansible web -m ping
+web1 | SUCCESS => { "ping": "pong" }
+web2 | SUCCESS => { "ping": "pong" }
+$ ansible web -a "hostname"
+web1 | CHANGED | rc=0 >>
+ip-10-0-1-25
+web2 | CHANGED | rc=0 >>
+ip-10-0-1-187"""),
+  ("info", "Ansible usa tu clave SSH de `~/.ssh/` automáticamente. Es la misma clave pública que Terraform subió a AWS en el paso del módulo 6."),
+  ("p", "Resultado de este paso: Ansible llega a tus dos servidores. En el siguiente módulo los configurarás."),
+ ],
+}

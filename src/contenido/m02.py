@@ -188,3 +188,37 @@ output "password" {
 # Para verla: terraform output -raw password
 # Ojo: está guardada en texto plano en terraform.tfstate.""")},
 ]
+
+
+PROYECTO = {'titulo': 'Inicializa la carpeta de Terraform',
+ 'bloques': [('p',
+              'Crea el archivo con las versiones y los providers que usará el proyecto: `aws` para crear los '
+              'servidores y `local` para escribir archivos (lo usarás en el paso del módulo 8).'),
+             ('code',
+              'hcl',
+              'terraform/versions.tf',
+              'terraform {\n'
+              '  required_version = ">= 1.10"\n'
+              '\n'
+              '  required_providers {\n'
+              '    aws = {\n'
+              '      source  = "hashicorp/aws"\n'
+              '      version = "~> 6.0"\n'
+              '    }\n'
+              '    local = {\n'
+              '      source  = "hashicorp/local"\n'
+              '      version = "~> 2.5"\n'
+              '    }\n'
+              '  }\n'
+              '}'),
+             ('term',
+              '$ cd terraform\n'
+              '$ terraform init\n'
+              'Initializing provider plugins...\n'
+              '- Installing hashicorp/aws v6.4.0...\n'
+              '- Installing hashicorp/local v2.5.2...\n'
+              '\n'
+              'Terraform has been successfully initialized!'),
+             ('p', 'Sube el lock file a Git (no la carpeta `.terraform/`, que ya está en el `.gitignore`):'),
+             ('term', '$ git add versions.tf .terraform.lock.hcl\n$ git commit -m "Inicializa Terraform"'),
+             ('p', 'Resultado de este paso: la carpeta `terraform/` está preparada.')]}

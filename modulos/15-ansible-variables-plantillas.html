@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>15 · Variables, facts y plantillas | Terraform y Ansible desde cero</title>
+<meta name="description" content="Personalizar la configuración con variables, datos de cada servidor y plantillas Jinja2.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 23 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html" aria-current="page"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#variables">Variables</a></li><li><a href="#donde-poner-las-variables">Dónde poner las variables</a></li><li><a href="#facts-lo-que-ansible-sabe-de-cada-servidor">Facts: lo que Ansible sabe de cada servidor</a></li><li><a href="#plantillas-jinja2">Plantillas Jinja2</a></li><li><a href="#bucles-y-condiciones-en-las-plantillas">Bucles y condiciones en las plantillas</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 15</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 15</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 15</p>
+  <h1>Variables, facts y plantillas</h1>
+  <p class="lead">Personalizar la configuración con variables, datos de cada servidor y plantillas Jinja2.</p>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 2 h</span><span>Test: 7 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 15</span></div>
+</header>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Definir variables en el playbook, en <code>group_vars</code> y en la línea de comandos.</li><li>Usar los facts: datos que Ansible recoge de cada servidor.</li><li>Generar archivos con plantillas Jinja2.</li><li>Recorrer listas dentro de una plantilla.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="variables">Variables</h3>
+<p>Como en Terraform, las <strong>variables</strong> sirven para no escribir los datos dentro de las tareas. Se usan escribiendo su nombre entre dobles llaves: <code>{{ nombre }}</code>.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">playbook con variables</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Ejemplo de variables
+  hosts: local
+  vars:
+    carpeta: /tmp/miweb
+    saludo: "Hola desde Ansible"
+
+  tasks:
+    - name: Crear la carpeta
+      ansible.builtin.file:
+        path: "{{ carpeta }}"
+        state: directory
+        mode: "0755"
+
+    - name: Escribir el saludo
+      ansible.builtin.copy:
+        content: "{{ saludo }}"
+        dest: "{{ carpeta }}/saludo.txt"
+        mode: "0644"</code></pre></figure>
+<div class="callout aviso"><span class="k">Importante</span>Si un valor <strong>empieza</strong> por <code>{{</code>, ponlo entre comillas: <code>path: "{{ carpeta }}"</code>. Si no, YAML da error.</div>
+<h3 id="donde-poner-las-variables">Dónde poner las variables</h3>
+<p>Lo más ordenado es guardarlas en la carpeta <strong>group_vars</strong>, junto al inventario. Ansible las carga solas según el grupo:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">estructura</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">inventario/
+├── hosts.ini
+└── group_vars/
+    ├── all.yml      # variables para todos los servidores
+    └── web.yml      # variables solo para el grupo web</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">inventario/group_vars/all.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+web_nombre: "Ana García"
+web_descripcion: "Aprendiendo Terraform y Ansible."
+web_proyectos:
+  - nombre: "Infraestructura con Terraform"
+    descripcion: "Red y servidores en AWS."
+  - nombre: "Configuración con Ansible"
+    descripcion: "Servidores configurados solos."</code></pre></figure>
+<p>También puedes dar una variable al ejecutar. Esta forma gana a todas las demás:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-playbook site.yml -e &quot;web_nombre=Luis&quot;">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml -e "web_nombre=Luis"</span></code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>Dónde</th><th>Prioridad</th></tr></thead><tbody><tr><td><code>defaults/</code> de un rol (módulo 17)</td><td>La más baja</td></tr><tr><td><code>group_vars/all.yml</code></td><td>Baja</td></tr><tr><td><code>group_vars/GRUPO.yml</code></td><td>Media</td></tr><tr><td><code>vars:</code> en el playbook</td><td>Alta</td></tr><tr><td><code>-e</code> al ejecutar</td><td>La más alta</td></tr></tbody></table></div>
+<h3 id="facts-lo-que-ansible-sabe-de-cada-servidor">Facts: lo que Ansible sabe de cada servidor</h3>
+<p>Al empezar un playbook, Ansible recoge información de cada servidor: nombre, sistema operativo, IP, memoria... Son los <strong>facts</strong> (<em>hechos</em>). Es la tarea <code>Gathering Facts</code> que ves al principio.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible web1 -m setup -a &quot;filter=ansible_distribution*&quot;">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible web1 -m setup -a "filter=ansible_distribution*"</span>
+<span class="out">web1 | SUCCESS =&gt; {</span>
+<span class="out">    "ansible_facts": {</span>
+<span class="out">        "ansible_distribution": "Ubuntu",</span>
+<span class="out">        "ansible_distribution_version": "24.04"</span>
+<span class="out">    }</span>
+<span class="out">}</span></code></pre></figure>
+<p>Se usan con <code>ansible_facts['nombre']</code> (sin el prefijo <code>ansible_</code>):</p>
+<div class="table-wrap"><table><thead><tr><th>Fact</th><th>Ejemplo</th></tr></thead><tbody><tr><td><code>ansible_facts['hostname']</code></td><td>ip-10-0-1-25</td></tr><tr><td><code>ansible_facts['distribution']</code></td><td>Ubuntu</td></tr><tr><td><code>ansible_facts['distribution_version']</code></td><td>24.04</td></tr><tr><td><code>ansible_facts['default_ipv4']['address']</code></td><td>10.0.1.25</td></tr><tr><td><code>ansible_facts['memtotal_mb']</code></td><td>957</td></tr></tbody></table></div>
+<p>Y hay variables especiales que siempre existen, como <code>inventory_hostname</code>: el nombre del servidor en el inventario (web1, web2).</p>
+<h3 id="plantillas-jinja2">Plantillas Jinja2</h3>
+<p>Una <strong>plantilla</strong> es un archivo con huecos que Ansible rellena con variables. Se escriben en el lenguaje <strong>Jinja2</strong> y por costumbre terminan en <code>.j2</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">templates/index.html.j2</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">&lt;h1&gt;{{ web_nombre }}&lt;/h1&gt;
+&lt;p&gt;{{ web_descripcion }}&lt;/p&gt;
+&lt;p&gt;Servidor: {{ inventory_hostname }} ({{ ansible_facts['distribution'] }})&lt;/p&gt;</code></pre></figure>
+<p>El módulo <code>template</code> rellena la plantilla y deja el resultado en el servidor:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">tarea</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">    - name: Generar la página principal
+      ansible.builtin.template:
+        src: templates/index.html.j2
+        dest: /var/www/miweb/index.html
+        mode: "0644"</code></pre></figure>
+<p>Resultado en web1:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">/var/www/miweb/index.html</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">&lt;h1&gt;Ana García&lt;/h1&gt;
+&lt;p&gt;Aprendiendo Terraform y Ansible.&lt;/p&gt;
+&lt;p&gt;Servidor: web1 (Ubuntu)&lt;/p&gt;</code></pre></figure>
+<h3 id="bucles-y-condiciones-en-las-plantillas">Bucles y condiciones en las plantillas</h3>
+<p>Jinja2 permite recorrer listas con <code>{% for %}</code> y elegir con <code>{% if %}</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">templates/index.html.j2</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">&lt;ul&gt;
+{% for proyecto in web_proyectos %}
+  &lt;li&gt;&lt;strong&gt;{{ proyecto.nombre }}&lt;/strong&gt;: {{ proyecto.descripcion }}&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;
+
+{% if web_proyectos | length &gt; 2 %}
+&lt;p&gt;Tengo muchos proyectos.&lt;/p&gt;
+{% endif %}</code></pre></figure>
+<ul><li><code>{{ }}</code> muestra un valor.</li><li><code>{% %}</code> es lógica: bucles y condiciones.</li><li><code>|</code> aplica un <strong>filtro</strong>: <code>| length</code> (cuántos hay), <code>| upper</code> (mayúsculas), <code>| default('nada')</code> (valor si no existe).</li></ul></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 15 de 22</p><h3 class="paso-titulo">Tu web personal con plantillas</h3><p>Vas a sustituir la página de prueba por tu web personal: tu nombre, una descripción y tus proyectos. Y añadirás una página de estado que muestra los datos de cada servidor.</p>
+<p>1. Crea las variables con tus datos (cámbialos por los tuyos):</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/inventario/group_vars/all/web.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+web_nombre: "Ana García"
+web_titulo: "Mi web en la nube"
+web_descripcion: "Aprendiendo Terraform y Ansible paso a paso."
+web_proyectos:
+  - nombre: "Infraestructura con Terraform"
+    descripcion: "Red, servidores y firewall en AWS creados con código."
+  - nombre: "Configuración con Ansible"
+    descripcion: "Servidores configurados automáticamente."
+  - nombre: "Despliegue automático"
+    descripcion: "Un solo comando crea y configura todo."</code></pre></figure>
+<div class="callout "><span class="k">Nota</span><code>group_vars/all/</code> es una carpeta: Ansible carga todos los archivos <code>.yml</code> que haya dentro. Así podrás añadir más archivos de variables (en el paso del módulo 18 añadirás uno cifrado).</div>
+<p>2. Crea la plantilla de la página principal:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/templates/index.html.j2</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">&lt;!doctype html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;{{ web_titulo }}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;{{ web_nombre }}&lt;/h1&gt;
+  &lt;p&gt;{{ web_descripcion }}&lt;/p&gt;
+  &lt;h2&gt;Proyectos&lt;/h2&gt;
+  &lt;ul&gt;
+{% for proyecto in web_proyectos %}
+    &lt;li&gt;&lt;strong&gt;{{ proyecto.nombre }}&lt;/strong&gt;: {{ proyecto.descripcion }}&lt;/li&gt;
+{% endfor %}
+  &lt;/ul&gt;
+  &lt;p&gt;Servido por {{ inventory_hostname }}. &lt;a href="/estado.html"&gt;Estado del servidor&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></figure>
+<p>3. Crea la página de estado con los facts:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/templates/estado.html.j2</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">&lt;!doctype html&gt;
+&lt;html lang="es"&gt;
+&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;title&gt;Estado de {{ inventory_hostname }}&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Estado del servidor&lt;/h1&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Nombre: {{ inventory_hostname }} ({{ ansible_facts['hostname'] }})&lt;/li&gt;
+    &lt;li&gt;Sistema: {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}&lt;/li&gt;
+    &lt;li&gt;IP privada: {{ ansible_facts['default_ipv4']['address'] | default('desconocida') }}&lt;/li&gt;
+    &lt;li&gt;Memoria: {{ ansible_facts['memtotal_mb'] }} MB&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;p&gt;&lt;a href="/"&gt;Volver&lt;/a&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></figure>
+<p>4. En <code>site.yml</code>, sustituye la tarea «Publicar una página de prueba» por estas dos:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/site.yml (tareas nuevas)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">    - name: Generar la página principal
+      ansible.builtin.template:
+        src: templates/index.html.j2
+        dest: /var/www/html/index.html
+        mode: "0644"
+
+    - name: Generar la página de estado
+      ansible.builtin.template:
+        src: templates/estado.html.j2
+        dest: /var/www/html/estado.html
+        mode: "0644"</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-playbook site.yml
+curl -s http://54.170.10.21/estado.html | grep Nombre">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml</span>
+<span class="out">...</span>
+<span class="out">TASK [Generar la página principal] ********************************</span>
+<span class="out">changed: [web1]</span>
+<span class="out">changed: [web2]</span>
+<span class="prompt">$ </span><span class="cmdline">curl -s http://54.170.10.21/estado.html | grep Nombre</span>
+<span class="out">    &lt;li&gt;Nombre: web2 (ip-10-0-1-187)&lt;/li&gt;</span></code></pre></figure>
+<p>Resultado de este paso: tu web personal está en internet y cada servidor muestra sus propios datos en <code>/estado.html</code>.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Una página generada con plantilla (carpeta <code>labs/15-ansible-plantillas</code>)</strong></p><ol class="pasos"><li>Revisa <code>group_vars/all.yml</code> y la plantilla <code>pagina.html.j2</code>.</li><li>Ejecuta el playbook y abre el archivo generado.</li><li>Cambia una variable y vuelve a ejecutarlo: solo cambia la plantilla.</li><li>Pasa una variable con <code>-e</code> y comprueba que tiene prioridad.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">ansible web -m setup</code></td><td>Muestra todos los facts de los servidores.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible web -m setup" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible web -m setup -a &quot;filter=ansible_distribution*&quot;</code></td><td>Muestra solo algunos facts.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible web -m setup -a &quot;filter=ansible_distribution*&quot;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-playbook site.yml -e &quot;web_nombre=Ana&quot;</code></td><td>Da valor a una variable al ejecutar.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-playbook site.yml -e &quot;web_nombre=Ana&quot;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-inventory --host web1</code></td><td>Muestra las variables de un servidor.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-inventory --host web1" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>'web_nombre' is undefined</code></dt><dd>La variable no existe. Revisa el nombre y que el archivo de <code>group_vars</code> está en la carpeta correcta.</dd></div><div><dt>Poner <code>{{ }}</code> al principio de un valor sin comillas</dt><dd>En YAML, si un valor empieza por <code>{{</code>, escríbelo entre comillas: <code>dest: "{{ ruta }}"</code>.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="15" data-total="7"><fieldset class="q" data-ok="0"><legend><span class="qn">01</span><span class="txt">¿Cómo se usa la variable <code>carpeta</code> dentro de una tarea?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">{{ carpeta }}</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">${carpeta}</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">var.carpeta</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">$carpeta</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Ansible usa la sintaxis de Jinja2: dobles llaves.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">02</span><span class="txt">¿Por qué hay que escribir <code>path: "{{ carpeta }}"</code> con comillas?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Por estética</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Porque es un número</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Porque si el valor empieza por {{ YAML lo confunde y da error</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">No hace falta</span></button></div><p class="exp" hidden><strong class="verdict"></strong> YAML interpreta { como el inicio de un diccionario.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">03</span><span class="txt">¿Dónde pondrías variables comunes a todos los servidores?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">En ansible.cfg</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">En el inventario dentro de [web]</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">En group_vars/all.yml</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">En el estado</span></button></div><p class="exp" hidden><strong class="verdict"></strong> group_vars/all.yml se aplica a todos los servidores.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">04</span><span class="txt">¿Qué son los facts?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Datos que Ansible recoge de cada servidor</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Tareas especiales</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Errores de Ansible</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Variables cifradas</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Nombre, sistema, IP, memoria... se recogen al empezar el playbook.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">05</span><span class="txt">¿Qué variable tiene el nombre del servidor en el inventario?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">inventory_hostname</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">hostname</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">ansible_host</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">server_name</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>ansible_host</code> es la IP; <code>inventory_hostname</code> es el nombre (web1, web2).</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">06</span><span class="txt">¿Para qué sirve <code>{% for %}</code> en una plantilla?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Para cargar un archivo</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para recorrer una lista</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para cifrar</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para comentar</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Repite una parte de la plantilla por cada elemento.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">07</span><span class="txt">Tienes <code>web_nombre</code> en group_vars y ejecutas con <code>-e web_nombre=Luis</code>. ¿Qué valor se usa?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">El de group_vars</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Ninguno</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Luis</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Da error</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Las variables con -e tienen la prioridad más alta.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Archivo de configuración con plantilla</h3><p>Crea una plantilla <code>app.conf.j2</code> que genere un archivo con el nombre del servidor, el sistema operativo y una línea por cada puerto de la lista <code>puertos: [80, 443, 8080]</code>. Genera el archivo en <code>/tmp/app.conf</code>.</p><details><summary>Ver pista</summary><p>Usa <code>inventory_hostname</code>, <code>ansible_facts['distribution']</code> y un <code>{% for %}</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain"># templates/app.conf.j2
+servidor = {{ inventory_hostname }}
+sistema  = {{ ansible_facts['distribution'] }}
+{% for puerto in puertos %}
+puerto = {{ puerto }}
+{% endfor %}
+
+# playbook
+- name: Configuración
+  hosts: local
+  vars:
+    puertos: [80, 443, 8080]
+  tasks:
+    - name: Generar app.conf
+      ansible.builtin.template:
+        src: templates/app.conf.j2
+        dest: /tmp/app.conf
+        mode: "0644"</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2. Valor por defecto</h3><p>Haz que la plantilla muestre «Sin descripción» si la variable <code>web_descripcion</code> no existe.</p><details><summary>Ver pista</summary><p>Hay un filtro para eso.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">&lt;p&gt;{{ web_descripcion | default('Sin descripción') }}&lt;/p&gt;</code></pre></figure></details></article></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="15"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="14-ansible-playbooks.html"><small>Anterior</small>Playbooks</a><a class="next" href="16-ansible-handlers-bucles.html"><small>Siguiente</small>Handlers, condiciones y bucles</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

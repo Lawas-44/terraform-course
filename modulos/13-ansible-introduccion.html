@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>13 · Introducción a Ansible | Terraform y Ansible desde cero</title>
+<meta name="description" content="Qué es Ansible, cómo se conecta a los servidores, el inventario y los primeros comandos.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 23 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html" aria-current="page"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#que-es-ansible">Qué es Ansible</a></li><li><a href="#como-funciona">Cómo funciona</a></li><li><a href="#instalar-ansible">Instalar Ansible</a></li><li><a href="#el-inventario-la-lista-de-servidores">El inventario: la lista de servidores</a></li><li><a href="#el-archivo-ansible-cfg">El archivo ansible.cfg</a></li><li><a href="#comandos-ad-hoc">Comandos ad-hoc</a></li><li><a href="#practicar-sin-servidores">Practicar sin servidores</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 13</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 13</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 13</p>
+  <h1>Introducción a Ansible</h1>
+  <p class="lead">Qué es Ansible, cómo se conecta a los servidores, el inventario y los primeros comandos.</p>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 1,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 13</span></div>
+</header>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Explicar qué hace Ansible y en qué se diferencia de Terraform.</li><li>Instalar Ansible y comprobar que funciona.</li><li>Escribir un inventario con tus servidores.</li><li>Ejecutar comandos en varios servidores a la vez.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="que-es-ansible">Qué es Ansible</h3>
+<p>Con Terraform ya sabes <strong>crear</strong> servidores. Pero un servidor recién creado está vacío: no tiene tu web, ni nginx, ni nada configurado. <strong>Ansible</strong> se encarga de eso: entra en los servidores y los <strong>configura</strong> (instala programas, copia archivos, arranca servicios...).</p>
+<div class="table-wrap"><table><thead><tr><th></th><th>Terraform</th><th>Ansible</th></tr></thead><tbody><tr><td>Para qué</td><td>Crear infraestructura: redes, servidores, firewalls</td><td>Configurar lo que hay dentro de los servidores</td></tr><tr><td>Cómo trabaja</td><td>Habla con la API de la nube</td><td>Entra en los servidores por SSH</td></tr><tr><td>Lenguaje</td><td>HCL (archivos <code>.tf</code>)</td><td>YAML (archivos <code>.yml</code>)</td></tr><tr><td>Recuerda lo que hizo</td><td>Sí, en el estado</td><td>No: cada vez mira cómo está el servidor</td></tr></tbody></table></div>
+<p>Por eso se usan juntos: <strong>Terraform crea los servidores y Ansible los configura</strong>.</p>
+<h3 id="como-funciona">Cómo funciona</h3>
+<ul><li>Ansible se instala <strong>solo en tu ordenador</strong> (el <em>nodo de control</em>). En los servidores no hay que instalar nada.</li><li>Se conecta a cada servidor por <strong>SSH</strong>, igual que harías tú a mano.</li><li>En los servidores solo necesita que haya Python, que ya viene en casi todos los Linux.</li></ul>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">esquema</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">   Tu ordenador (Ansible)
+          |
+          |  SSH
+    +-----+------+
+    |            |
+    v            v
+  web1         web2</code></pre></figure>
+<h3 id="instalar-ansible">Instalar Ansible</h3>
+<p>Ansible funciona en Linux y macOS. En Windows se usa dentro de <strong>WSL</strong> (lo instalaste en el módulo 1).</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">macOS</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-bash">brew install ansible</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">Ubuntu / Debian / WSL</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-bash">sudo apt update
+sudo apt install -y pipx
+pipx install --include-deps ansible
+pipx ensurepath</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible --version">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible --version</span>
+<span class="out">ansible [core 2.18.1]</span>
+<span class="out">  python version = 3.12.3</span></code></pre></figure>
+<h3 id="el-inventario-la-lista-de-servidores">El inventario: la lista de servidores</h3>
+<p>Ansible necesita saber a qué servidores conectarse. Esa lista se llama <strong>inventario</strong> y es un archivo de texto. Los servidores se agrupan con un nombre entre corchetes:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">inventario.ini</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">[web]
+web1 ansible_host=54.170.10.20
+web2 ansible_host=54.170.10.21
+
+[web:vars]
+ansible_user=ubuntu</code></pre></figure>
+<ul><li><code>[web]</code> es un <strong>grupo</strong>. Puedes tener varios: <code>[web]</code>, <code>[basedatos]</code>...</li><li><code>web1</code> es el nombre que tú le das; <code>ansible_host</code> es su IP.</li><li><code>[web:vars]</code> define variables para todo el grupo. <code>ansible_user</code> es el usuario con el que entra por SSH (en Ubuntu de AWS es <code>ubuntu</code>).</li><li>Existe siempre el grupo especial <code>all</code>, que incluye a todos los servidores.</li></ul>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-inventory -i inventario.ini --graph">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-inventory -i inventario.ini --graph</span>
+<span class="out">@all:</span>
+<span class="out">  |--@ungrouped:</span>
+<span class="out">  |--@web:</span>
+<span class="out">  |  |--web1</span>
+<span class="out">  |  |--web2</span></code></pre></figure>
+<h3 id="el-archivo-ansible-cfg">El archivo ansible.cfg</h3>
+<p>Para no repetir opciones en cada comando, se crea un archivo <code>ansible.cfg</code> en la carpeta del proyecto. Ansible lo lee solo:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible.cfg</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">[defaults]
+inventory = inventario.ini
+host_key_checking = False</code></pre></figure>
+<p>Con esto ya no hace falta escribir <code>-i inventario.ini</code>. <code>host_key_checking = False</code> evita que Ansible pregunte si confías en cada servidor la primera vez (útil mientras aprendes).</p>
+<h3 id="comandos-ad-hoc">Comandos ad-hoc</h3>
+<p>Un comando <strong>ad-hoc</strong> es una orden suelta que se ejecuta en varios servidores a la vez. Sirve para comprobaciones rápidas. La forma es: <code>ansible GRUPO -m MÓDULO -a "OPCIONES"</code>.</p>
+<p>El primero que siempre se prueba es <code>ping</code>. No es un ping de red: comprueba que Ansible puede entrar y usar Python:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible web -m ping">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible web -m ping</span>
+<span class="out">web1 | SUCCESS =&gt; {</span>
+<span class="out">    "changed": false,</span>
+<span class="out">    "ping": "pong"</span>
+<span class="out">}</span>
+<span class="out">web2 | SUCCESS =&gt; {</span>
+<span class="out">    "changed": false,</span>
+<span class="out">    "ping": "pong"</span>
+<span class="out">}</span></code></pre></figure>
+<p>Más ejemplos:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible web -a &quot;uptime&quot;
+ansible web -b -m apt -a &quot;name=htop state=present update_cache=true&quot;">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible web -a "uptime"</span>
+<span class="out">web1 | CHANGED | rc=0 &gt;&gt;</span>
+<span class="out"> 10:15:01 up 12 min,  1 user,  load average: 0.00, 0.01, 0.00</span>
+<span class="out">web2 | CHANGED | rc=0 &gt;&gt;</span>
+<span class="out"> 10:15:01 up 12 min,  1 user,  load average: 0.02, 0.03, 0.00</span>
+<span class="prompt">$ </span><span class="cmdline">ansible web -b -m apt -a "name=htop state=present update_cache=true"</span></code></pre></figure>
+<ul><li><code>-a "uptime"</code>: ejecuta un comando de Linux.</li><li><code>-m apt</code>: usa el <strong>módulo</strong> <code>apt</code> para instalar un paquete.</li><li><code>-b</code> (<em>become</em>): ejecuta como administrador, como <code>sudo</code>.</li></ul>
+<div class="callout "><span class="k">Nota</span>Un <strong>módulo</strong> es una acción ya preparada: instalar un paquete (<code>apt</code>), copiar un archivo (<code>copy</code>), arrancar un servicio (<code>service</code>)... Ansible trae cientos.</div>
+<h3 id="practicar-sin-servidores">Practicar sin servidores</h3>
+<p>Para practicar sin crear nada en AWS puedes usar <strong>tu propio ordenador</strong> como servidor. Se indica con <code>ansible_connection=local</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">inventario.ini</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">[local]
+localhost ansible_connection=local</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible local -m ping">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible local -m ping</span>
+<span class="out">localhost | SUCCESS =&gt; {</span>
+<span class="out">    "changed": false,</span>
+<span class="out">    "ping": "pong"</span>
+<span class="out">}</span></code></pre></figure>
+<div class="callout tip"><span class="k">Consejo</span>Los labs de Ansible del curso usan este inventario local, así que puedes hacerlos sin coste. En el proyecto guiado usarás los servidores de AWS que creaste con Terraform.</div></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 13 de 22</p><h3 class="paso-titulo">Conecta Ansible con tus servidores</h3><p>Ya tienes dos servidores en AWS creados con Terraform y un inventario que Terraform genera solo (paso del módulo 8). Ahora vas a comprobar que Ansible puede entrar en ellos.</p>
+<p>Primero, levanta la infraestructura si la habías destruido:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="cd terraform
+terraform apply
+cat ../ansible/inventario/hosts.ini">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">cd terraform</span>
+<span class="prompt">$ </span><span class="cmdline">terraform apply</span>
+<span class="prompt">$ </span><span class="cmdline">cat ../ansible/inventario/hosts.ini</span>
+<span class="out"># Archivo generado por Terraform. No lo edites a mano.</span>
+<span class="out">[web]</span>
+<span class="out">web1 ansible_host=54.170.10.20</span>
+<span class="out">web2 ansible_host=54.170.10.21</span>
+<span class="out"></span>
+<span class="out">[web:vars]</span>
+<span class="out">ansible_user=ubuntu</span></code></pre></figure>
+<p>Crea el archivo de configuración de Ansible en la carpeta <code>ansible/</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/ansible.cfg</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">[defaults]
+inventory = inventario/hosts.ini
+roles_path = roles
+host_key_checking = False
+interpreter_python = auto_silent
+
+[ssh_connection]
+pipelining = True</code></pre></figure>
+<p>Comprueba la conexión y prueba algunos comandos:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="cd ../ansible
+ansible web -m ping
+ansible web -a &quot;hostname&quot;">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">cd ../ansible</span>
+<span class="prompt">$ </span><span class="cmdline">ansible web -m ping</span>
+<span class="out">web1 | SUCCESS =&gt; { "ping": "pong" }</span>
+<span class="out">web2 | SUCCESS =&gt; { "ping": "pong" }</span>
+<span class="prompt">$ </span><span class="cmdline">ansible web -a "hostname"</span>
+<span class="out">web1 | CHANGED | rc=0 &gt;&gt;</span>
+<span class="out">ip-10-0-1-25</span>
+<span class="out">web2 | CHANGED | rc=0 &gt;&gt;</span>
+<span class="out">ip-10-0-1-187</span></code></pre></figure>
+<div class="callout "><span class="k">Nota</span>Ansible usa tu clave SSH de <code>~/.ssh/</code> automáticamente. Es la misma clave pública que Terraform subió a AWS en el paso del módulo 6.</div>
+<p>Resultado de este paso: Ansible llega a tus dos servidores. En el siguiente módulo los configurarás.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Primeros comandos con Ansible (carpeta <code>labs/13-ansible-intro</code>)</strong></p><ol class="pasos"><li>Instala Ansible y ejecuta <code>ansible --version</code>.</li><li>Ejecuta <code>ansible local -m ping</code> con el inventario del lab.</li><li>Ejecuta <code>ansible local -a "uptime"</code> y <code>ansible local -m setup -a "filter=ansible_distribution*"</code>.</li><li>Añade al inventario un servidor de AWS (si tienes uno del módulo 6) y haz <code>ping</code>.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">ansible --version</code></td><td>Muestra la versión de Ansible.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible --version" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible all -m ping</code></td><td>Comprueba que Ansible llega a todos los servidores.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible all -m ping" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible web -a &quot;uptime&quot;</code></td><td>Ejecuta un comando en el grupo web.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible web -a &quot;uptime&quot;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible web -b -m apt -a &quot;name=htop state=present&quot;</code></td><td>Instala un paquete con permisos de administrador.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible web -b -m apt -a &quot;name=htop state=present&quot;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-inventory --graph</code></td><td>Muestra los grupos y servidores del inventario.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-inventory --graph" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>UNREACHABLE! ... Permission denied (publickey)</code></dt><dd>Ansible no puede entrar por SSH. Revisa el usuario (<code>ansible_user</code>) y que tu clave SSH es la correcta.</dd></div><div><dt><code>Host key verification failed</code></dt><dd>Es la primera vez que te conectas a ese servidor. Entra una vez con <code>ssh</code> o pon <code>host_key_checking = False</code> en <code>ansible.cfg</code> mientras aprendes.</dd></div><div><dt>Ansible no funciona en Windows</dt><dd>Ansible necesita Linux o macOS para ejecutarse. En Windows, úsalo dentro de WSL.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="13" data-total="6"><fieldset class="q" data-ok="0"><legend><span class="qn">01</span><span class="txt">¿Qué hace Ansible?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Configura lo que hay dentro de los servidores</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Es un editor de código</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Guarda el estado de Terraform</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Crea redes y servidores en la nube</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Ansible instala programas, copia archivos y arranca servicios en servidores que ya existen.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">02</span><span class="txt">¿Cómo se conecta Ansible a los servidores Linux?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Por la API de AWS</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Con un agente instalado en cada servidor</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Por correo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Por SSH</span></button></div><p class="exp" hidden><strong class="verdict"></strong> No hay que instalar nada en los servidores: Ansible entra por SSH.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">03</span><span class="txt">¿Qué es el inventario?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">El estado de Ansible</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">La lista de servidores a los que se conecta Ansible</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">La lista de paquetes instalados</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Un tipo de módulo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Es un archivo con los servidores, agrupados por nombre.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">04</span><span class="txt">¿Qué significa <code>-b</code> en <code>ansible web -b -m apt -a "name=htop"</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Que se ejecute en segundo plano</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Que se ejecute en todos los grupos</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Que se ejecute como administrador (become)</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Que haga una copia de seguridad</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>-b</code> equivale a usar sudo en el servidor.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">05</span><span class="txt">¿Qué comprueba <code>ansible all -m ping</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Que Ansible puede entrar en los servidores y usar Python</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">La velocidad de la red</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Que los servidores tienen Internet</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Que el puerto 80 está abierto</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Si responde pong, Ansible puede trabajar con ese servidor.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">06</span><span class="txt">¿Dónde se instala Ansible?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">En cada servidor</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">En AWS</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Solo en el ordenador desde el que lo ejecutas</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">En GitHub</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Por eso se dice que Ansible no usa agentes (es <em>agentless</em>).</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Tu primer inventario</h3><p>Crea un inventario con dos grupos: <code>web</code> (con localhost) y <code>basedatos</code> (vacío). Comprueba la estructura con <code>ansible-inventory --graph</code> y haz <code>ping</code> al grupo web.</p><details><summary>Ver pista</summary><p>Un grupo vacío se declara solo con su nombre entre corchetes.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain"># inventario.ini
+[web]
+localhost ansible_connection=local
+
+[basedatos]
+
+# Comandos:
+# ansible-inventory -i inventario.ini --graph
+# ansible -i inventario.ini web -m ping</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2. Información del sistema</h3><p>Con un comando ad-hoc, muestra la versión del sistema operativo de tu máquina usando el módulo <code>setup</code> y un filtro.</p><details><summary>Ver pista</summary><p>Los datos que empiezan por <code>ansible_distribution</code> contienen el nombre y la versión.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-bash">ansible local -m setup -a "filter=ansible_distribution*"
+# localhost | SUCCESS =&gt; {
+#     "ansible_facts": {
+#         "ansible_distribution": "Ubuntu",
+#         "ansible_distribution_version": "24.04",
+#         ...</code></pre></figure></details></article></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="13"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="12-import-refactor.html"><small>Anterior</small>Importar y refactorizar</a><a class="next" href="14-ansible-playbooks.html"><small>Siguiente</small>Playbooks</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

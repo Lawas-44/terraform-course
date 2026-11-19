@@ -22,11 +22,20 @@ terraform destroy
 | `10-backend-s3` | `bootstrap/` (bucket del estado) + `proyecto/` (backend parcial y workspaces) | AWS | ~0 € |
 | `11-modulos` | Módulos `static-site` y `etiquetas` (con tests) | AWS | ~0 € |
 | `12-import` | Importar recursos creados a mano | AWS | ~0 € |
-| `13-testing` | `terraform test`, postconditions, TFLint, pre-commit | No | 0 € |
-| `14-cicd` | Rol OIDC para GitHub Actions + workflow de ejemplo | AWS | 0 € |
-| `15-proyecto-final` | VPC + ALB + Auto Scaling (con tests de red) | AWS | ALB ≈ 0,03 €/h |
+| `13-ansible-intro` | Inventario y comandos ad-hoc | No | 0 € |
+| `14-ansible-playbooks` | Primer playbook | No | 0 € |
+| `15-ansible-plantillas` | Variables, facts y plantillas Jinja2 | No | 0 € |
+| `16-ansible-handlers` | Handlers, bucles y condiciones | No | 0 € |
+| `17-ansible-roles` | Roles y colecciones | No | 0 € |
+| `18-ansible-vault` | Ansible Vault y ansible-lint | No | 0 € |
+| `20-calidad-testing` | `terraform test`, postconditions, TFLint, pre-commit | No | 0 € |
+| `21-cicd` | Rol OIDC para GitHub Actions + workflow de ejemplo | AWS | 0 € |
 
-El workflow `.github/workflows/labs.yml` comprueba en cada push que todos los labs pasan `terraform fmt`, `terraform validate` y `terraform test`.
+Los labs de Ansible usan tu propia máquina como servidor (`ansible_connection=local`) y solo escriben en `/tmp`. Necesitas Linux, macOS o WSL.
+
+El proyecto guiado completo (módulos 0 a 22) está en la carpeta [`proyecto/`](../proyecto/).
+
+El workflow `.github/workflows/labs.yml` comprueba en cada push que los labs de Terraform pasan `fmt`, `validate` y `test`, que los de Ansible pasan `ansible-lint` y se ejecutan dos veces sin cambios, y que el playbook del proyecto funciona de verdad en una máquina Ubuntu.
 
 Reglas:
 

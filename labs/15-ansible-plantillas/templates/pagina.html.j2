@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><title>{{ web_nombre }}</title></head>
+<body>
+  <h1>{{ web_nombre }}</h1>
+  <p>{{ web_descripcion }}</p>
+  <ul>
+{% for proyecto in web_proyectos %}
+    <li><strong>{{ proyecto.nombre }}</strong>: {{ proyecto.descripcion }}</li>
+{% endfor %}
+  </ul>
+  <p>Generado en {{ inventory_hostname }} ({{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}).</p>
+</body>
+</html>

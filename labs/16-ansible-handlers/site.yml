@@ -1,0 +1,44 @@
+---
+- name: Handlers, bucles y condiciones
+  hosts: local
+  vars:
+    carpeta: /tmp/lab16
+    app_puerto: 8080
+    app_modo: desarrollo
+
+  tasks:
+    - name: Crear carpetas
+      ansible.builtin.file:
+        path: "{{ carpeta }}/{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - conf
+        - logs
+        - datos
+
+    - name: Generar la configuración
+      ansible.builtin.template:
+        src: templates/app.conf.j2
+        dest: "{{ carpeta }}/conf/app.conf"
+        mode: "0644"
+      notify: Recargar la aplicación
+
+    - name: Avisar si estamos en desarrollo
+      ansible.builtin.debug:
+        msg: "Modo desarrollo: no usar en producción"
+      when: app_modo == "desarrollo"
+
+    - name: Contar archivos de configuración
+      ansible.builtin.find:
+        paths: "{{ carpeta }}/conf"
+      register: archivos
+
+    - name: Mostrar el resultado
+      ansible.builtin.debug:
+        msg: "Hay {{ archivos.matched }} archivo(s) de configuración"
+
+  handlers:
+    - name: Recargar la aplicación
+      ansible.builtin.debug:
+        msg: "La configuración ha cambiado: aquí se recargaría el servicio"

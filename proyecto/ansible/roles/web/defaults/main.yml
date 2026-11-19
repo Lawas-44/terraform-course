@@ -1,0 +1,3 @@
+---
+web_raiz: /var/www/miweb
+web_privado_usuario: admin

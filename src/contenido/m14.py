@@ -1,205 +1,256 @@
 # -*- coding: utf-8 -*-
-# Módulo 14 · Trabajo en equipo y CI/CD
+# Módulo 14 · Playbooks
 
 LECCION = [
- ("h", "Organizar el repositorio"),
- ("p", "Cuando hay varios entornos (desarrollo, producción...), conviene separar los **módulos** (las piezas reutilizables) de los **entornos** (donde se usan):"),
- ("code", "text", "estructura recomendada", """infra/
-├── modules/          # piezas reutilizables
-│   ├── network/
-│   └── web/
-├── envs/
-│   ├── dev/          # entorno de desarrollo (su propio estado)
-│   │   ├── main.tf
-│   │   └── terraform.tfvars
-│   └── prod/         # entorno de producción (su propio estado)
-│       ├── main.tf
-│       └── terraform.tfvars
-└── .github/workflows/terraform.yml"""),
- ("p", "Cada entorno tiene su propio estado. Así, un error en desarrollo nunca afecta a producción."),
- ("code", "hcl", "envs/prod/main.tf", """module "web" {
-  source         = "../../modules/web"
-  nombre         = "tienda-prod"
-  tipo_instancia = "t3.medium"
-}"""),
-
- ("h", "Trabajar en equipo"),
- ("p", "En un equipo nadie aplica cambios desde su ordenador. El proceso habitual es:"),
+ ("h", "YAML en cinco minutos"),
+ ("p", "Los playbooks se escriben en **YAML**, un formato de texto muy sencillo. Solo hay tres reglas importantes:"),
  ("ol", [
-  "Creas una rama nueva en Git y haces tu cambio.",
-  "Abres un **Pull Request** en GitHub.",
-  "Un sistema automático ejecuta `terraform plan` y publica el resultado en el Pull Request.",
-  "Un compañero revisa el código y el plan.",
-  "Al aprobarlo y unirlo a `main`, el sistema automático ejecuta `terraform apply`.",
+  "La **sangría** (los espacios al principio) indica qué va dentro de qué. Usa siempre espacios, nunca tabuladores.",
+  "`clave: valor` define un dato.",
+  "Un guion `- ` al principio indica un elemento de una lista.",
  ]),
- ("p", "Así todo cambio queda revisado y registrado, y nadie necesita las claves de producción en su ordenador."),
+ ("code", "yaml", "ejemplo.yml", """---
+nombre: Ana            # texto
+edad: 30               # número
+activo: true           # verdadero o falso
+lenguajes:             # lista
+  - terraform
+  - ansible
+direccion:             # datos dentro de otro dato
+  ciudad: Madrid
+  cp: "28001\""""),
+ ("tip", "Los archivos YAML suelen empezar con `---`. No es obligatorio, pero es la costumbre."),
 
- ("h", "Guardar el plan y aplicar ese mismo plan"),
- ("p", "En los sistemas automáticos se guarda el plan en un archivo y luego se aplica exactamente ese plan:"),
- ("term", """$ terraform plan -out=tfplan
-$ terraform show tfplan
-$ terraform apply tfplan"""),
- ("p", "Así se aplica justo lo que se revisó, sin sorpresas."),
- ("p", "Otra opción útil es `-detailed-exitcode`. Hace que `plan` termine con un número que indica el resultado:"),
- ("table", ["Número", "Significado"], [
-  ["0", "No hay cambios"],
-  ["1", "Ha habido un error"],
-  ["2", "Hay cambios pendientes"],
- ]),
+ ("h", "Qué es un playbook"),
+ ("p", "Un **playbook** es un archivo con una lista de **tareas** que Ansible ejecuta en orden en un grupo de servidores. Es como una receta: primero esto, luego esto otro."),
+ ("code", "yaml", "site.yml", """---
+- name: Configurar los servidores web
+  hosts: web
+  become: true
 
- ("h", "Conectar GitHub con AWS sin guardar claves"),
- ("p", "GitHub Actions es el sistema automático de GitHub. Para que pueda crear cosas en AWS **no guardes tus claves de AWS en GitHub**. Usa **OIDC**: GitHub pide permiso a AWS en cada ejecución y recibe unas claves temporales que caducan en una hora."),
- ("p", "Se configura una vez en AWS:"),
- ("code", "hcl", "oidc.tf", """resource "aws_iam_openid_connect_provider" "github" {
-  url            = "https://token.actions.githubusercontent.com"
-  client_id_list = ["sts.amazonaws.com"]
-}
+  tasks:
+    - name: Instalar nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
 
-resource "aws_iam_role" "github_terraform" {
-  name = "github-terraform"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [{
-      Effect    = "Allow"
-      Principal = { Federated = aws_iam_openid_connect_provider.github.arn }
-      Action    = "sts:AssumeRoleWithWebIdentity"
-      Condition = {
-        StringEquals = {
-          "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
-        }
-        StringLike = {
-          # Solo TU repositorio puede usar este permiso
-          "token.actions.githubusercontent.com:sub" = "repo:mi-usuario/terraform-labs:*"
-        }
-      }
-    }]
-  })
-}
-
-resource "aws_iam_role_policy_attachment" "admin" {
-  role       = aws_iam_role.github_terraform.name
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
-output "role_arn" {
-  value = aws_iam_role.github_terraform.arn
-}"""),
- ("warn", "La línea con `sub` es muy importante: limita el permiso a tu repositorio. Sin ella, cualquier repositorio de GitHub podría usar tu cuenta de AWS."),
-
- ("h", "El flujo automático en GitHub Actions"),
- ("p", "Este archivo hace `plan` en cada Pull Request y `apply` al unir los cambios a `main`:"),
- ("code", "yaml", ".github/workflows/terraform.yml", """name: terraform
-
-on:
-  pull_request:
-  push:
-    branches: [main]
-
-permissions:
-  id-token: write    # necesario para OIDC
-  contents: read
-
-jobs:
-  terraform:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: envs/dev
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: eu-west-1
-
-      - run: terraform fmt -check -recursive
-      - run: terraform init -input=false
-      - run: terraform validate
-      - run: terraform plan -input=false -out=tfplan
-
-      - name: Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -input=false tfplan"""),
- ("ol", [
-  "Copia el valor del output `role_arn`.",
-  "En GitHub, ve a *Settings → Secrets and variables → Actions* y crea el secreto `AWS_ROLE_ARN` con ese valor.",
-  "Abre un Pull Request: verás el plan en la pestaña *Actions*.",
- ]),
-
- ("h", "Normas para trabajar en equipo"),
+    - name: Arrancar nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true"""),
  ("ul", [
-  "**Un solo camino para aplicar cambios**: si se hace desde GitHub Actions, nadie lo hace desde su ordenador.",
-  "**Cambios pequeños**: son más fáciles de revisar.",
-  "**Lee el plan**, no solo el código. Fíjate sobre todo en lo que se va a borrar.",
-  "**Protege la rama main**: que no se pueda cambiar sin Pull Request y revisión.",
+  "`name`: una descripción. Es lo que verás en pantalla.",
+  "`hosts`: en qué grupo del inventario se ejecuta.",
+  "`become: true`: ejecutar como administrador.",
+  "`tasks`: la lista de tareas. Cada tarea usa un **módulo** (`apt`, `service`...) con sus opciones.",
  ]),
+ ("info", "`ansible.builtin.apt` es el nombre completo del módulo `apt`. Se recomienda escribir el nombre completo para evitar confusiones."),
+
+ ("h", "Ejecutar un playbook"),
+ ("term", """$ ansible-playbook site.yml
+
+PLAY [Configurar los servidores web] ******************************
+
+TASK [Gathering Facts] ********************************************
+ok: [web1]
+ok: [web2]
+
+TASK [Instalar nginx] *********************************************
+changed: [web1]
+changed: [web2]
+
+TASK [Arrancar nginx] *********************************************
+ok: [web1]
+ok: [web2]
+
+PLAY RECAP ********************************************************
+web1 : ok=3  changed=1  unreachable=0  failed=0
+web2 : ok=3  changed=1  unreachable=0  failed=0"""),
+ ("table", ["Resultado", "Significado"], [
+  ["`ok`", "Ya estaba bien; no ha hecho falta cambiar nada"],
+  ["`changed`", "Ha hecho un cambio"],
+  ["`failed`", "Ha fallado"],
+  ["`unreachable`", "No ha podido conectarse al servidor"],
+ ]),
+
+ ("h", "Idempotencia: ejecutarlo varias veces"),
+ ("p", "Ejecuta el mismo playbook otra vez:"),
+ ("term", """$ ansible-playbook site.yml
+...
+PLAY RECAP ********************************************************
+web1 : ok=3  changed=0  unreachable=0  failed=0
+web2 : ok=3  changed=0  unreachable=0  failed=0"""),
+ ("p", "`changed=0`: nginx ya estaba instalado y arrancado, así que no ha hecho nada. Como Terraform, Ansible describe **cómo debe quedar** el servidor y solo cambia lo necesario. Por eso puedes ejecutar un playbook tantas veces como quieras sin miedo."),
+
+ ("h", "Probar antes de cambiar"),
+ ("p", "Igual que `terraform plan`, Ansible puede enseñarte lo que haría sin cambiar nada:"),
+ ("term", """$ ansible-playbook site.yml --check --diff"""),
+ ("ul", [
+  "`--check`: simula; no cambia nada.",
+  "`--diff`: muestra las líneas que cambiarían en los archivos.",
+ ]),
+ ("p", "Y para comprobar que el YAML está bien escrito:"),
+ ("term", """$ ansible-playbook site.yml --syntax-check
+playbook: site.yml"""),
+
+ ("h", "Los módulos más usados"),
+ ("table", ["Módulo", "Para qué sirve", "Ejemplo"], [
+  ["`apt`", "Instalar o quitar paquetes (Ubuntu/Debian)", "`name: nginx`, `state: present`"],
+  ["`service`", "Arrancar, parar o reiniciar servicios", "`name: nginx`, `state: started`"],
+  ["`copy`", "Copiar un archivo o escribir un texto", "`src: web.css`, `dest: /var/www/web.css`"],
+  ["`file`", "Crear carpetas, enlaces o borrar archivos", "`path: /var/www`, `state: directory`"],
+  ["`template`", "Copiar un archivo rellenando variables (módulo 15)", "`src: index.html.j2`"],
+  ["`user`", "Crear usuarios", "`name: deploy`"],
+  ["`command`", "Ejecutar un comando (último recurso)", "`cmd: uptime`"],
+ ]),
+ ("code", "yaml", "más tareas", """    - name: Crear la carpeta de la web
+      ansible.builtin.file:
+        path: /var/www/miweb
+        state: directory
+        mode: "0755"
+
+    - name: Crear una página sencilla
+      ansible.builtin.copy:
+        content: "<h1>Hola desde Ansible</h1>"
+        dest: /var/www/miweb/index.html
+        mode: "0644"
+
+    - name: Crear el usuario deploy
+      ansible.builtin.user:
+        name: deploy
+        shell: /bin/bash"""),
+ ("warn", "Evita `command` y `shell` siempre que exista un módulo para lo que quieres hacer. Los módulos saben si algo ya está hecho; un comando suelto se ejecuta siempre."),
 ]
 
 TEST = [
- ("¿Por qué separar `envs/dev` y `envs/prod` en carpetas con estados distintos?",
-  ["Por estética", "Para que un error en un entorno no afecte al otro y las diferencias sean explícitas", "Porque Terraform lo exige", "Para que sea más barato"], 1,
-  "Cada entorno tiene su estado y su configuración visibles por separado."),
- ("¿Qué ventaja tiene `terraform apply tfplan` frente a `terraform apply`?",
-  ["Es más rápido", "Aplica exactamente el plan revisado", "No necesita credenciales", "No modifica el estado"], 1,
-  "Lo que se aprobó en el PR es lo que se ejecuta."),
- ("Con `-detailed-exitcode`, ¿qué código devuelve `plan` si hay cambios pendientes?",
-  ["0", "1", "2", "3"], 2, "0 = sin cambios, 1 = error, 2 = cambios."),
- ("¿Qué aporta OIDC frente a guardar access keys de AWS en GitHub?",
-  ["Nada", "Credenciales temporales sin secretos de larga duración", "Es más rápido", "Permite usar Azure"], 1,
-  "No hay claves que puedan filtrarse; cada ejecución obtiene credenciales que caducan."),
- ("En la política de confianza del rol OIDC, ¿qué limita la condición sobre `sub`?",
-  ["La región", "Qué repositorio (y rama) puede asumir el rol", "El tamaño de las instancias", "La versión de Terraform"], 1,
-  "Sin ella, cualquier repositorio de GitHub podría asumir el rol."),
- ("¿Qué permiso necesita el workflow de GitHub Actions para usar OIDC?",
-  ["contents: write", "id-token: write", "actions: write", "packages: read"], 1, "Permite solicitar el token OIDC a GitHub."),
+ ("En YAML, ¿qué indica la sangría?",
+  ["Nada, es decorativa", "Qué datos van dentro de otros", "Los comentarios", "El orden de ejecución"], 1,
+  "Por eso hay que ser cuidadoso con los espacios."),
+ ("¿Qué indica `hosts: web` en un playbook?",
+  ["El nombre del playbook", "El grupo del inventario donde se ejecuta", "El usuario SSH", "El puerto"], 1,
+  "Las tareas se ejecutarán en todos los servidores del grupo web."),
+ ("Ejecutas un playbook dos veces seguidas sin cambiar nada. ¿Qué esperas ver la segunda vez?",
+  ["changed en todas las tareas", "changed=0", "failed", "unreachable"], 1,
+  "Ansible es idempotente: si todo está ya bien, no cambia nada."),
+ ("¿Qué hace `--check`?",
+  ["Comprueba la sintaxis", "Simula la ejecución sin cambiar nada", "Revisa la seguridad", "Comprueba la conexión"], 1,
+  "Es el equivalente a terraform plan."),
+ ("¿Qué módulo usarías para crear una carpeta?",
+  ["copy", "file", "apt", "service"], 1, "`file` con `state: directory`."),
+ ("¿Por qué evitar `command` cuando hay un módulo específico?",
+  ["Porque es más lento", "Porque los módulos saben si algo ya está hecho y command se ejecuta siempre", "Porque command no existe", "Porque necesita internet"], 1,
+  "Los módulos son idempotentes; un comando suelto no."),
 ]
 
 RETOS = [
- {"titulo": "Tu primer pipeline",
-  "enunciado": "En tu repositorio de prácticas, crea el rol OIDC, añade el workflow y abre un PR que cambie una etiqueta. Comprueba que aparece el plan como comentario y que al hacer merge se aplica.",
-  "pista": "Si el job falla en `configure-aws-credentials`, revisa el permiso `id-token: write` y la condición `sub` (propietario/repositorio exactos, sensibles a mayúsculas).",
-  "solucion": ("bash", """cd bootstrap
-terraform apply -var="repo_github=TU_USUARIO/terraform-labs"
-terraform output -raw role_arn     # cópialo al secreto AWS_ROLE_ARN
+ {"titulo": "Arregla el YAML",
+  "enunciado": "Este playbook tiene tres errores de YAML o de Ansible. Encuéntralos y compruébalo con `--syntax-check`.",
+  "codigo": ("yaml", """- name: Mi playbook
+  hosts: local
+  tasks:
+  - name: Crear carpeta
+      ansible.builtin.file:
+        path: /tmp/prueba
+        state: directory
+    - name Crear archivo
+      ansible.builtin.copy:
+        content: "hola"
+        dest: /tmp/prueba/hola.txt"""),
+  "pista": "Mira la sangría de las tareas y los dos puntos.",
+  "solucion": ("yaml", """- name: Mi playbook
+  hosts: local
+  tasks:
+    - name: Crear carpeta            # 1. todas las tareas al mismo nivel
+      ansible.builtin.file:          # 2. el módulo, alineado con name
+        path: /tmp/prueba
+        state: directory
+    - name: Crear archivo            # 3. faltaban los dos puntos
+      ansible.builtin.copy:
+        content: "hola"
+        dest: /tmp/prueba/hola.txt""")},
+ {"titulo": "Un playbook completo",
+  "enunciado": "Escribe un playbook para el grupo `local` que cree la carpeta `/tmp/miweb`, escriba dentro un `index.html` con tu nombre y cree el archivo `/tmp/miweb/LEEME.txt`. Ejecútalo dos veces.",
+  "pista": "Usa `file` y `copy` con `content`. No hace falta `become` porque es `/tmp`.",
+  "solucion": ("yaml", """---
+- name: Mi web local
+  hosts: local
+  tasks:
+    - name: Crear la carpeta
+      ansible.builtin.file:
+        path: /tmp/miweb
+        state: directory
+        mode: "0755"
 
-git switch -c prueba-pipeline
-# cambia una etiqueta en envs/dev
-git commit -am "chore: cambia etiqueta" && git push -u origin prueba-pipeline
-# abre el PR en GitHub → ver comentario con el plan → merge""")},
- {"titulo": "Detector de drift programado",
-  "enunciado": "Añade un segundo workflow que se ejecute todas las noches (`schedule`), haga `plan -detailed-exitcode` sobre `envs/dev` y falle (o abra un issue) si hay drift.",
-  "pista": "`on: schedule: - cron: \"0 3 * * *\"`. Usa `continue-on-error` o captura el código de salida en bash.",
-  "solucion": ("yaml", """name: drift
-on:
-  schedule:
-    - cron: "0 3 * * *"
-  workflow_dispatch: {}
+    - name: Crear la página
+      ansible.builtin.copy:
+        content: "<h1>Ana</h1>"
+        dest: /tmp/miweb/index.html
+        mode: "0644"
 
-permissions:
-  id-token: write
-  contents: read
-
-jobs:
-  drift:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: envs/dev
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hashicorp/setup-terraform@v3
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          aws-region: eu-west-1
-      - run: terraform init -input=false
-      - name: Plan
-        run: |
-          set +e
-          terraform plan -input=false -detailed-exitcode
-          code=$?
-          if [ $code -eq 2 ]; then echo "::error::Drift detectado"; exit 1; fi
-          exit $code""")},
+    - name: Crear el LEEME
+      ansible.builtin.copy:
+        content: "Creado con Ansible"
+        dest: /tmp/miweb/LEEME.txt
+        mode: "0644"
+# Segunda ejecución: changed=0""")},
 ]
+
+PROYECTO = {
+ "titulo": "Instala nginx: tu primera web visible",
+ "bloques": [
+  ("p", "Vas a escribir el primer playbook del proyecto. Instalará el servidor web nginx en los dos servidores y publicará una página sencilla. Al terminar podrás abrir la web en el navegador."),
+  ("code", "yaml", "ansible/site.yml", """---
+- name: Configurar los servidores web
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Actualizar la lista de paquetes
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Instalar nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Crear la carpeta de la web
+      ansible.builtin.file:
+        path: /var/www/html
+        state: directory
+        mode: "0755"
+
+    - name: Publicar una página de prueba
+      ansible.builtin.copy:
+        content: "<h1>Mi web en la nube</h1><p>Servidor {{ inventory_hostname }}</p>"
+        dest: /var/www/html/index.html
+        mode: "0644"
+
+    - name: Arrancar nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true"""),
+  ("p", "`{{ inventory_hostname }}` es el nombre del servidor en el inventario (web1 o web2). Lo verás en detalle en el próximo módulo."),
+  ("term", """$ cd ansible
+$ ansible-playbook site.yml --syntax-check
+$ ansible-playbook site.yml
+...
+PLAY RECAP ********************************************************
+web1 : ok=6  changed=3  unreachable=0  failed=0
+web2 : ok=6  changed=3  unreachable=0  failed=0"""),
+  ("p", "Abre las direcciones que te da Terraform:"),
+  ("term", """$ terraform -chdir=../terraform output urls
+{
+  "web1" = "http://54.170.10.20"
+  "web2" = "http://54.170.10.21"
+}
+$ curl http://54.170.10.20
+<h1>Mi web en la nube</h1><p>Servidor web1</p>"""),
+  ("tip", "Ejecuta el playbook una segunda vez: debe terminar con `changed=0`."),
+  ("p", "Resultado de este paso: tus dos servidores sirven una web. Es tu primer resultado visible del proyecto."),
+ ],
+}

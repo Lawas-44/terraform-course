@@ -183,3 +183,69 @@ resource "local_file" "config" {
   "solucion": ("text", """Sin -var  → "d"  (*.auto.tfvars gana a terraform.tfvars, entorno y default)
 Con -var  → "e"  (la línea de comandos gana a todo)""")},
 ]
+
+
+PROYECTO = {'titulo': 'Las variables del proyecto',
+ 'bloques': [('p',
+              'Define los datos de entrada del proyecto. Algunos tienen valor por defecto y otros (como tu '
+              'IP) los das tú:'),
+             ('code',
+              'hcl',
+              'terraform/variables.tf',
+              'variable "proyecto" {\n'
+              '  description = "Nombre del proyecto. Se usa en los nombres de los recursos"\n'
+              '  type        = string\n'
+              '  default     = "miweb"\n'
+              '\n'
+              '  validation {\n'
+              '    condition     = can(regex("^[a-z][a-z0-9-]{2,15}$", var.proyecto))\n'
+              '    error_message = "Solo minúsculas, números y guiones (3 a 16 caracteres)."\n'
+              '  }\n'
+              '}\n'
+              '\n'
+              'variable "entorno" {\n'
+              '  description = "Entorno: dev o prod"\n'
+              '  type        = string\n'
+              '  default     = "dev"\n'
+              '\n'
+              '  validation {\n'
+              '    condition     = contains(["dev", "prod"], var.entorno)\n'
+              '    error_message = "El entorno debe ser dev o prod."\n'
+              '  }\n'
+              '}\n'
+              '\n'
+              'variable "region" {\n'
+              '  description = "Región de AWS"\n'
+              '  type        = string\n'
+              '  default     = "eu-west-1"\n'
+              '}\n'
+              '\n'
+              'variable "mi_ip" {\n'
+              '  description = "Tu IP pública en formato CIDR (por ejemplo 81.45.10.20/32)"\n'
+              '  type        = string\n'
+              '\n'
+              '  validation {\n'
+              '    condition     = can(cidrhost(var.mi_ip, 0))\n'
+              '    error_message = "mi_ip debe tener formato CIDR, por ejemplo 81.45.10.20/32."\n'
+              '  }\n'
+              '}\n'
+              '\n'
+              'variable "ruta_clave_publica" {\n'
+              '  description = "Ruta de tu clave SSH pública"\n'
+              '  type        = string\n'
+              '  default     = "~/.ssh/id_ed25519.pub"\n'
+              '}'),
+             ('p', 'Da valor a tu IP en `terraform.tfvars`. Añade `/32` al final: significa «solo esta IP».'),
+             ('code', 'hcl', 'terraform/terraform.tfvars', 'mi_ip = "81.45.10.20/32"'),
+             ('p',
+              'Este archivo tiene un dato personal y está en el `.gitignore`. Sube en su lugar un ejemplo '
+              'para que otros sepan qué poner:'),
+             ('code',
+              'hcl',
+              'terraform/terraform.tfvars.example',
+              '# Copia este archivo como terraform.tfvars y cambia los valores.\n'
+              'mi_ip = "81.45.10.20/32"   # tu IP: curl -s https://checkip.amazonaws.com'),
+             ('term', '$ terraform validate\nSuccess! The configuration is valid.'),
+             ('p',
+              'Resultado de este paso: el error del paso anterior ha desaparecido y el proyecto ya tiene sus '
+              'datos de entrada.')]}

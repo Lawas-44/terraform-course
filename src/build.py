@@ -10,11 +10,12 @@ OUT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = "https://github.com/lawas-44/terraform-course"
 
 FASES = [
-    ("Fase 1 · Fundamentos", "Del cero absoluto a tu primer recurso en la nube.", ["00", "01", "02", "03", "04", "05"]),
-    ("Fase 2 · Construir infraestructura", "Recursos reales, repetición y lógica.", ["06", "07", "08"]),
-    ("Fase 3 · Escalar y mantener", "Estado, entornos, reutilización y código heredado.", ["09", "10", "11", "12"]),
-    ("Fase 4 · Nivel profesional", "Calidad, automatización y proyecto final.", ["13", "14", "15"]),
+    ("Parte 1 · Primeros pasos", "Qué vas a aprender, qué vas a construir y cómo preparar tu ordenador.", ["00", "01"]),
+    ("Parte 2 · Terraform", "Crear la infraestructura: red, servidores y firewall en AWS.", ["02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"]),
+    ("Parte 3 · Ansible", "Configurar los servidores: programas, archivos y servicios.", ["13", "14", "15", "16", "17", "18"]),
+    ("Parte 4 · Todo junto", "Terraform y Ansible trabajando juntos, calidad, automatización y proyecto final.", ["19", "20", "21", "22"]),
 ]
+TITULO = "Terraform y Ansible desde cero"
 
 # ---------------------------------------------------------------- utilidades
 
@@ -34,6 +35,18 @@ def fmt(s):
 def slug(s):
     s = unicodedata.normalize("NFD", s).encode("ascii", "ignore").decode().lower()
     return re.sub(r"[^a-z0-9]+", "-", s).strip("-")
+
+
+def pasos_proyecto():
+    """Módulos con paso del proyecto, numerados en orden: {num_modulo: (paso, titulo)}."""
+    pasos, n = {}, 0
+    for m in MODULOS:
+        cont = importlib.import_module(f"contenido.m{m['num']}")
+        pr = getattr(cont, "PROYECTO", None)
+        if pr:
+            n += 1
+            pasos[m["num"]] = (n, pr["titulo"])
+    return pasos
 
 
 def mod_url(m, root):
@@ -85,7 +98,8 @@ def sidebar(root, actual=None, toc=None):
   <small class="js-count">0 de {len(MODULOS)} módulos completados</small>
 </div>
 <nav aria-label="Contenido del curso">
-<ul class="sb-list"><li><a class="sb-link" href="{root}index.html"{' aria-current="page"' if actual == "inicio" else ''}><span class="num"></span><span class="t">Inicio</span></a></li></ul>''']
+<ul class="sb-list"><li><a class="sb-link" href="{root}index.html"{' aria-current="page"' if actual == "inicio" else ''}><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="{root}proyecto.html"{' aria-current="page"' if actual == "proyecto" else ''}><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>''']
     for titulo, _, nums in FASES:
         h.append(f'<p class="sb-group">{esc(titulo)}</p><ul class="sb-list">')
         for n in nums:
@@ -140,7 +154,7 @@ def page(title, body, root, actual, desc, toc=None, wide=False):
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="topbar">
   <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false">{ICON_MENU}</button>
-  <a class="brand" href="{root}index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <a class="brand" href="{root}index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
   <span class="spacer"></span>
   <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
   <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema">{ICON_TEMA}</button>
@@ -181,12 +195,12 @@ def cmd_table(rows):
 # ---------------------------------------------------------------- módulos
 
 
-def render_blocks(blocks):
+def render_blocks(blocks, prefijo=""):
     out, toc = [], []
     for b in blocks:
         k = b[0]
         if k == "h":
-            sid = slug(b[1])
+            sid = prefijo + slug(b[1])
             toc.append((sid, b[1]))
             out.append(f'<h3 id="{sid}">{fmt(b[1])}</h3>')
         elif k == "p":
@@ -251,7 +265,12 @@ def modulo_page(i, m):
     cont = importlib.import_module(f"contenido.m{m['num']}")
     leccion_html, lec_toc = render_blocks(cont.LECCION)
 
-    toc = [("objetivos", "Objetivos", None), ("leccion", "Lección", lec_toc), ("practica", "Práctica guiada", None)]
+    pr = getattr(cont, "PROYECTO", None)
+    paso = PASOS.get(m["num"])
+    toc = [("objetivos", "Objetivos", None), ("leccion", "Lección", lec_toc)]
+    if pr:
+        toc.append(("proyecto", f"Proyecto: paso {paso[0]}", None))
+    toc.append(("practica", "Práctica guiada", None))
     if m["comandos"]:
         toc.append(("comandos", "Comandos clave", None))
     toc += [("errores", "Errores frecuentes", None), ("test", "Test", None), ("retos", "Retos", None)]
@@ -261,11 +280,17 @@ def modulo_page(i, m):
   <p class="eyebrow">Módulo {m['num']}</p>
   <h1>{fmt(m['titulo'])}</h1>
   <p class="lead">{fmt(m['resumen'])}</p>
-  <div class="meta-row"><span>Nivel: {m['nivel']}</span><span>Duración: {m['duracion']}</span><span>Test: {len(cont.TEST)} preguntas</span><span>Retos: {len(cont.RETOS)}</span></div>
+  <div class="meta-row"><span>Nivel: {m['nivel']}</span><span>Duración: {m['duracion']}</span><span>Test: {len(cont.TEST)} preguntas</span><span>Retos: {len(cont.RETOS)}</span>{f'<span>Proyecto: paso {paso[0]}</span>' if paso else ''}</div>
 </header>"""]
     p.append('<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check">'
              + "".join(f"<li>{fmt(o)}</li>" for o in m["objetivos"]) + "</ul></section>")
     p.append(f'<section id="leccion"><h2>Lección</h2>{leccion_html}</section>')
+    if pr:
+        pr_html, _ = render_blocks(pr["bloques"], prefijo="proyecto-")
+        total = len(PASOS)
+        p.append(f'<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2>'
+                 f'<p class="paso-label">Paso {paso[0]} de {total}</p><h3 class="paso-titulo">{fmt(pr["titulo"])}</h3>'
+                 f'{pr_html}<p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>')
     lab = m["lab"]
     aviso = ('<div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta '
              '<code>terraform destroy</code> al terminar para no pagar por ellos.</div>') if int(m["num"]) >= 5 else ""
@@ -284,7 +309,7 @@ def modulo_page(i, m):
     pn += (f'<a class="prev" href="{prev_m["num"]}-{prev_m["slug"]}.html"><small>Anterior</small>{fmt(prev_m["titulo"])}</a>' if prev_m else "<span></span>")
     pn += (f'<a class="next" href="{next_m["num"]}-{next_m["slug"]}.html"><small>Siguiente</small>{fmt(next_m["titulo"])}</a>' if next_m else "<span></span>")
     p.append(pn + "</nav>")
-    return page(f"{m['num']} · {m['titulo'].replace('`', '')} | Terraform desde cero", "\n".join(p), root, m["num"], m["resumen"], toc=toc)
+    return page(f"{m['num']} · {m['titulo'].replace('`', '')} | Terraform y Ansible desde cero", "\n".join(p), root, m["num"], m["resumen"], toc=toc)
 
 # ---------------------------------------------------------------- portada
 
@@ -303,23 +328,36 @@ def index_page():
     body = f"""
 <section class="hero">
   <p class="eyebrow">Curso gratuito · En español · Desde cero</p>
-  <h1>Aprende Terraform desde cero</h1>
-  <p class="lead">Aprende a crear infraestructura con código, paso a paso. Cada módulo tiene una explicación sencilla, ejemplos que puedes copiar, un test y ejercicios.</p>
+  <h1>Aprende Terraform y Ansible desde cero</h1>
+  <p class="lead">Aprende a crear servidores en la nube con Terraform y a configurarlos con Ansible. Mientras aprendes, construyes paso a paso un proyecto real: tu propia web funcionando en AWS.</p>
   <div class="cta"><a class="btn primary js-continuar" href="modulos/00-introduccion.html">Empezar el curso</a><a class="btn" href="comandos.html">Chuleta de comandos</a></div>
   <ul class="stats">
-    <li><strong>16</strong><span>módulos</span></li>
-    <li><strong>~35 h</strong><span>de contenido y prácticas</span></li>
-    <li><strong>0 €</strong><span>para empezar (módulos 0 a 4 sin nube)</span></li>
+    <li><strong>{len(MODULOS)}</strong><span>módulos</span></li>
+    <li><strong>{len(PASOS)}</strong><span>pasos del proyecto guiado</span></li>
+    <li><strong>~50 h</strong><span>de contenido y prácticas</span></li>
+    <li><strong>0 €</strong><span>para empezar (capa gratuita de AWS)</span></li>
   </ul>
+</section>
+
+<section id="resultado">
+  <h2>Lo que tendrás al terminar</h2>
+  <p>Una web personal funcionando en dos servidores de AWS. Terraform crea la red, el firewall y los servidores; Ansible instala nginx, publica tu web, añade una página de estado y una zona privada con contraseña. Todo se crea con un solo comando y se borra con otro.</p>
+  <div class="grid-2">
+    <div class="card"><h3>Terraform</h3><p>Red propia (VPC), firewall, clave SSH y dos servidores Ubuntu. Estado guardado en S3.</p></div>
+    <div class="card"><h3>Ansible</h3><p>Roles para preparar el sistema, instalar nginx y publicar tu web con plantillas.</p></div>
+    <div class="card"><h3>Integración</h3><p>Terraform genera el inventario de Ansible y un script lo despliega todo.</p></div>
+    <div class="card"><h3>Calidad</h3><p>Tests, ansible-lint y GitHub Actions revisando cada cambio.</p></div>
+  </div>
+  <div class="cta"><a class="btn" href="proyecto.html">Ver el proyecto paso a paso</a></div>
 </section>
 
 <section id="enfoque">
   <h2>Cómo funciona el curso</h2>
   <div class="grid-2">
     <div class="card"><h3>Para quién</h3><p>Para cualquier persona que empiece de cero. No hace falta saber programar ni haber usado la nube.</p></div>
-    <div class="card"><h3>Qué necesitas</h3><p>Un ordenador con Windows, macOS o Linux. A partir del módulo 5, una cuenta de AWS.</p></div>
-    <div class="card"><h3>Cómo se aprende</h3><p>Cada módulo tiene: objetivos, lección, práctica guiada, comandos, errores frecuentes, test y retos.</p></div>
-    <div class="card"><h3>Sin gastar dinero</h3><p>Empezamos sin nube. Después usamos recursos gratuitos y cada práctica termina con <code>terraform destroy</code>.</p></div>
+    <div class="card"><h3>Qué necesitas</h3><p>Un ordenador con Windows (con WSL), macOS o Linux. A partir del módulo 5, una cuenta de AWS.</p></div>
+    <div class="card"><h3>Cómo se aprende</h3><p>Cada módulo tiene: objetivos, lección, un paso del proyecto, práctica guiada, comandos, errores frecuentes, test y retos.</p></div>
+    <div class="card"><h3>Sin gastar dinero</h3><p>Usamos servidores de la capa gratuita de AWS y al terminar cada sesión los borramos con <code>terraform destroy</code>.</p></div>
   </div>
 </section>
 
@@ -343,14 +381,90 @@ def index_page():
 <section id="recursos">
   <h2>Material de apoyo</h2>
   <div class="grid-2">
-    <a class="card" href="comandos.html"><h3>Chuleta de comandos</h3><p>Terraform, terminal, Git y AWS, con buscador y botón de copiar.</p></a>
+    <a class="card" href="comandos.html"><h3>Chuleta de comandos</h3><p>Terraform, Ansible, terminal, Git y AWS, con buscador y botón de copiar.</p></a>
     <a class="card" href="glosario.html"><h3>Glosario</h3><p>Todas las palabras del curso explicadas en una línea.</p></a>
     <a class="card" href="{REPO}/tree/main/labs"><h3>Código de las prácticas</h3><p>Cada práctica lista para ejecutar, en la carpeta <code>labs/</code>.</p></a>
+    <a class="card" href="{REPO}/tree/main/proyecto"><h3>Código del proyecto terminado</h3><p>Para comparar con el tuyo si te atascas, en la carpeta <code>proyecto/</code>.</p></a>
   </div>
 </section>
 """
-    return page("Terraform desde cero · Curso para principiantes", body, "", "inicio",
-                "Curso gratuito de Terraform en español para principiantes: lecciones, prácticas, tests y chuleta de comandos.")
+    return page("Terraform y Ansible desde cero · Curso para principiantes", body, "", "inicio",
+                "Curso gratuito de Terraform y Ansible en español para principiantes, con un proyecto real paso a paso.")
+
+# ---------------------------------------------------------------- proyecto
+
+
+def proyecto_page():
+    by = {m["num"]: m for m in MODULOS}
+    filas = ""
+    for num, (paso, titulo) in PASOS.items():
+        m = by[num]
+        filas += (f'<li><a class="mod-row" href="{mod_url(m, "")}#proyecto" data-mod="{num}"><span class="num">{paso:02d}</span>'
+                  f'<span><strong>{fmt(titulo)}</strong><span class="desc">Módulo {num} · {fmt(m["titulo"])}</span></span>'
+                  f'<span class="info"><span class="estado"></span></span></a></li>')
+    arbol = """mi-web-en-la-nube/
+├── terraform/
+│   ├── versions.tf        providers y backend S3
+│   ├── variables.tf       datos de entrada (tu IP, servidores...)
+│   ├── main.tf            red, clave SSH, servidores e inventario
+│   ├── outputs.tf         IPs y direcciones web
+│   ├── modules/
+│   │   ├── red/           VPC, subred, internet gateway
+│   │   └── servidores/    firewall y servidores Ubuntu
+│   └── tests/             tests con AWS simulado
+├── ansible/
+│   ├── ansible.cfg
+│   ├── site.yml           playbook principal
+│   ├── inventario/        hosts.ini (lo genera Terraform) y variables
+│   └── roles/
+│       ├── comun/         paquetes básicos
+│       ├── nginx/         servidor web
+│       └── web/           tu página, estado y zona privada
+└── scripts/
+    ├── desplegar.sh       crea y configura todo
+    └── destruir.sh        lo borra todo"""
+    esquema = """             Tu ordenador
+   Terraform ──────────┐     Ansible (por SSH)
+                       v            |
+   +------------------ AWS ----------v--------------+
+   |  VPC 10.0.0.0/16                               |
+   |   Subred pública                               |
+   |    +-------------+          +-------------+    |
+   |    |    web1     |          |    web2     |    |
+   |    |   Ubuntu    |          |   Ubuntu    |    |
+   |    |   nginx     |          |   nginx     |    |
+   |    +-------------+          +-------------+    |
+   |   Firewall: SSH solo desde tu IP, HTTP abierto |
+   +------------------------------------------------+
+                       ^
+                Visitantes (HTTP)"""
+    body = f"""<header class="mod-head"><p class="eyebrow">Proyecto guiado</p><h1>Tu web en la nube</h1>
+<p class="lead">A lo largo del curso construyes, paso a paso, una web personal que funciona de verdad en AWS. Cada módulo añade una pieza. Al final, un solo comando crea los servidores y los deja configurados.</p></header>
+
+<section id="resultado"><h2>El resultado</h2>
+<ul class="check">
+<li>Dos servidores Ubuntu en AWS, dentro de tu propia red y protegidos por un firewall.</li>
+<li>Tu web personal (nombre, descripción y proyectos) servida por nginx en los dos servidores.</li>
+<li>Una página <code>/estado.html</code> que muestra los datos de cada servidor.</li>
+<li>Una zona <code>/privado/</code> protegida con usuario y contraseña cifrada con Ansible Vault.</li>
+<li>Despliegue con <code>./scripts/desplegar.sh</code> y borrado con <code>./scripts/destruir.sh</code>.</li>
+<li>Tests y revisiones automáticas en GitHub Actions.</li>
+</ul></section>
+
+<section id="esquema"><h2>Cómo encaja todo</h2>{code_block("text", "esquema", esquema)}
+<p>Terraform crea todo lo que hay en AWS y escribe el inventario de Ansible con las IPs de los servidores. Ansible entra por SSH en cada servidor y lo configura.</p></section>
+
+<section id="estructura"><h2>Estructura final del repositorio</h2>{code_block("text", "mi-web-en-la-nube", arbol)}
+<p>El código terminado está en la carpeta <a href="{REPO}/tree/main/proyecto"><code>proyecto/</code></a> del repositorio del curso. Úsalo para comparar si te atascas.</p></section>
+
+<section id="pasos"><h2>Los pasos</h2>
+<p class="muted">Cada paso está al final de la lección de su módulo. Hazlos en orden.</p>
+<ul class="mod-list">{filas}</ul></section>
+
+<section id="coste"><h2>Cuánto cuesta</h2>
+<p>Los servidores <code>t3.micro</code> y el resto de recursos entran en la capa gratuita de AWS para cuentas nuevas. Fuera de ella, los dos servidores cuestan unos céntimos por hora. Borra todo con <code>terraform destroy</code> al terminar cada sesión y vuelve a crearlo la siguiente: es justo la ventaja de tenerlo en código.</p></section>"""
+    return page(f"El proyecto del curso | {TITULO}", body, "", "proyecto",
+                "Proyecto guiado del curso: una web personal en AWS creada con Terraform y configurada con Ansible.")
 
 # ---------------------------------------------------------------- referencia
 
@@ -373,7 +487,7 @@ $ terraform destroy"""
 {secs}
 <section id="errores-comunes" class="cmd-section"><h2>Errores comunes</h2><div class="table-wrap"><table><thead><tr><th>Mensaje</th><th>Solución</th></tr></thead><tbody>{errs}</tbody></table></div></section>"""
     toc = [("flujo-diario", "El flujo de cada día", None)] + [(k, t, None) for k, t, _, _ in COMANDOS] + [("errores-comunes", "Errores comunes", None)]
-    return page("Chuleta de comandos | Terraform desde cero", body, "", "comandos",
+    return page("Chuleta de comandos | Terraform y Ansible desde cero", body, "", "comandos",
                 "Comandos de Terraform, terminal, Git y AWS CLI para el curso.", toc=toc, wide=True)
 
 
@@ -381,17 +495,20 @@ def glosario_page():
     items = "".join(f'<div><dt>{esc(t)}</dt><dd>{fmt(d)}</dd></div>' for t, d in sorted(GLOSARIO, key=lambda x: x[0].lower()))
     body = f"""<header class="mod-head"><p class="eyebrow">Referencia</p><h1>Glosario</h1><p class="lead">Las palabras del curso, explicadas en una línea.</p></header>
 <dl class="glosario">{items}</dl>"""
-    return page("Glosario | Terraform desde cero", body, "", "glosario", "Glosario de términos de Terraform.")
+    return page("Glosario | Terraform y Ansible desde cero", body, "", "glosario", "Glosario de términos de Terraform y Ansible.")
 
 # ---------------------------------------------------------------- main
 
 
+PASOS = {}
+
 if __name__ == "__main__":
+    PASOS.update(pasos_proyecto())
     os.makedirs(f"{OUT}/modulos", exist_ok=True)
     for i, m in enumerate(MODULOS):
         with open(f"{OUT}/modulos/{m['num']}-{m['slug']}.html", "w", encoding="utf-8") as f:
             f.write(modulo_page(i, m))
-    for name, fn in [("index.html", index_page), ("comandos.html", comandos_page), ("glosario.html", glosario_page)]:
+    for name, fn in [("index.html", index_page), ("proyecto.html", proyecto_page), ("comandos.html", comandos_page), ("glosario.html", glosario_page)]:
         with open(f"{OUT}/{name}", "w", encoding="utf-8") as f:
             f.write(fn())
     print("ok", len(MODULOS), "módulos")

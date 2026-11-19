@@ -60,6 +60,12 @@ LECCION = [
 $ terraform plan
 $ terraform apply
 $ terraform destroy"""),
+ ('h', 'Terraform y Ansible: un equipo'),
+ ('p', 'En este curso aprenderás dos herramientas que se usan juntas:'),
+ ('table', ['Herramienta', 'Qué hace', 'Ejemplo'], [['**Terraform**', 'Crea la infraestructura', 'Crea dos servidores, una red y un firewall en AWS'], ['**Ansible**', 'Configura lo que hay dentro de los servidores', 'Instala nginx y publica tu web en esos servidores']]),
+ ('p', 'Piensa en una casa: Terraform construye las paredes, las puertas y la instalación eléctrica; Ansible pone los muebles y lo deja todo listo para vivir.'),
+ ('h', 'El proyecto del curso'),
+ ('p', 'No solo vas a aprender teoría: a lo largo del curso construirás **tu propia web funcionando en AWS**. Cada módulo añade una pieza en la sección **Proyecto guiado**. Al final, un solo comando creará los servidores y los dejará configurados.'),
 ]
 
 TEST = [
@@ -98,3 +104,30 @@ Declarativo:
 - base_de_datos "blog": mysql, db.t3.micro, 20 GB
 - registro_dns "www":  tipo A → IP del servidor "blog\"""")},
 ]
+
+
+PROYECTO = {'titulo': 'Lo que vas a construir',
+ 'bloques': [('p', 'Al terminar el curso tendrás una web personal funcionando en dos servidores de AWS:'),
+             ('ul',
+              ['**Terraform** creará una red propia, un firewall, una clave SSH y dos servidores Ubuntu.',
+               '**Ansible** instalará nginx en los servidores y publicará tu web, una página de estado y una '
+               'zona privada con contraseña.',
+               'Un **script** lo hará todo con un comando, y otro lo borrará.',
+               '**GitHub Actions** revisará cada cambio que subas.']),
+             ('code',
+              'text',
+              'resultado final',
+              '   Tú                          Visitantes\n'
+              '    |                               |\n'
+              '    | Terraform + Ansible           | http://\n'
+              '    v                               v\n'
+              ' +------------------- AWS ------------------+\n'
+              ' |   +--------+            +--------+       |\n'
+              ' |   |  web1  |            |  web2  |       |\n'
+              ' |   | nginx  |            | nginx  |       |\n'
+              ' |   +--------+            +--------+       |\n'
+              ' +------------------------------------------+'),
+             ('p',
+              'Cada módulo tiene un paso. Hazlos en orden y, si te atascas, compara con el código terminado '
+              'en la carpeta `proyecto/` del repositorio del curso.'),
+             ('p', 'En este módulo no hay nada que escribir todavía. Empezamos en el siguiente.')]}

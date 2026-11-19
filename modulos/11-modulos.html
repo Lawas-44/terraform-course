@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>11 · Módulos | Terraform desde cero</title>
+<title>11 · Módulos | Terraform y Ansible desde cero</title>
 <meta name="description" content="Empaquetar y reutilizar infraestructura: crear, versionar y consumir módulos.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,7 @@
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="topbar">
   <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
-  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
   <span class="spacer"></span>
   <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
   <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
@@ -26,15 +26,18 @@
 <div class="progress-box" aria-live="polite">
   <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
   <div class="bar"><span class="fill js-fill"></span></div>
-  <small class="js-count">0 de 16 módulos completados</small>
+  <small class="js-count">0 de 23 módulos completados</small>
 </div>
 <nav aria-label="Contenido del curso">
-<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
-<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
 </li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
@@ -43,32 +46,44 @@
 </li>
 <li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
 </li>
-</ul>
-<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
 </li>
-</ul>
-<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html" aria-current="page"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
-<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#que-es-un-modulo">Qué es un módulo</a></li><li><a href="#crear-un-modulo">Crear un módulo</a></li><li><a href="#usar-el-modulo">Usar el módulo</a></li><li><a href="#reutilizar-el-modulo-varias-veces">Reutilizar el módulo varias veces</a></li><li><a href="#modulos-hechos-por-otros">Módulos hechos por otros</a></li><li><a href="#consejos-para-crear-buenos-modulos">Consejos para crear buenos módulos</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#que-es-un-modulo">Qué es un módulo</a></li><li><a href="#crear-un-modulo">Crear un módulo</a></li><li><a href="#usar-el-modulo">Usar el módulo</a></li><li><a href="#reutilizar-el-modulo-varias-veces">Reutilizar el módulo varias veces</a></li><li><a href="#modulos-hechos-por-otros">Módulos hechos por otros</a></li><li><a href="#consejos-para-crear-buenos-modulos">Consejos para crear buenos módulos</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 12</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
 </li>
 <li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
-<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
-<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
 <p class="sb-group">Referencia</p><ul class="sb-list">
@@ -90,7 +105,7 @@
   <p class="eyebrow">Módulo 11</p>
   <h1>Módulos</h1>
   <p class="lead">Empaquetar y reutilizar infraestructura: crear, versionar y consumir módulos.</p>
-  <div class="meta-row"><span>Nivel: Intermedio</span><span>Duración: 3 h</span><span>Test: 7 preguntas</span><span>Retos: 2</span></div>
+  <div class="meta-row"><span>Nivel: Intermedio</span><span>Duración: 3 h</span><span>Test: 7 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 12</span></div>
 </header>
 <section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Crear un módulo propio con entradas, salidas y documentación.</li><li>Consumir módulos del Terraform Registry fijando versiones.</li><li>Diseñar módulos con una responsabilidad clara.</li></ul></section>
 <section id="leccion"><h2>Lección</h2><h3 id="que-es-un-modulo">Qué es un módulo</h3>
@@ -221,6 +236,121 @@ terraform apply">Copiar</button></div><pre><code class="plain"><span class="prom
 <p>La doble barra <code>//</code> separa el repositorio de la carpeta del módulo.</p>
 <h3 id="consejos-para-crear-buenos-modulos">Consejos para crear buenos módulos</h3>
 <ul><li>Que hagan <strong>una sola cosa</strong> clara (una red, una web, una base de datos).</li><li>Variables con <code>description</code> y <code>type</code>.</li><li>Outputs con todo lo que otros puedan necesitar.</li><li>No pongas bloques <code>provider</code> dentro del módulo: deja que los reciba del módulo raíz.</li><li>Añade un <code>README.md</code> explicando cómo usarlo.</li></ul></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 12 de 22</p><h3 class="paso-titulo">Módulos y una red propia</h3><p>El <code>main.tf</code> ha crecido. Vas a ordenarlo en dos módulos y a crear una red propia para el proyecto. Lo harás en dos partes para ver bien qué pasa.</p>
+<h3 id="proyecto-parte-1-mover-los-servidores-a-un-modulo">Parte 1: mover los servidores a un módulo</h3>
+<p>Crea <code>terraform/modules/servidores/</code> y mueve allí el <code>data "aws_ami"</code>, el security group, sus tres reglas y los servidores (renombra <code>aws_instance.web</code> a <code>aws_instance.this</code>). El módulo recibe por variables lo que antes venía de fuera:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/modules/servidores/variables.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">variable "nombre" {
+  type = string
+}
+
+variable "servidores" {
+  type = map(string)
+}
+
+variable "vpc_id" {
+  type    = string
+  default = null # de momento, la red por defecto
+}
+
+variable "subnet_id" {
+  type    = string
+  default = null
+}
+
+variable "clave_ssh" {
+  type = string
+}
+
+variable "mi_ip" {
+  type = string
+}</code></pre></figure>
+<p>Dentro del módulo, cambia <code>local.prefijo</code> por <code>var.nombre</code>, <code>aws_key_pair.this.key_name</code> por <code>var.clave_ssh</code> y <code>var.mi_ip</code> sigue igual. Añade <code>vpc_id = var.vpc_id</code> al security group y <code>subnet_id = var.subnet_id</code> a los servidores. El output:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/modules/servidores/outputs.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">output "ips" {
+  value = { for nombre, servidor in aws_instance.this : nombre =&gt; servidor.public_ip }
+}</code></pre></figure>
+<p>En el <code>main.tf</code> raíz queda solo la clave, la llamada al módulo y el inventario. Los bloques <code>moved</code> evitan que se recree nada:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "aws_key_pair" "this" {
+  key_name   = "${local.prefijo}-clave"
+  public_key = file(pathexpand(var.ruta_clave_publica))
+}
+
+module "servidores" {
+  source     = "./modules/servidores"
+  nombre     = local.prefijo
+  servidores = var.servidores
+  clave_ssh  = aws_key_pair.this.key_name
+  mi_ip      = var.mi_ip
+}
+
+resource "local_file" "inventario" {
+  filename        = "${path.module}/../ansible/inventario/hosts.ini"
+  file_permission = "0644"
+  content = templatefile("${path.module}/templates/inventario.ini.tftpl", {
+    servidores = module.servidores.ips
+  })
+}
+
+moved {
+  from = aws_instance.web
+  to   = module.servidores.aws_instance.this
+}
+
+moved {
+  from = aws_security_group.web
+  to   = module.servidores.aws_security_group.web
+}
+
+moved {
+  from = aws_vpc_security_group_ingress_rule.ssh
+  to   = module.servidores.aws_vpc_security_group_ingress_rule.ssh
+}
+
+moved {
+  from = aws_vpc_security_group_ingress_rule.http
+  to   = module.servidores.aws_vpc_security_group_ingress_rule.http
+}
+
+moved {
+  from = aws_vpc_security_group_egress_rule.todo
+  to   = module.servidores.aws_vpc_security_group_egress_rule.todo
+}</code></pre></figure>
+<p>En <code>outputs.tf</code>, cambia <code>aws_instance.web</code> por <code>module.servidores.ips</code> (por ejemplo: <code>{ for nombre, ip in module.servidores.ips : nombre =&gt; "http://${ip}" }</code>).</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform init
+terraform plan">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform init</span>
+<span class="prompt">$ </span><span class="cmdline">terraform plan</span>
+<span class="out">  # aws_instance.web["web1"] has moved to module.servidores.aws_instance.this["web1"]</span>
+<span class="out">  ...</span>
+<span class="out">Plan: 0 to add, 0 to change, 0 to destroy.</span></code></pre></figure>
+<p>Cero cambios: has reorganizado todo el código sin tocar ni un servidor.</p>
+<h3 id="proyecto-parte-2-una-red-propia">Parte 2: una red propia</h3>
+<p>Crea <code>terraform/modules/red/</code> con una VPC, una subred pública, un internet gateway y su tabla de rutas (el código está en <code>proyecto/terraform/modules/red</code> del repositorio del curso; es el mismo del reto del módulo 6). Úsalo en <code>main.tf</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/main.tf (añadir y cambiar)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">module "red" {
+  source   = "./modules/red"
+  nombre   = local.prefijo
+  vpc_cidr = "10.0.0.0/16"
+}
+
+module "servidores" {
+  source     = "./modules/servidores"
+  nombre     = local.prefijo
+  servidores = var.servidores
+  vpc_id     = module.red.vpc_id      # nuevo
+  subnet_id  = module.red.subnet_id   # nuevo
+  clave_ssh  = aws_key_pair.this.key_name
+  mi_ip      = var.mi_ip
+}</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform init
+terraform plan">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform init</span>
+<span class="prompt">$ </span><span class="cmdline">terraform plan</span>
+<span class="out">  # module.servidores.aws_instance.this["web1"] must be replaced</span>
+<span class="out">-/+ resource "aws_instance" "this" {</span>
+<span class="out">      ~ subnet_id = "subnet-0aa..." -&gt; (known after apply) # forces replacement</span>
+<span class="out">...</span>
+<span class="out">Plan: 11 to add, 1 to change, 6 to destroy.</span></code></pre></figure>
+<p>Esta vez los servidores <strong>se recrean</strong>: un servidor no puede cambiar de red. No pasa nada, porque todavía no tienen nada instalado (y aunque lo tuvieran, Ansible lo volvería a configurar).</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform apply">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform apply</span></code></pre></figure>
+<p>Una vez aplicado, puedes borrar los bloques <code>moved</code>: ya han cumplido su función. Compara tu carpeta con <code>proyecto/terraform</code> del repositorio del curso: deberían ser casi iguales.</p>
+<p>Resultado de este paso: la parte de Terraform del proyecto está terminada. Tienes dos servidores en tu propia red, código ordenado en módulos y el inventario listo para Ansible.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
 <section id="practica"><h2>Práctica guiada</h2><p><strong>Módulo de web estática</strong></p><ol class="pasos"><li>Crea <code>modules/static-site</code> con un bucket S3 configurado como web.</li><li>Expón el nombre del bucket y la URL como outputs.</li><li>Instáncialo dos veces (dev y prod) con <code>for_each</code>.</li><li>Sustituye tu VPC manual por el módulo oficial del Registry.</li><li>Genera el README del módulo con <code>terraform-docs markdown table</code>.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
 <section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform get -update</code></td><td>Descarga/actualiza los módulos.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform get -update" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform init -upgrade</code></td><td>Actualiza módulos y providers.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -upgrade" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform-docs markdown table ./modules/static-site</code></td><td>Genera documentación de inputs/outputs.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform-docs markdown table ./modules/static-site" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state list module.vpc</code></td><td>Recursos dentro de un módulo.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state list module.vpc" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
 <section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>Module not installed</code></dt><dd>Has añadido un módulo nuevo: ejecuta <code>terraform init</code>.</dd></div><div><dt>Módulos sin versión fija</dt><dd>Fija siempre <code>version</code> (Registry) o <code>?ref=</code> (Git) para evitar sorpresas.</dd></div></dl></section>

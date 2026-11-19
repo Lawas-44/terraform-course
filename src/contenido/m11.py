@@ -237,3 +237,155 @@ resource "aws_s3_bucket_website_configuration" "this" {
   }
 }""")},
 ]
+
+
+PROYECTO = {'titulo': 'Módulos y una red propia',
+ 'bloques': [('p',
+              'El `main.tf` ha crecido. Vas a ordenarlo en dos módulos y a crear una red propia para el '
+              'proyecto. Lo harás en dos partes para ver bien qué pasa.'),
+             ('h', 'Parte 1: mover los servidores a un módulo'),
+             ('p',
+              'Crea `terraform/modules/servidores/` y mueve allí el `data "aws_ami"`, el security group, sus '
+              'tres reglas y los servidores (renombra `aws_instance.web` a `aws_instance.this`). El módulo '
+              'recibe por variables lo que antes venía de fuera:'),
+             ('code',
+              'hcl',
+              'terraform/modules/servidores/variables.tf',
+              'variable "nombre" {\n'
+              '  type = string\n'
+              '}\n'
+              '\n'
+              'variable "servidores" {\n'
+              '  type = map(string)\n'
+              '}\n'
+              '\n'
+              'variable "vpc_id" {\n'
+              '  type    = string\n'
+              '  default = null # de momento, la red por defecto\n'
+              '}\n'
+              '\n'
+              'variable "subnet_id" {\n'
+              '  type    = string\n'
+              '  default = null\n'
+              '}\n'
+              '\n'
+              'variable "clave_ssh" {\n'
+              '  type = string\n'
+              '}\n'
+              '\n'
+              'variable "mi_ip" {\n'
+              '  type = string\n'
+              '}'),
+             ('p',
+              'Dentro del módulo, cambia `local.prefijo` por `var.nombre`, `aws_key_pair.this.key_name` por '
+              '`var.clave_ssh` y `var.mi_ip` sigue igual. Añade `vpc_id = var.vpc_id` al security group y '
+              '`subnet_id = var.subnet_id` a los servidores. El output:'),
+             ('code',
+              'hcl',
+              'terraform/modules/servidores/outputs.tf',
+              'output "ips" {\n'
+              '  value = { for nombre, servidor in aws_instance.this : nombre => servidor.public_ip }\n'
+              '}'),
+             ('p',
+              'En el `main.tf` raíz queda solo la clave, la llamada al módulo y el inventario. Los bloques '
+              '`moved` evitan que se recree nada:'),
+             ('code',
+              'hcl',
+              'terraform/main.tf',
+              'resource "aws_key_pair" "this" {\n'
+              '  key_name   = "${local.prefijo}-clave"\n'
+              '  public_key = file(pathexpand(var.ruta_clave_publica))\n'
+              '}\n'
+              '\n'
+              'module "servidores" {\n'
+              '  source     = "./modules/servidores"\n'
+              '  nombre     = local.prefijo\n'
+              '  servidores = var.servidores\n'
+              '  clave_ssh  = aws_key_pair.this.key_name\n'
+              '  mi_ip      = var.mi_ip\n'
+              '}\n'
+              '\n'
+              'resource "local_file" "inventario" {\n'
+              '  filename        = "${path.module}/../ansible/inventario/hosts.ini"\n'
+              '  file_permission = "0644"\n'
+              '  content = templatefile("${path.module}/templates/inventario.ini.tftpl", {\n'
+              '    servidores = module.servidores.ips\n'
+              '  })\n'
+              '}\n'
+              '\n'
+              'moved {\n'
+              '  from = aws_instance.web\n'
+              '  to   = module.servidores.aws_instance.this\n'
+              '}\n'
+              '\n'
+              'moved {\n'
+              '  from = aws_security_group.web\n'
+              '  to   = module.servidores.aws_security_group.web\n'
+              '}\n'
+              '\n'
+              'moved {\n'
+              '  from = aws_vpc_security_group_ingress_rule.ssh\n'
+              '  to   = module.servidores.aws_vpc_security_group_ingress_rule.ssh\n'
+              '}\n'
+              '\n'
+              'moved {\n'
+              '  from = aws_vpc_security_group_ingress_rule.http\n'
+              '  to   = module.servidores.aws_vpc_security_group_ingress_rule.http\n'
+              '}\n'
+              '\n'
+              'moved {\n'
+              '  from = aws_vpc_security_group_egress_rule.todo\n'
+              '  to   = module.servidores.aws_vpc_security_group_egress_rule.todo\n'
+              '}'),
+             ('p',
+              'En `outputs.tf`, cambia `aws_instance.web` por `module.servidores.ips` (por ejemplo: `{ for '
+              'nombre, ip in module.servidores.ips : nombre => "http://${ip}" }`).'),
+             ('term',
+              '$ terraform init\n'
+              '$ terraform plan\n'
+              '  # aws_instance.web["web1"] has moved to module.servidores.aws_instance.this["web1"]\n'
+              '  ...\n'
+              'Plan: 0 to add, 0 to change, 0 to destroy.'),
+             ('p', 'Cero cambios: has reorganizado todo el código sin tocar ni un servidor.'),
+             ('h', 'Parte 2: una red propia'),
+             ('p',
+              'Crea `terraform/modules/red/` con una VPC, una subred pública, un internet gateway y su tabla '
+              'de rutas (el código está en `proyecto/terraform/modules/red` del repositorio del curso; es el '
+              'mismo del reto del módulo 6). Úsalo en `main.tf`:'),
+             ('code',
+              'hcl',
+              'terraform/main.tf (añadir y cambiar)',
+              'module "red" {\n'
+              '  source   = "./modules/red"\n'
+              '  nombre   = local.prefijo\n'
+              '  vpc_cidr = "10.0.0.0/16"\n'
+              '}\n'
+              '\n'
+              'module "servidores" {\n'
+              '  source     = "./modules/servidores"\n'
+              '  nombre     = local.prefijo\n'
+              '  servidores = var.servidores\n'
+              '  vpc_id     = module.red.vpc_id      # nuevo\n'
+              '  subnet_id  = module.red.subnet_id   # nuevo\n'
+              '  clave_ssh  = aws_key_pair.this.key_name\n'
+              '  mi_ip      = var.mi_ip\n'
+              '}'),
+             ('term',
+              '$ terraform init\n'
+              '$ terraform plan\n'
+              '  # module.servidores.aws_instance.this["web1"] must be replaced\n'
+              '-/+ resource "aws_instance" "this" {\n'
+              '      ~ subnet_id = "subnet-0aa..." -> (known after apply) # forces replacement\n'
+              '...\n'
+              'Plan: 11 to add, 1 to change, 6 to destroy.'),
+             ('p',
+              'Esta vez los servidores **se recrean**: un servidor no puede cambiar de red. No pasa nada, '
+              'porque todavía no tienen nada instalado (y aunque lo tuvieran, Ansible lo volvería a '
+              'configurar).'),
+             ('term', '$ terraform apply'),
+             ('p',
+              'Una vez aplicado, puedes borrar los bloques `moved`: ya han cumplido su función. Compara tu '
+              'carpeta con `proyecto/terraform` del repositorio del curso: deberían ser casi iguales.'),
+             ('p',
+              'Resultado de este paso: la parte de Terraform del proyecto está terminada. Tienes dos '
+              'servidores en tu propia red, código ordenado en módulos y el inventario listo para Ansible.')]}

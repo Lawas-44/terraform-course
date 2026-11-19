@@ -5,11 +5,12 @@ MODULOS = [
 {
  "num": "00", "slug": "introduccion", "titulo": "Introducción a la Infraestructura como Código",
  "nivel": "Básico", "duracion": "1 h",
- "resumen": "Qué problema resuelve Terraform, qué es la IaC y cómo encaja Terraform frente a otras herramientas.",
+ "resumen": "Qué es la Infraestructura como Código y para qué sirven Terraform y Ansible.",
  "objetivos": [
   "Explicar qué es la Infraestructura como Código (IaC) y qué problemas resuelve.",
   "Diferenciar el enfoque declarativo del imperativo.",
-  "Situar Terraform frente a Ansible, CloudFormation, Pulumi y OpenTofu.",
+  "Entender qué hace Terraform, qué hace Ansible y por qué se usan juntos.",
+  "Conocer el proyecto que construirás a lo largo del curso.",
   "Entender el ciclo de vida básico: escribir → planificar → aplicar → destruir.",
  ],
  "temas": [
@@ -44,10 +45,11 @@ MODULOS = [
 {
  "num": "01", "slug": "entorno", "titulo": "Preparación del entorno",
  "nivel": "Básico", "duracion": "1,5 h",
- "resumen": "Terminal, instalación de Terraform, editor, Git y la cuenta en la nube preparada de forma segura.",
+ "resumen": "Terminal, Terraform, Ansible, claves SSH, editor, Git y una cuenta de AWS preparada de forma segura.",
  "objetivos": [
   "Moverse con soltura por la terminal (Linux/macOS y PowerShell).",
-  "Instalar Terraform y gestionar varias versiones.",
+  "Instalar Terraform y Ansible.",
+  "Crear una clave SSH para entrar en los servidores.",
   "Configurar VS Code con la extensión oficial de HashiCorp.",
   "Preparar Git y un repositorio para los ejercicios.",
   "Crear una cuenta en AWS con un usuario no-root, MFA y alertas de presupuesto.",
@@ -819,9 +821,210 @@ removed {
  ],
 },
 {
- "num": "13", "slug": "calidad-testing", "titulo": "Validación, testing y seguridad",
+ "num": "13", "slug": "ansible-introduccion", "titulo": "Introducción a Ansible",
+ "nivel": "Básico", "duracion": "1,5 h",
+ "resumen": "Qué es Ansible, cómo se conecta a los servidores, el inventario y los primeros comandos.",
+ "objetivos": [
+  "Explicar qué hace Ansible y en qué se diferencia de Terraform.",
+  "Instalar Ansible y comprobar que funciona.",
+  "Escribir un inventario con tus servidores.",
+  "Ejecutar comandos en varios servidores a la vez.",
+ ],
+ "lab": {"titulo": "Primeros comandos con Ansible (carpeta `labs/13-ansible-intro`)",
+  "pasos": [
+   "Instala Ansible y ejecuta `ansible --version`.",
+   "Ejecuta `ansible local -m ping` con el inventario del lab.",
+   "Ejecuta `ansible local -a \"uptime\"` y `ansible local -m setup -a \"filter=ansible_distribution*\"`.",
+   "Añade al inventario un servidor de AWS (si tienes uno del módulo 6) y haz `ping`.",
+  ]},
+ "comandos": [
+  ("ansible --version", "Muestra la versión de Ansible."),
+  ("ansible all -m ping", "Comprueba que Ansible llega a todos los servidores."),
+  ("ansible web -a \"uptime\"", "Ejecuta un comando en el grupo web."),
+  ("ansible web -b -m apt -a \"name=htop state=present\"", "Instala un paquete con permisos de administrador."),
+  ("ansible-inventory --graph", "Muestra los grupos y servidores del inventario."),
+ ],
+ "errores": [
+  ("`UNREACHABLE! ... Permission denied (publickey)`", "Ansible no puede entrar por SSH. Revisa el usuario (`ansible_user`) y que tu clave SSH es la correcta."),
+  ("`Host key verification failed`", "Es la primera vez que te conectas a ese servidor. Entra una vez con `ssh` o pon `host_key_checking = False` en `ansible.cfg` mientras aprendes."),
+  ("Ansible no funciona en Windows", "Ansible necesita Linux o macOS para ejecutarse. En Windows, úsalo dentro de WSL."),
+ ],
+},
+{
+ "num": "14", "slug": "ansible-playbooks", "titulo": "Playbooks",
+ "nivel": "Básico", "duracion": "2 h",
+ "resumen": "Escribir playbooks en YAML para instalar programas, copiar archivos y arrancar servicios.",
+ "objetivos": [
+  "Leer y escribir archivos YAML sin errores.",
+  "Crear un playbook con varias tareas.",
+  "Usar los módulos más comunes: apt, copy, file, service y user.",
+  "Entender por qué Ansible es idempotente y probar cambios con `--check`.",
+ ],
+ "lab": {"titulo": "Mi primer playbook (carpeta `labs/14-ansible-playbooks`)",
+  "pasos": [
+   "Lee el playbook `playbook.yml` del lab y localiza cada tarea.",
+   "Ejecútalo con `--check --diff` para ver qué haría.",
+   "Ejecútalo de verdad y luego otra vez: la segunda vez debe salir `changed=0`.",
+   "Añade una tarea que cree un archivo con `copy` y vuelve a ejecutarlo.",
+  ]},
+ "comandos": [
+  ("ansible-playbook site.yml", "Ejecuta un playbook."),
+  ("ansible-playbook site.yml --check --diff", "Muestra qué cambiaría, sin cambiar nada."),
+  ("ansible-playbook site.yml --syntax-check", "Comprueba que el YAML está bien escrito."),
+  ("ansible-playbook site.yml --limit web1", "Ejecuta solo en un servidor."),
+  ("ansible-playbook site.yml -v", "Más detalle en la salida (-vv, -vvv para más)."),
+ ],
+ "errores": [
+  ("`Syntax Error while loading YAML`", "En YAML la sangría importa: usa siempre espacios (nunca tabuladores) y alinea bien los guiones."),
+  ("`Missing sudo password` o `Permission denied`", "La tarea necesita permisos de administrador. Añade `become: true` al playbook."),
+  ("Usar `command` o `shell` para todo", "Busca primero un módulo específico (apt, copy, service...). Los módulos son idempotentes; los comandos sueltos no."),
+ ],
+},
+{
+ "num": "15", "slug": "ansible-variables-plantillas", "titulo": "Variables, facts y plantillas",
+ "nivel": "Básico", "duracion": "2 h",
+ "resumen": "Personalizar la configuración con variables, datos de cada servidor y plantillas Jinja2.",
+ "objetivos": [
+  "Definir variables en el playbook, en `group_vars` y en la línea de comandos.",
+  "Usar los facts: datos que Ansible recoge de cada servidor.",
+  "Generar archivos con plantillas Jinja2.",
+  "Recorrer listas dentro de una plantilla.",
+ ],
+ "lab": {"titulo": "Una página generada con plantilla (carpeta `labs/15-ansible-plantillas`)",
+  "pasos": [
+   "Revisa `group_vars/all.yml` y la plantilla `pagina.html.j2`.",
+   "Ejecuta el playbook y abre el archivo generado.",
+   "Cambia una variable y vuelve a ejecutarlo: solo cambia la plantilla.",
+   "Pasa una variable con `-e` y comprueba que tiene prioridad.",
+  ]},
+ "comandos": [
+  ("ansible web -m setup", "Muestra todos los facts de los servidores."),
+  ("ansible web -m setup -a \"filter=ansible_distribution*\"", "Muestra solo algunos facts."),
+  ("ansible-playbook site.yml -e \"web_nombre=Ana\"", "Da valor a una variable al ejecutar."),
+  ("ansible-inventory --host web1", "Muestra las variables de un servidor."),
+ ],
+ "errores": [
+  ("`'web_nombre' is undefined`", "La variable no existe. Revisa el nombre y que el archivo de `group_vars` está en la carpeta correcta."),
+  ("Poner `{{ }}` al principio de un valor sin comillas", "En YAML, si un valor empieza por `{{`, escríbelo entre comillas: `dest: \"{{ ruta }}\"`."),
+ ],
+},
+{
+ "num": "16", "slug": "ansible-handlers-bucles", "titulo": "Handlers, condiciones y bucles",
+ "nivel": "Intermedio", "duracion": "1,5 h",
+ "resumen": "Reiniciar servicios solo cuando hace falta, repetir tareas y ejecutarlas solo si se cumple algo.",
+ "objetivos": [
+  "Usar handlers para recargar un servicio solo si cambió su configuración.",
+  "Repetir una tarea con `loop`.",
+  "Ejecutar una tarea solo si se cumple una condición con `when`.",
+  "Guardar el resultado de una tarea con `register`.",
+ ],
+ "lab": {"titulo": "Handlers, bucles y condiciones (carpeta `labs/16-ansible-handlers`)",
+  "pasos": [
+   "Ejecuta el playbook del lab y fíjate en cuándo se ejecuta el handler.",
+   "Vuelve a ejecutarlo sin cambios: el handler no se ejecuta.",
+   "Ejecútalo con `-e app_puerto=9090`: cambia la plantilla y el handler vuelve a ejecutarse.",
+   "Ejecútalo con `-e app_modo=produccion` y mira cómo se salta la tarea con `when`.",
+  ]},
+ "comandos": [
+  ("ansible-playbook site.yml --list-tasks", "Lista las tareas sin ejecutarlas."),
+  ("ansible-playbook site.yml --start-at-task \"Configurar el sitio\"", "Empieza desde una tarea concreta."),
+  ("ansible-playbook site.yml --step", "Pide confirmación antes de cada tarea."),
+ ],
+ "errores": [
+  ("El handler no se ejecuta", "Solo se ejecuta si la tarea que lo avisa (`notify`) ha cambiado algo, y el nombre debe coincidir exactamente."),
+  ("Reiniciar un servicio en cada ejecución", "Usa un handler en lugar de una tarea con `state: restarted`."),
+ ],
+},
+{
+ "num": "17", "slug": "ansible-roles", "titulo": "Roles y colecciones",
+ "nivel": "Intermedio", "duracion": "2 h",
+ "resumen": "Organizar los playbooks en roles reutilizables y usar roles y colecciones de otros.",
+ "objetivos": [
+  "Conocer la estructura de carpetas de un rol.",
+  "Convertir un playbook largo en roles.",
+  "Usar valores por defecto (`defaults`) en un rol.",
+  "Instalar roles y colecciones de Ansible Galaxy.",
+ ],
+ "lab": {"titulo": "De playbook a roles (carpeta `labs/17-ansible-roles`)",
+  "pasos": [
+   "Crea un rol vacío con `ansible-galaxy role init`.",
+   "Mueve las tareas, plantillas y handlers a su carpeta.",
+   "Usa el rol desde un playbook corto.",
+   "Instala una colección con `ansible-galaxy collection install`.",
+  ]},
+ "comandos": [
+  ("ansible-galaxy role init roles/nginx", "Crea la estructura de un rol."),
+  ("ansible-galaxy collection install community.general", "Instala una colección."),
+  ("ansible-galaxy install -r requirements.yml", "Instala los roles y colecciones de un archivo."),
+  ("ansible-galaxy collection list", "Lista las colecciones instaladas."),
+ ],
+ "errores": [
+  ("`the role 'nginx' was not found`", "Ansible no encuentra la carpeta del rol. Revisa `roles_path` en `ansible.cfg` o que la carpeta `roles/` está junto al playbook."),
+  ("Poner variables que el usuario debe cambiar en `vars/`", "Lo que se puede personalizar va en `defaults/`; `vars/` tiene más prioridad y es difícil de cambiar desde fuera."),
+ ],
+},
+{
+ "num": "18", "slug": "ansible-vault", "titulo": "Ansible Vault y buenas prácticas",
+ "nivel": "Intermedio", "duracion": "1,5 h",
+ "resumen": "Guardar contraseñas cifradas y mantener el código de Ansible limpio con ansible-lint.",
+ "objetivos": [
+  "Cifrar y descifrar archivos con Ansible Vault.",
+  "Usar variables cifradas en un playbook.",
+  "Configurar Ansible con `ansible.cfg`.",
+  "Revisar el código con ansible-lint.",
+ ],
+ "lab": {"titulo": "Un secreto cifrado (carpeta `labs/18-ansible-vault`)",
+  "pasos": [
+   "Cifra el archivo `secretos.yml` con `ansible-vault encrypt`.",
+   "Ábrelo con `cat` y comprueba que no se puede leer.",
+   "Ejecuta el playbook con `--ask-vault-pass`.",
+   "Pasa `ansible-lint` y corrige los avisos.",
+  ]},
+ "comandos": [
+  ("ansible-vault create secretos.yml", "Crea un archivo cifrado."),
+  ("ansible-vault encrypt secretos.yml", "Cifra un archivo existente."),
+  ("ansible-vault edit secretos.yml", "Edita un archivo cifrado."),
+  ("ansible-vault view secretos.yml", "Muestra el contenido descifrado."),
+  ("ansible-playbook site.yml --ask-vault-pass", "Pide la contraseña del vault al ejecutar."),
+  ("ansible-lint", "Revisa el código y avisa de malas prácticas."),
+ ],
+ "errores": [
+  ("`Attempting to decrypt but no vault secrets found`", "El playbook usa un archivo cifrado. Añade `--ask-vault-pass`."),
+  ("Subir la contraseña del vault a Git", "La contraseña del vault nunca se sube. Guárdala en un gestor de contraseñas o en los secretos del CI."),
+ ],
+},
+{
+ "num": "19", "slug": "terraform-ansible", "titulo": "Terraform y Ansible juntos",
+ "nivel": "Intermedio", "duracion": "2 h",
+ "resumen": "Crear servidores con Terraform y configurarlos con Ansible con un solo comando.",
+ "objetivos": [
+  "Saber qué tarea corresponde a Terraform y cuál a Ansible.",
+  "Pasar las IPs de Terraform a Ansible con un inventario generado.",
+  "Usar el inventario dinámico de AWS.",
+  "Automatizar todo el despliegue con un script.",
+ ],
+ "lab": {"titulo": "Despliegue completo con un comando (carpeta `proyecto/`)",
+  "pasos": [
+   "Revisa cómo `terraform/main.tf` genera `ansible/inventario/hosts.ini`.",
+   "Ejecuta `scripts/desplegar.sh`.",
+   "Abre las URLs del output en el navegador.",
+   "Destruye todo con `scripts/destruir.sh`.",
+  ]},
+ "comandos": [
+  ("terraform output -json ips", "IPs de los servidores en JSON."),
+  ("ansible-inventory -i inventario/aws_ec2.yml --graph", "Muestra el inventario dinámico de AWS."),
+  ("ansible web -m wait_for_connection", "Espera a que los servidores acepten SSH."),
+  ("./scripts/desplegar.sh", "Crea y configura todo."),
+ ],
+ "errores": [
+  ("Ansible falla justo después de `terraform apply`", "Los servidores tardan un poco en arrancar. Espera con `wait_for_connection` antes del playbook."),
+  ("Las IPs cambian y el inventario se queda viejo", "Genera el inventario desde Terraform o usa el inventario dinámico; nunca lo escribas a mano."),
+ ],
+},
+{
+ "num": "20", "slug": "calidad-testing", "titulo": "Calidad, tests y seguridad",
  "nivel": "Avanzado", "duracion": "2,5 h",
- "resumen": "Condiciones, tests nativos, linters y escáneres de seguridad.",
+ "resumen": "Comprobar el código de Terraform y de Ansible antes de desplegar: tests, linters y escáneres.",
  "objetivos": [
   "Añadir `precondition`, `postcondition` y bloques `check`.",
   "Escribir tests con `terraform test` (archivos `.tftest.hcl`).",
@@ -886,9 +1089,9 @@ run "entorno_invalido" {
  ],
 },
 {
- "num": "14", "slug": "equipo-cicd", "titulo": "Trabajo en equipo y CI/CD",
+ "num": "21", "slug": "equipo-cicd", "titulo": "Trabajo en equipo y CI/CD",
  "nivel": "Avanzado", "duracion": "2,5 h",
- "resumen": "Flujo con Git y Pull Requests, GitHub Actions con OIDC y HCP Terraform.",
+ "resumen": "Flujo con Git y Pull Requests, y GitHub Actions para revisar Terraform y Ansible automáticamente.",
  "objetivos": [
   "Organizar un repositorio de infraestructura para varios entornos.",
   "Automatizar `fmt`, `validate`, `plan` en cada Pull Request.",
@@ -955,57 +1158,31 @@ jobs:
  ],
 },
 {
- "num": "15", "slug": "proyecto-final", "titulo": "Proyecto final y certificación",
- "nivel": "Avanzado", "duracion": "4–6 h",
- "resumen": "Integrar todo en una infraestructura completa y preparar la certificación oficial.",
+ "num": "22", "slug": "proyecto-final", "titulo": "Proyecto final y siguientes pasos",
+ "nivel": "Avanzado", "duracion": "3 h",
+ "resumen": "Desplegar el proyecto completo desde cero, comprobar el resultado y saber cómo seguir.",
  "objetivos": [
-  "Diseñar y desplegar una infraestructura de varios componentes con buenas prácticas.",
-  "Documentar el proyecto como lo haría un equipo profesional.",
-  "Conocer el temario de la certificación HashiCorp Certified: Terraform Associate.",
+  "Desplegar desde cero toda la infraestructura y la configuración del proyecto.",
+  "Comprobar que el resultado funciona y documentarlo.",
+  "Conocer las certificaciones de Terraform y Ansible.",
+  "Saber qué aprender después.",
  ],
- "temas": [
-  "Arquitectura propuesta: VPC con subredes públicas/privadas, Application Load Balancer, Auto Scaling Group con EC2, bucket S3 para estáticos, (opcional) RDS.",
-  "Requisitos: módulos propios + Registry, backend remoto, dos entornos, variables validadas, tests, CI con plan en PR.",
-  "Entregables: código, README con diagrama, outputs útiles, evidencia de `destroy`.",
-  "Rúbrica de evaluación: funcionalidad, organización, seguridad, documentación, coste.",
-  "Certificación Terraform Associate: dominios del examen, formato, simulacros y recursos oficiales (consulta la versión vigente del examen en la web de HashiCorp).",
-  "Siguientes pasos: Kubernetes con Terraform, Terragrunt, OpenTofu, otras nubes, CDK for Terraform.",
- ],
- "ejemplo": ("text", "Estructura sugerida", """proyecto-final/
-├── bootstrap/            # bucket del estado remoto
-├── modules/
-│   ├── network/          # VPC, subredes, NAT
-│   ├── web/              # ALB + ASG + security groups
-│   └── static-site/      # S3 (+ CloudFront opcional)
-├── envs/
-│   ├── dev/
-│   │   ├── main.tf
-│   │   ├── backend.tf
-│   │   └── dev.tfvars
-│   └── prod/
-├── tests/
-├── .github/workflows/terraform.yml
-├── .pre-commit-config.yaml
-├── .tflint.hcl
-└── README.md"""),
- "lab": {"titulo": "Web escalable en AWS",
+ "lab": {"titulo": "Tu web en la nube, de principio a fin",
   "pasos": [
-   "Dibuja el diagrama de arquitectura antes de escribir código.",
-   "Implementa los módulos `network`, `web` y `static-site`.",
-   "Despliega `dev` desde CI y comprueba la URL del balanceador.",
-   "Ejecuta `infracost` y documenta el coste estimado.",
-   "Destruye todo y deja constancia en el README.",
+   "Clona tu repositorio en una carpeta nueva, como si fueras otra persona.",
+   "Sigue solo el README para desplegar todo.",
+   "Comprueba la web, la página de estado y la zona privada en los dos servidores.",
+   "Destruye todo y comprueba en la web de AWS que no queda nada.",
   ]},
  "comandos": [
-  ("terraform plan -var-file=prod.tfvars -out=prod.tfplan", "Plan de producción guardado."),
-  ("terraform destroy -var-file=dev.tfvars", "Limpieza final del entorno."),
+  ("./scripts/desplegar.sh", "Crea y configura todo."),
+  ("curl -s http://IP/estado.html", "Comprueba la página de estado."),
+  ("curl -u admin:CONTRASEÑA http://IP/privado/", "Entra en la zona privada desde la terminal."),
+  ("./scripts/destruir.sh", "Borra todo al terminar."),
  ],
  "errores": [
-  ("Olvidar destruir el NAT Gateway o el ALB", "Son de los recursos que más cobran por hora. Revisa la factura al día siguiente."),
- ],
- "quiz": [
-  "Explica tu decisión entre workspaces y carpetas por entorno.",
-  "¿Qué mejorarías para llevar este proyecto a producción real?",
+  ("La web no carga después de desplegar", "Comprueba que el playbook terminó sin `failed` y que el firewall permite el puerto 80."),
+  ("Olvidar destruir los servidores", "Revisa la sección EC2 de la web de AWS al día siguiente."),
  ],
 },
 ]

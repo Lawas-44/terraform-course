@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>08 · Expresiones y funciones | Terraform desde cero</title>
+<title>08 · Expresiones y funciones | Terraform y Ansible desde cero</title>
 <meta name="description" content="Condicionales, bucles `for`, splat, bloques dinámicos y funciones integradas.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,7 @@
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="topbar">
   <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
-  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
   <span class="spacer"></span>
   <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
   <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
@@ -26,15 +26,18 @@
 <div class="progress-box" aria-live="polite">
   <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
   <div class="bar"><span class="fill js-fill"></span></div>
-  <small class="js-count">0 de 16 módulos completados</small>
+  <small class="js-count">0 de 23 módulos completados</small>
 </div>
 <nav aria-label="Contenido del curso">
-<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
-<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
 </li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
@@ -43,17 +46,13 @@
 </li>
 <li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
 </li>
-</ul>
-<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html" aria-current="page"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
-<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#operaciones-basicas">Operaciones básicas</a></li><li><a href="#elegir-entre-dos-valores">Elegir entre dos valores</a></li><li><a href="#recorrer-listas-con-for">Recorrer listas con for</a></li><li><a href="#sacar-un-dato-de-todas-las-copias">Sacar un dato de todas las copias</a></li><li><a href="#bloques-repetidos-dynamic">Bloques repetidos: dynamic</a></li><li><a href="#funciones-utiles">Funciones útiles</a></li><li><a href="#dividir-una-red-en-partes-cidrsubnet">Dividir una red en partes: cidrsubnet</a></li><li><a href="#escribir-json-sin-errores">Escribir JSON sin errores</a></li><li><a href="#plantillas-templatefile">Plantillas: templatefile</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#operaciones-basicas">Operaciones básicas</a></li><li><a href="#elegir-entre-dos-valores">Elegir entre dos valores</a></li><li><a href="#recorrer-listas-con-for">Recorrer listas con for</a></li><li><a href="#sacar-un-dato-de-todas-las-copias">Sacar un dato de todas las copias</a></li><li><a href="#bloques-repetidos-dynamic">Bloques repetidos: dynamic</a></li><li><a href="#funciones-utiles">Funciones útiles</a></li><li><a href="#dividir-una-red-en-partes-cidrsubnet">Dividir una red en partes: cidrsubnet</a></li><li><a href="#escribir-json-sin-errores">Escribir JSON sin errores</a></li><li><a href="#plantillas-templatefile">Plantillas: templatefile</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 9</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
 </li>
-</ul>
-<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
@@ -63,12 +62,28 @@
 <li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
-<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
-<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
 <p class="sb-group">Referencia</p><ul class="sb-list">
@@ -90,7 +105,7 @@
   <p class="eyebrow">Módulo 08</p>
   <h1>Expresiones y funciones</h1>
   <p class="lead">Condicionales, bucles <code>for</code>, splat, bloques dinámicos y funciones integradas.</p>
-  <div class="meta-row"><span>Nivel: Intermedio</span><span>Duración: 2 h</span><span>Test: 7 preguntas</span><span>Retos: 2</span></div>
+  <div class="meta-row"><span>Nivel: Intermedio</span><span>Duración: 2 h</span><span>Test: 7 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 9</span></div>
 </header>
 <section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Escribir condicionales y expresiones <code>for</code> para transformar datos.</li><li>Generar bloques anidados con <code>dynamic</code>.</li><li>Usar las funciones más comunes y probarlas en <code>terraform console</code>.</li></ul></section>
 <section id="leccion"><h2>Lección</h2><h3 id="operaciones-basicas">Operaciones básicas</h3>
@@ -182,6 +197,46 @@ echo "Bienvenido al entorno ${entorno}" &gt; /tmp/bienvenida.txt</code></pre></f
   filename = "script.sh"
   content  = templatefile("bienvenida.sh.tftpl", { entorno = "dev" })
 }</code></pre></figure></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 9 de 22</p><h3 class="paso-titulo">Genera el inventario de Ansible</h3><p>Ansible necesitará la lista de servidores con sus IPs. En lugar de escribirla a mano, haz que Terraform la genere con una plantilla.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/templates/inventario.ini.tftpl</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain"># Archivo generado por Terraform. No lo edites a mano.
+[web]
+%{ for nombre, ip in servidores ~}
+${nombre} ansible_host=${ip}
+%{ endfor ~}
+
+[web:vars]
+ansible_user=ubuntu</code></pre></figure>
+<p><code>%{ for }</code> repite la línea por cada servidor. Añade a <code>main.tf</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/main.tf (añadir)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "local_file" "inventario" {
+  filename        = "${path.module}/../ansible/inventario/hosts.ini"
+  file_permission = "0644"
+  content = templatefile("${path.module}/templates/inventario.ini.tftpl", {
+    servidores = { for nombre, servidor in aws_instance.web : nombre =&gt; servidor.public_ip }
+  })
+}</code></pre></figure>
+<p>Añade también dos outputs útiles con expresiones <code>for</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/outputs.tf (añadir)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">output "urls" {
+  description = "Dirección web de cada servidor"
+  value       = { for nombre, servidor in aws_instance.web : nombre =&gt; "http://${servidor.public_ip}" }
+}
+
+output "ssh" {
+  description = "Comando para entrar en cada servidor"
+  value       = { for nombre, servidor in aws_instance.web : nombre =&gt; "ssh ubuntu@${servidor.public_ip}" }
+}</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform apply
+cat ../ansible/inventario/hosts.ini">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform apply</span>
+<span class="out">...</span>
+<span class="out">Plan: 1 to add, 0 to change, 0 to destroy.</span>
+<span class="prompt">$ </span><span class="cmdline">cat ../ansible/inventario/hosts.ini</span>
+<span class="out"># Archivo generado por Terraform. No lo edites a mano.</span>
+<span class="out">[web]</span>
+<span class="out">web1 ansible_host=54.170.10.20</span>
+<span class="out">web2 ansible_host=54.170.10.21</span>
+<span class="out"></span>
+<span class="out">[web:vars]</span>
+<span class="out">ansible_user=ubuntu</span></code></pre></figure>
+<p>Resultado de este paso: Terraform escribe solo el inventario que usará Ansible a partir del módulo 13.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
 <section id="practica"><h2>Práctica guiada</h2><p><strong>Juega en la consola</strong></p><ol class="pasos"><li>En <code>terraform console</code> calcula 4 subredes /24 dentro de <code>10.0.0.0/16</code> con <code>cidrsubnet</code>.</li><li>Convierte una lista de nombres en un mapa nombre → longitud.</li><li>Genera un JSON de política IAM con <code>jsonencode</code>.</li><li>Renderiza un <code>user_data</code> con <code>templatefile</code>.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
 <section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">echo &#x27;cidrsubnet(&quot;10.0.0.0/16&quot;, 8, 2)&#x27; | terraform console</code></td><td>Evalúa una expresión sin abrir la consola interactiva.</td><td class="copy-cell"><button class="copy" type="button" data-copy="echo &#x27;cidrsubnet(&quot;10.0.0.0/16&quot;, 8, 2)&#x27; | terraform console" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform console -var-file=dev.tfvars</code></td><td>Consola con las variables cargadas.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform console -var-file=dev.tfvars" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
 <section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>Inconsistent conditional result types</code></dt><dd>Las dos ramas del ternario deben devolver el mismo tipo.</dd></div><div><dt><code>dynamic</code> en exceso</dt><dd>Si el código se vuelve ilegible, simplifica o separa en recursos independientes.</dd></div></dl></section>

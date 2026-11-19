@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>06 · Recursos, data sources y dependencias | Terraform desde cero</title>
+<title>06 · Recursos, data sources y dependencias | Terraform y Ansible desde cero</title>
 <meta name="description" content="Construir una pequeña red y un servidor en AWS entendiendo el grafo de dependencias.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,7 @@
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="topbar">
   <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
-  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
   <span class="spacer"></span>
   <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
   <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
@@ -26,15 +26,18 @@
 <div class="progress-box" aria-live="polite">
   <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
   <div class="bar"><span class="fill js-fill"></span></div>
-  <small class="js-count">0 de 16 módulos completados</small>
+  <small class="js-count">0 de 23 módulos completados</small>
 </div>
 <nav aria-label="Contenido del curso">
-<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
-<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
 </li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
@@ -43,17 +46,13 @@
 </li>
 <li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
 </li>
-</ul>
-<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html" aria-current="page"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
-<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#lo-que-escribes-y-lo-que-recibes">Lo que escribes y lo que recibes</a></li><li><a href="#consultar-cosas-que-ya-existen-data">Consultar cosas que ya existen: data</a></li><li><a href="#el-orden-lo-decide-terraform">El orden lo decide Terraform</a></li><li><a href="#practica-un-servidor-web">Práctica: un servidor web</a></li><li><a href="#modificar-o-recrear">Modificar o recrear</a></li><li><a href="#ver-lo-que-se-ha-creado">Ver lo que se ha creado</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#lo-que-escribes-y-lo-que-recibes">Lo que escribes y lo que recibes</a></li><li><a href="#consultar-cosas-que-ya-existen-data">Consultar cosas que ya existen: data</a></li><li><a href="#el-orden-lo-decide-terraform">El orden lo decide Terraform</a></li><li><a href="#practica-un-servidor-web">Práctica: un servidor web</a></li><li><a href="#modificar-o-recrear">Modificar o recrear</a></li><li><a href="#ver-lo-que-se-ha-creado">Ver lo que se ha creado</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 7</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
 </li>
 <li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
 </li>
-</ul>
-<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
@@ -63,12 +62,28 @@
 <li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
-<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
-<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
 <p class="sb-group">Referencia</p><ul class="sb-list">
@@ -90,7 +105,7 @@
   <p class="eyebrow">Módulo 06</p>
   <h1>Recursos, data sources y dependencias</h1>
   <p class="lead">Construir una pequeña red y un servidor en AWS entendiendo el grafo de dependencias.</p>
-  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 2,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span></div>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 2,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 7</span></div>
 </header>
 <section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Referenciar atributos de un recurso desde otro.</li><li>Distinguir <code>resource</code> (crea) de <code>data</code> (lee).</li><li>Entender el grafo de dependencias y el paralelismo.</li><li>Desplegar una EC2 con un servidor web accesible.</li></ul></section>
 <section id="leccion"><h2>Lección</h2><h3 id="lo-que-escribes-y-lo-que-recibes">Lo que escribes y lo que recibes</h3>
@@ -216,6 +231,89 @@ terraform state show aws_instance.web">Copiar</button></div><pre><code class="pl
 <span class="prompt">$ </span><span class="cmdline">terraform state show aws_instance.web</span></code></pre></figure>
 <p>Cuando termines, borra todo:</p>
 <figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform destroy">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform destroy</span></code></pre></figure></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 7 de 22</p><h3 class="paso-titulo">Tu primer servidor</h3><p>Vas a crear un servidor Ubuntu en AWS, un firewall que solo deja entrar por SSH desde tu IP y la clave SSH para entrar.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl"># Imagen más reciente de Ubuntu 24.04
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical, la empresa de Ubuntu
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]
+  }
+}
+
+# Tu clave SSH pública, subida a AWS
+resource "aws_key_pair" "this" {
+  key_name   = "${local.prefijo}-clave"
+  public_key = file(pathexpand(var.ruta_clave_publica))
+}
+
+# Firewall
+resource "aws_security_group" "web" {
+  name_prefix = "${local.prefijo}-web-"
+  description = "SSH desde mi IP y HTTP desde Internet"
+}
+
+resource "aws_vpc_security_group_ingress_rule" "ssh" {
+  security_group_id = aws_security_group.web.id
+  cidr_ipv4         = var.mi_ip
+  from_port         = 22
+  to_port           = 22
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_ingress_rule" "http" {
+  security_group_id = aws_security_group.web.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 80
+  to_port           = 80
+  ip_protocol       = "tcp"
+}
+
+resource "aws_vpc_security_group_egress_rule" "todo" {
+  security_group_id = aws_security_group.web.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+}
+
+# El servidor
+resource "aws_instance" "web" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t3.micro"
+  key_name               = aws_key_pair.this.key_name
+  vpc_security_group_ids = [aws_security_group.web.id]
+
+  metadata_options {
+    http_tokens = "required" # medida de seguridad recomendada
+  }
+
+  root_block_device {
+    encrypted = true # disco cifrado
+  }
+
+  tags = {
+    Name = "${local.prefijo}-web1"
+    Rol  = "web"
+  }
+}</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/outputs.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">output "ip" {
+  value = aws_instance.web.public_ip
+}</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform plan
+terraform apply
+ssh ubuntu@54.170.10.20">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform plan</span>
+<span class="out">Plan: 6 to add, 0 to change, 0 to destroy.</span>
+<span class="prompt">$ </span><span class="cmdline">terraform apply</span>
+<span class="out">...</span>
+<span class="out">Outputs:</span>
+<span class="out">ip = "54.170.10.20"</span>
+<span class="prompt">$ </span><span class="cmdline">ssh ubuntu@54.170.10.20</span>
+<span class="out">Welcome to Ubuntu 24.04 LTS</span>
+<span class="out">ubuntu@ip-172-31-5-10:~$ exit</span></code></pre></figure>
+<div class="callout "><span class="k">Nota</span>De momento el servidor usa la red por defecto de AWS. En el paso del módulo 11 crearás tu propia red.</div>
+<div class="callout aviso"><span class="k">Importante</span>A partir de aquí tienes un servidor encendido. Si terminas la sesión, ejecuta <code>terraform destroy</code>; en la siguiente, <code>terraform apply</code> lo vuelve a crear igual.</div>
+<p>Resultado de este paso: tienes un servidor en AWS y puedes entrar en él por SSH.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
 <section id="practica"><h2>Práctica guiada</h2><p><strong>Servidor web en EC2</strong></p><ol class="pasos"><li>Despliega el ejemplo en la VPC por defecto y abre la URL del output.</li><li>Genera el grafo con <code>terraform graph | dot -Tsvg &gt; grafo.svg</code> y analízalo.</li><li>Cambia <code>user_data</code> y observa en el plan si actualiza o reemplaza.</li><li>Reto: crea tu propia VPC con una subnet pública e internet gateway.</li><li>Destruye todo al terminar.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
 <section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform graph | dot -Tsvg &gt; grafo.svg</code></td><td>Dibuja el grafo de dependencias (requiere Graphviz).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform graph | dot -Tsvg &gt; grafo.svg" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform apply -parallelism=5</code></td><td>Limita las operaciones simultáneas.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply -parallelism=5" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state list</code></td><td>Lista los recursos gestionados.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state list" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state show aws_instance.web</code></td><td>Muestra todos los atributos de un recurso.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state show aws_instance.web" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
 <section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt>La web no carga</dt><dd>Revisa reglas del security group, IP pública y espera a que termine <code>user_data</code>.</dd></div><div><dt><code>depends_on</code> en todas partes</dt><dd>Úsalo solo si no hay referencia directa; las referencias ya crean la dependencia.</dd></div></dl></section>

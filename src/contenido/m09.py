@@ -129,3 +129,43 @@ moved {
   to   = random_pet.animal
 }""")},
 ]
+
+
+PROYECTO = {'titulo': 'Explora el estado del proyecto',
+ 'bloques': [('p',
+              'En este paso no escribes código: vas a mirar qué recuerda Terraform del proyecto y a provocar '
+              'un pequeño drift.'),
+             ('term',
+              '$ terraform state list\n'
+              'data.aws_ami.ubuntu\n'
+              'aws_instance.web["web1"]\n'
+              'aws_instance.web["web2"]\n'
+              'aws_key_pair.this\n'
+              'aws_security_group.web\n'
+              'aws_vpc_security_group_egress_rule.todo\n'
+              'aws_vpc_security_group_ingress_rule.http\n'
+              'aws_vpc_security_group_ingress_rule.ssh\n'
+              'local_file.inventario\n'
+              '$ terraform state show \'aws_instance.web["web1"]\' | grep -E "public_ip|instance_type"\n'
+              '    instance_type = "t3.micro"\n'
+              '    public_ip     = "54.170.10.20"'),
+             ('p',
+              'Ahora, en la web de AWS (EC2), cambia a mano la etiqueta `Name` de `web2` por '
+              '`prueba-manual`. Después:'),
+             ('term',
+              '$ terraform plan -refresh-only\n'
+              '  # aws_instance.web["web2"] has changed\n'
+              '  ~ tags = {\n'
+              '      ~ "Name" = "miweb-dev-web2" -> "prueba-manual"\n'
+              '    }\n'
+              '$ terraform apply\n'
+              '  ~ tags = {\n'
+              '      ~ "Name" = "prueba-manual" -> "miweb-dev-web2"\n'
+              '    }\n'
+              'Apply complete! Resources: 0 added, 1 changed, 0 destroyed.'),
+             ('p',
+              'Terraform ha detectado el cambio manual y lo ha deshecho para que todo vuelva a ser como dice '
+              'el código.'),
+             ('p',
+              'Resultado de este paso: sabes ver qué gestiona Terraform en tu proyecto y cómo corrige los '
+              'cambios hechos a mano.')]}

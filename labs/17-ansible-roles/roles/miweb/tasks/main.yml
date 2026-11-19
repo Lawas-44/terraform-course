@@ -1,0 +1,13 @@
+---
+- name: Crear la carpeta
+  ansible.builtin.file:
+    path: "{{ miweb_carpeta }}"
+    state: directory
+    mode: "0755"
+
+- name: Generar la página
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ miweb_carpeta }}/index.html"
+    mode: "0644"
+  notify: Avisar del cambio

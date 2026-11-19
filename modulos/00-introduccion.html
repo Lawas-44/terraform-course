@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>00 · Introducción a la Infraestructura como Código | Terraform desde cero</title>
-<meta name="description" content="Qué problema resuelve Terraform, qué es la IaC y cómo encaja Terraform frente a otras herramientas.">
+<title>00 · Introducción a la Infraestructura como Código | Terraform y Ansible desde cero</title>
+<meta name="description" content="Qué es la Infraestructura como Código y para qué sirven Terraform y Ansible.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="topbar">
   <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
-  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
   <span class="spacer"></span>
   <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
   <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
@@ -26,16 +26,19 @@
 <div class="progress-box" aria-live="polite">
   <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
   <div class="bar"><span class="fill js-fill"></span></div>
-  <small class="js-count">0 de 16 módulos completados</small>
+  <small class="js-count">0 de 23 módulos completados</small>
 </div>
 <nav aria-label="Contenido del curso">
-<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
-<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html" aria-current="page"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
-<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#el-problema-hacerlo-todo-a-mano">El problema: hacerlo todo a mano</a></li><li><a href="#la-solucion-infraestructura-como-codigo">La solución: Infraestructura como Código</a></li><li><a href="#describir-el-resultado-no-los-pasos">Describir el resultado, no los pasos</a></li><li><a href="#terraform-y-otras-herramientas">Terraform y otras herramientas</a></li><li><a href="#las-tres-piezas-de-terraform">Las tres piezas de Terraform</a></li><li><a href="#los-cinco-pasos-que-repetiras-siempre">Los cinco pasos que repetirás siempre</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#el-problema-hacerlo-todo-a-mano">El problema: hacerlo todo a mano</a></li><li><a href="#la-solucion-infraestructura-como-codigo">La solución: Infraestructura como Código</a></li><li><a href="#describir-el-resultado-no-los-pasos">Describir el resultado, no los pasos</a></li><li><a href="#terraform-y-otras-herramientas">Terraform y otras herramientas</a></li><li><a href="#las-tres-piezas-de-terraform">Las tres piezas de Terraform</a></li><li><a href="#los-cinco-pasos-que-repetiras-siempre">Los cinco pasos que repetirás siempre</a></li><li><a href="#terraform-y-ansible-un-equipo">Terraform y Ansible: un equipo</a></li><li><a href="#el-proyecto-del-curso">El proyecto del curso</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 1</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
 </li>
 <li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
 </li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
@@ -44,16 +47,12 @@
 </li>
 <li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
 </li>
-</ul>
-<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
 </li>
-</ul>
-<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
@@ -63,12 +62,28 @@
 <li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
-<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
-<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
 <p class="sb-group">Referencia</p><ul class="sb-list">
@@ -89,10 +104,10 @@
 <header class="mod-head">
   <p class="eyebrow">Módulo 00</p>
   <h1>Introducción a la Infraestructura como Código</h1>
-  <p class="lead">Qué problema resuelve Terraform, qué es la IaC y cómo encaja Terraform frente a otras herramientas.</p>
-  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 1 h</span><span>Test: 6 preguntas</span><span>Retos: 1</span></div>
+  <p class="lead">Qué es la Infraestructura como Código y para qué sirven Terraform y Ansible.</p>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 1 h</span><span>Test: 6 preguntas</span><span>Retos: 1</span><span>Proyecto: paso 1</span></div>
 </header>
-<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Explicar qué es la Infraestructura como Código (IaC) y qué problemas resuelve.</li><li>Diferenciar el enfoque declarativo del imperativo.</li><li>Situar Terraform frente a Ansible, CloudFormation, Pulumi y OpenTofu.</li><li>Entender el ciclo de vida básico: escribir → planificar → aplicar → destruir.</li></ul></section>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Explicar qué es la Infraestructura como Código (IaC) y qué problemas resuelve.</li><li>Diferenciar el enfoque declarativo del imperativo.</li><li>Entender qué hace Terraform, qué hace Ansible y por qué se usan juntos.</li><li>Conocer el proyecto que construirás a lo largo del curso.</li><li>Entender el ciclo de vida básico: escribir → planificar → aplicar → destruir.</li></ul></section>
 <section id="leccion"><h2>Lección</h2><h3 id="el-problema-hacerlo-todo-a-mano">El problema: hacerlo todo a mano</h3>
 <p>Una web necesita varias piezas: servidores, una red, una base de datos, reglas de firewall... Lo habitual al empezar es crearlas <strong>a mano</strong>, haciendo clic en la web del proveedor de nube (AWS, Azure, Google Cloud).</p>
 <p>Hacerlo a mano trae problemas:</p>
@@ -124,7 +139,27 @@ terraform apply
 terraform destroy">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform init</span>
 <span class="prompt">$ </span><span class="cmdline">terraform plan</span>
 <span class="prompt">$ </span><span class="cmdline">terraform apply</span>
-<span class="prompt">$ </span><span class="cmdline">terraform destroy</span></code></pre></figure></section>
+<span class="prompt">$ </span><span class="cmdline">terraform destroy</span></code></pre></figure>
+<h3 id="terraform-y-ansible-un-equipo">Terraform y Ansible: un equipo</h3>
+<p>En este curso aprenderás dos herramientas que se usan juntas:</p>
+<div class="table-wrap"><table><thead><tr><th>Herramienta</th><th>Qué hace</th><th>Ejemplo</th></tr></thead><tbody><tr><td><strong>Terraform</strong></td><td>Crea la infraestructura</td><td>Crea dos servidores, una red y un firewall en AWS</td></tr><tr><td><strong>Ansible</strong></td><td>Configura lo que hay dentro de los servidores</td><td>Instala nginx y publica tu web en esos servidores</td></tr></tbody></table></div>
+<p>Piensa en una casa: Terraform construye las paredes, las puertas y la instalación eléctrica; Ansible pone los muebles y lo deja todo listo para vivir.</p>
+<h3 id="el-proyecto-del-curso">El proyecto del curso</h3>
+<p>No solo vas a aprender teoría: a lo largo del curso construirás <strong>tu propia web funcionando en AWS</strong>. Cada módulo añade una pieza en la sección <strong>Proyecto guiado</strong>. Al final, un solo comando creará los servidores y los dejará configurados.</p></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 1 de 22</p><h3 class="paso-titulo">Lo que vas a construir</h3><p>Al terminar el curso tendrás una web personal funcionando en dos servidores de AWS:</p>
+<ul><li><strong>Terraform</strong> creará una red propia, un firewall, una clave SSH y dos servidores Ubuntu.</li><li><strong>Ansible</strong> instalará nginx en los servidores y publicará tu web, una página de estado y una zona privada con contraseña.</li><li>Un <strong>script</strong> lo hará todo con un comando, y otro lo borrará.</li><li><strong>GitHub Actions</strong> revisará cada cambio que subas.</li></ul>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">resultado final</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">   Tú                          Visitantes
+    |                               |
+    | Terraform + Ansible           | http://
+    v                               v
+ +------------------- AWS ------------------+
+ |   +--------+            +--------+       |
+ |   |  web1  |            |  web2  |       |
+ |   | nginx  |            | nginx  |       |
+ |   +--------+            +--------+       |
+ +------------------------------------------+</code></pre></figure>
+<p>Cada módulo tiene un paso. Hazlos en orden y, si te atascas, compara con el código terminado en la carpeta <code>proyecto/</code> del repositorio del curso.</p>
+<p>En este módulo no hay nada que escribir todavía. Empezamos en el siguiente.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
 <section id="practica"><h2>Práctica guiada</h2><p><strong>Mapa mental de la IaC</strong></p><ol class="pasos"><li>Elige una infraestructura sencilla que conozcas (por ejemplo, una web con un servidor y una base de datos).</li><li>Escribe los pasos manuales que harías en la consola web para crearla.</li><li>Reescribe lo mismo como una lista de «cosas que deben existir» (enfoque declarativo).</li><li>Anota qué pasaría si tuvieras que repetirlo en 3 entornos (dev, staging, prod).</li></ol></section>
 <section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt>Pensar que Terraform sirve para instalar software dentro de servidores</dt><dd>Terraform crea y gestiona recursos; la configuración interna suele hacerla otra herramienta (cloud-init, Ansible, imágenes).</dd></div><div><dt>Creer que hay que aprender un lenguaje de programación</dt><dd>HCL es un lenguaje de configuración sencillo; no necesitas saber programar.</dd></div></dl></section>
 <section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="00" data-total="6"><fieldset class="q" data-ok="3"><legend><span class="qn">01</span><span class="txt">¿Qué describe un archivo de Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Un script de Bash que se ejecuta en el servidor</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">La factura mensual de la nube</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Los pasos exactos que debe seguir el ordenador</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">El estado final que debe tener la infraestructura</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Terraform es declarativo: describes el resultado deseado y él calcula los pasos.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">02</span><span class="txt">¿Qué significa que una herramienta sea idempotente?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Que no necesita Internet</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Que solo funciona en una nube</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Que aplicarla varias veces produce el mismo resultado</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Que es muy rápida</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Si la infraestructura ya está como describe el código, volver a aplicarlo no cambia nada.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">03</span><span class="txt">¿Qué pieza de Terraform sabe hablar con la API de AWS?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">El provider de AWS</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">El archivo .gitignore</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Terraform Core</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">El estado</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los providers son plugins que traducen tus recursos a llamadas a la API de cada servicio.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">04</span><span class="txt">¿Cuál de estas tareas es más propia de Ansible que de Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Instalar y configurar Nginx dentro de un servidor existente</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Crear un bucket de S3</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Crear una VPC en AWS</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Crear un repositorio en GitHub</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Configurar el interior de los servidores es gestión de configuración; Terraform se centra en aprovisionar recursos.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">05</span><span class="txt">¿Qué es OpenTofu?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Un editor de código</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Una nube alternativa a AWS</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Un provider de Terraform</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Un fork open source de Terraform, casi totalmente compatible</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Nació en 2023 tras el cambio de licencia de Terraform; usa los mismos archivos y comandos con <code>tofu</code>.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">06</span><span class="txt">¿Qué comando enseña los cambios SIN aplicarlos?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform plan</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform apply</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform init</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">terraform destroy</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>plan</code> es una simulación: compara lo que describes con lo que existe y muestra las diferencias.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>

@@ -1,0 +1,17 @@
+# Archivo gestionado por Ansible
+server {
+    listen 80 default_server;
+    server_name _;
+
+    root {{ nginx_raiz }};
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+
+    location /privado/ {
+        auth_basic "Zona privada";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+    }
+}

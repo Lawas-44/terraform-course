@@ -1,0 +1,41 @@
+---
+- name: Instalar nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: Crear la carpeta de la web
+  ansible.builtin.file:
+    path: "{{ nginx_raiz }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Configurar el sitio
+  ansible.builtin.template:
+    src: sitio.conf.j2
+    dest: /etc/nginx/sites-available/miweb
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Recargar nginx
+
+- name: Activar el sitio
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/miweb
+    dest: /etc/nginx/sites-enabled/miweb
+    state: link
+  notify: Recargar nginx
+
+- name: Desactivar el sitio por defecto
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Recargar nginx
+
+- name: Arrancar nginx y activarlo al inicio
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true

@@ -154,3 +154,77 @@ moved {
 }
 # terraform plan → "has moved to ..." y 0 to add, 0 to destroy""")},
 ]
+
+
+PROYECTO = {'titulo': 'Dos servidores con for_each',
+ 'bloques': [('p',
+              'Queremos dos servidores, `web1` y `web2`. En lugar de copiar el bloque, usa `for_each` con '
+              'una variable. Añade a `variables.tf`:'),
+             ('code',
+              'hcl',
+              'terraform/variables.tf (añadir)',
+              'variable "servidores" {\n'
+              '  description = "Servidores a crear: nombre => tipo de instancia"\n'
+              '  type        = map(string)\n'
+              '  default = {\n'
+              '    web1 = "t3.micro"\n'
+              '    web2 = "t3.micro"\n'
+              '  }\n'
+              '}'),
+             ('p', 'Cambia el bloque del servidor en `main.tf`. Fíjate en las líneas con `each`:'),
+             ('code',
+              'hcl',
+              'terraform/main.tf (cambiar aws_instance)',
+              'resource "aws_instance" "web" {\n'
+              '  for_each = var.servidores\n'
+              '\n'
+              '  ami                    = data.aws_ami.ubuntu.id\n'
+              '  instance_type          = each.value\n'
+              '  key_name               = aws_key_pair.this.key_name\n'
+              '  vpc_security_group_ids = [aws_security_group.web.id]\n'
+              '\n'
+              '  metadata_options {\n'
+              '    http_tokens = "required"\n'
+              '  }\n'
+              '\n'
+              '  root_block_device {\n'
+              '    encrypted = true\n'
+              '  }\n'
+              '\n'
+              '  tags = {\n'
+              '    Name = "${local.prefijo}-${each.key}"\n'
+              '    Rol  = "web"\n'
+              '  }\n'
+              '}\n'
+              '\n'
+              '# El servidor que ya existía pasa a ser web1 (así no se recrea)\n'
+              'moved {\n'
+              '  from = aws_instance.web\n'
+              '  to   = aws_instance.web["web1"]\n'
+              '}'),
+             ('p', 'Y el output ahora devuelve un mapa con la IP de cada servidor:'),
+             ('code',
+              'hcl',
+              'terraform/outputs.tf',
+              'output "ips" {\n'
+              '  description = "IP pública de cada servidor"\n'
+              '  value       = { for nombre, servidor in aws_instance.web : nombre => servidor.public_ip }\n'
+              '}'),
+             ('term',
+              '$ terraform plan\n'
+              '  # aws_instance.web has moved to aws_instance.web["web1"]\n'
+              '  # aws_instance.web["web2"] will be created\n'
+              'Plan: 1 to add, 0 to change, 0 to destroy.\n'
+              '$ terraform apply\n'
+              '...\n'
+              'Outputs:\n'
+              'ips = {\n'
+              '  "web1" = "54.170.10.20"\n'
+              '  "web2" = "54.170.10.21"\n'
+              '}'),
+             ('info',
+              'El bloque `moved` (lo verás en detalle en el módulo 12) le dice a Terraform que el servidor '
+              'que ya tenías ahora se llama `web["web1"]`. Sin él, lo borraría y crearía uno nuevo.'),
+             ('p',
+              'Resultado de este paso: dos servidores. Para tener tres, solo añadirías una línea a la '
+              'variable.')]}

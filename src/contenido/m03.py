@@ -165,3 +165,39 @@ resource "local_file" "notas" {
   content  = "Hola ${random_pet.mascota.id}"
 }""")},
 ]
+
+
+PROYECTO = {'titulo': 'Nombres y etiquetas comunes',
+ 'bloques': [('p',
+              'Todos los recursos del proyecto tendrán un nombre que empieza igual (por ejemplo '
+              '`miweb-dev-...`) y las mismas etiquetas. Lo definimos una vez en `locals`:'),
+             ('code',
+              'hcl',
+              'terraform/locals.tf',
+              'locals {\n'
+              '  prefijo = "${var.proyecto}-${var.entorno}"\n'
+              '\n'
+              '  etiquetas = {\n'
+              '    Proyecto = var.proyecto\n'
+              '    Entorno  = var.entorno\n'
+              '    Gestion  = "terraform"\n'
+              '  }\n'
+              '}'),
+             ('p',
+              'Usa `var.proyecto` y `var.entorno`, que crearás en el próximo paso. Por eso `terraform '
+              'validate` dará un error de momento:'),
+             ('term',
+              '$ terraform fmt\n'
+              '$ terraform validate\n'
+              'Error: Reference to undeclared input variable\n'
+              '\n'
+              '  on locals.tf line 2, in locals:\n'
+              '   2:   prefijo = "${var.proyecto}-${var.entorno}"\n'
+              '\n'
+              'An input variable with the name "proyecto" has not been declared.'),
+             ('p',
+              'Es normal: lo arreglas en el módulo 4. Aprender a leer este tipo de errores es parte del '
+              'trabajo.'),
+             ('p',
+              'Resultado de este paso: los nombres y etiquetas del proyecto están definidos en un solo '
+              'sitio.')]}

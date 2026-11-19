@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>10 · Backends remotos, bloqueo y workspaces | Terraform desde cero</title>
+<title>10 · Backends remotos, bloqueo y workspaces | Terraform y Ansible desde cero</title>
 <meta name="description" content="Guardar el estado en S3 o HCP Terraform, bloquearlo y gestionar varios entornos.">
 <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,7 @@
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="topbar">
   <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
-  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform desde cero</span></a>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
   <span class="spacer"></span>
   <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
   <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
@@ -26,15 +26,18 @@
 <div class="progress-box" aria-live="polite">
   <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
   <div class="bar"><span class="fill js-fill"></span></div>
-  <small class="js-count">0 de 16 módulos completados</small>
+  <small class="js-count">0 de 23 módulos completados</small>
 </div>
 <nav aria-label="Contenido del curso">
-<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li></ul>
-<p class="sb-group">Fase 1 · Fundamentos</p><ul class="sb-list">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
 </li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
@@ -43,32 +46,44 @@
 </li>
 <li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
 </li>
-</ul>
-<p class="sb-group">Fase 2 · Construir infraestructura</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
 </li>
-</ul>
-<p class="sb-group">Fase 3 · Escalar y mantener</p><ul class="sb-list">
 <li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html" aria-current="page"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
-<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#el-problema-del-estado-en-tu-ordenador">El problema del estado en tu ordenador</a></li><li><a href="#paso-1-crear-el-bucket-para-el-estado">Paso 1: crear el bucket para el estado</a></li><li><a href="#paso-2-decirle-a-terraform-donde-guardar-el-estado">Paso 2: decirle a Terraform dónde guardar el estado</a></li><li><a href="#paso-3-mover-el-estado">Paso 3: mover el estado</a></li><li><a href="#el-bloqueo">El bloqueo</a></li><li><a href="#varios-entornos-con-el-mismo-codigo-workspaces">Varios entornos con el mismo código: workspaces</a></li><li><a href="#hcp-terraform">HCP Terraform</a></li></ul></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#el-problema-del-estado-en-tu-ordenador">El problema del estado en tu ordenador</a></li><li><a href="#paso-1-crear-el-bucket-para-el-estado">Paso 1: crear el bucket para el estado</a></li><li><a href="#paso-2-decirle-a-terraform-donde-guardar-el-estado">Paso 2: decirle a Terraform dónde guardar el estado</a></li><li><a href="#paso-3-mover-el-estado">Paso 3: mover el estado</a></li><li><a href="#el-bloqueo">El bloqueo</a></li><li><a href="#varios-entornos-con-el-mismo-codigo-workspaces">Varios entornos con el mismo código: workspaces</a></li><li><a href="#hcp-terraform">HCP Terraform</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 11</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
 </li>
 <li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
 </li>
 <li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
-<p class="sb-group">Fase 4 · Nivel profesional</p><ul class="sb-list">
-<li><a class="sb-link" data-mod="13" href="../modulos/13-calidad-testing.html"><span class="num">13</span><span class="t">Validación, testing y seguridad</span><span class="st" aria-hidden="true"></span></a>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="14" href="../modulos/14-equipo-cicd.html"><span class="num">14</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
 </li>
-<li><a class="sb-link" data-mod="15" href="../modulos/15-proyecto-final.html"><span class="num">15</span><span class="t">Proyecto final y certificación</span><span class="st" aria-hidden="true"></span></a>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
 </li>
 </ul>
 <p class="sb-group">Referencia</p><ul class="sb-list">
@@ -90,7 +105,7 @@
   <p class="eyebrow">Módulo 10</p>
   <h1>Backends remotos, bloqueo y workspaces</h1>
   <p class="lead">Guardar el estado en S3 o HCP Terraform, bloquearlo y gestionar varios entornos.</p>
-  <div class="meta-row"><span>Nivel: Intermedio</span><span>Duración: 2 h</span><span>Test: 7 preguntas</span><span>Retos: 2</span></div>
+  <div class="meta-row"><span>Nivel: Intermedio</span><span>Duración: 2 h</span><span>Test: 7 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 11</span></div>
 </header>
 <section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Configurar un backend remoto en S3 con cifrado, versionado y bloqueo.</li><li>Migrar un estado local a remoto.</li><li>Comparar workspaces vs carpetas por entorno.</li><li>Leer outputs de otra configuración con <code>terraform_remote_state</code>.</li></ul></section>
 <section id="leccion"><h2>Lección</h2><h3 id="el-problema-del-estado-en-tu-ordenador">El problema del estado en tu ordenador</h3>
@@ -186,6 +201,35 @@ terraform workspace list">Copiar</button></div><pre><code class="plain"><span cl
 <div class="callout tip"><span class="k">Consejo</span>Muchos equipos prefieren usar una carpeta por entorno (<code>envs/dev</code>, <code>envs/prod</code>) en lugar de workspaces, porque así es más difícil equivocarse de entorno. Lo verás en el módulo 14.</div>
 <h3 id="hcp-terraform">HCP Terraform</h3>
 <p><strong>HCP Terraform</strong> es un servicio de HashiCorp (la empresa de Terraform) que guarda el estado por ti y además ejecuta los comandos en sus servidores. Tiene un plan gratuito. Para conectarte se usa <code>terraform login</code>.</p></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 11 de 22</p><h3 class="paso-titulo">Guarda el estado en S3</h3><p>Vas a guardar el estado del proyecto en un bucket de S3. Así no lo pierdes si cambias de ordenador, y GitHub Actions podrá usarlo.</p>
+<p>1. Crea el bucket con el bootstrap de la lección (está en <code>labs/10-backend-s3/bootstrap</code> del repositorio del curso). Solo se hace una vez:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="cd labs/10-backend-s3/bootstrap
+terraform init &amp;&amp; terraform apply
+terraform output -raw bucket_estado">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">cd labs/10-backend-s3/bootstrap</span>
+<span class="prompt">$ </span><span class="cmdline">terraform init &amp;&amp; terraform apply</span>
+<span class="prompt">$ </span><span class="cmdline">terraform output -raw bucket_estado</span>
+<span class="out">tfstate-123456789012-eu-west-1</span></code></pre></figure>
+<p>2. En tu proyecto, añade el backend vacío dentro del bloque <code>terraform</code> de <code>versions.tf</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/versions.tf (añadir dentro de terraform { })</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">  backend "s3" {}</code></pre></figure>
+<p>3. Pon los datos en un archivo aparte (configuración parcial):</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/backend.hcl</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">bucket       = "tfstate-123456789012-eu-west-1"
+key          = "mi-web-en-la-nube/terraform.tfstate"
+region       = "eu-west-1"
+encrypt      = true
+use_lockfile = true</code></pre></figure>
+<p>4. Mueve el estado:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform init -backend-config=backend.hcl -migrate-state
+terraform plan
+rm terraform.tfstate terraform.tfstate.backup">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform init -backend-config=backend.hcl -migrate-state</span>
+<span class="out">Do you want to copy existing state to the new backend?</span>
+<span class="out">  Enter a value: yes</span>
+<span class="out"></span>
+<span class="out">Successfully configured the backend "s3"!</span>
+<span class="prompt">$ </span><span class="cmdline">terraform plan</span>
+<span class="out">No changes. Your infrastructure matches the configuration.</span>
+<span class="prompt">$ </span><span class="cmdline">rm terraform.tfstate terraform.tfstate.backup</span></code></pre></figure>
+<p>Sube un <code>backend.hcl.example</code> (sin tu número de cuenta) para que otros sepan qué poner.</p>
+<p>Resultado de este paso: el estado del proyecto está seguro en S3, con versiones y bloqueo.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
 <section id="practica"><h2>Práctica guiada</h2><p><strong>Estado remoto</strong></p><ol class="pasos"><li>Crea (con Terraform, en una carpeta <code>bootstrap/</code>) un bucket con versionado y cifrado.</li><li>Añade el bloque <code>backend "s3"</code> a tu proyecto y ejecuta <code>terraform init -migrate-state</code>.</li><li>Abre dos terminales y lanza <code>apply</code> a la vez para ver el bloqueo.</li><li>Crea los workspaces <code>dev</code> y <code>prod</code> y usa <code>terraform.workspace</code> en un nombre.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
 <section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform init -migrate-state</code></td><td>Mueve el estado al nuevo backend.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -migrate-state" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform init -reconfigure</code></td><td>Reinicializa el backend ignorando la configuración anterior.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -reconfigure" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform init -backend-config=dev.s3.tfbackend</code></td><td>Configuración parcial del backend desde archivo.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform init -backend-config=dev.s3.tfbackend" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform force-unlock LOCK_ID</code></td><td>Libera un bloqueo atascado (¡asegúrate de que nadie está aplicando!).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform force-unlock LOCK_ID" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform workspace list</code></td><td>Lista workspaces.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform workspace list" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform workspace new dev</code></td><td>Crea un workspace.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform workspace new dev" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform workspace select prod</code></td><td>Cambia de workspace.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform workspace select prod" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform workspace show</code></td><td>Muestra el workspace actual.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform workspace show" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform login</code></td><td>Inicia sesión en HCP Terraform.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform login" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
 <section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>Error acquiring the state lock</code></dt><dd>Alguien (o un proceso caído) tiene el bloqueo. Espera o usa <code>force-unlock</code> con cuidado.</dd></div><div><dt>Usar variables dentro del bloque <code>backend</code></dt><dd>No se permite. Usa <code>-backend-config</code> o archivos <code>.tfbackend</code>.</dd></div></dl></section>

@@ -1,0 +1,6 @@
+# Copia este archivo como backend.hcl y pon el nombre de tu bucket de estado.
+bucket       = "tfstate-123456789012"
+key          = "mi-web-en-la-nube/terraform.tfstate"
+region       = "eu-west-1"
+encrypt      = true
+use_lockfile = true

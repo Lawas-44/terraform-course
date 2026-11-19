@@ -1,0 +1,8 @@
+---
+web_nombre: "Ana García"
+web_descripcion: "Aprendiendo Ansible."
+web_proyectos:
+  - nombre: "Terraform"
+    descripcion: "Infraestructura con código."
+  - nombre: "Ansible"
+    descripcion: "Configuración automática."

@@ -1,0 +1,7 @@
+# Generado por Terraform en cada apply
+ansible/inventario/hosts.ini
+# En este repositorio de ejemplo no se sube el vault (en el tuyo, cifrado, sí puedes)
+ansible/inventario/group_vars/all/vault.yml
+# Valores personales
+terraform/terraform.tfvars
+terraform/backend.hcl

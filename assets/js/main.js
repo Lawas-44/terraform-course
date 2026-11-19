@@ -3,7 +3,7 @@
 
   var PROG_KEY = "tf-curso-progreso";
   var TEST_KEY = "tf-curso-tests";
-  var TOTAL_MODULOS = 16;
+  var TOTAL_MODULOS = document.querySelectorAll(".sidebar .sb-link[data-mod]").length || 1;
 
   function leer(key) {
     try { return JSON.parse(localStorage.getItem(key)) || {}; } catch (e) { return {}; }
@@ -62,11 +62,12 @@
     });
     var tests = leer(TEST_KEY);
     var filas = document.querySelectorAll(".mod-row[data-mod]");
+    var enProyecto = !!document.querySelector("#pasos");
     filas.forEach(function (row) {
       var partes = [];
       if (p[row.dataset.mod]) partes.push("Completado");
       var t = tests[row.dataset.mod];
-      if (t) partes.push("Test " + t.ok + "/" + t.total);
+      if (t && !enProyecto) partes.push("Test " + t.ok + "/" + t.total);
       row.querySelector(".estado").textContent = partes.join(" · ");
     });
     // En la portada, el botón principal lleva al primer módulo sin completar

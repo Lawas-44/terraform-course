@@ -89,6 +89,16 @@ Default output format [None]: json"""),
     "Arn": "arn:aws:iam::123456789012:user/alumno"
 }"""),
  ("warn", "Nunca escribas tus claves de AWS dentro de los archivos `.tf`. Terraform las lee solas de la configuración que acabas de crear."),
+ ('h', 'Instalar Ansible'),
+ ('p', 'Ansible se usa a partir del módulo 13, pero puedes instalarlo ya. Funciona en Linux y macOS; en **Windows se usa dentro de WSL**:'),
+ ('code', 'bash', 'macOS', 'brew install ansible'),
+ ('code', 'bash', 'Ubuntu / Debian / WSL', 'sudo apt update\nsudo apt install -y pipx\npipx install --include-deps ansible\npipx ensurepath'),
+ ('term', '$ ansible --version\nansible [core 2.18.1]'),
+ ('h', 'Tu clave SSH'),
+ ('p', 'Para entrar en los servidores (tú y Ansible) se usa **SSH** con una **clave**: un par de archivos. La **clave pública** se pone en los servidores; la **clave privada** se queda en tu ordenador y nunca se comparte.'),
+ ('term', '$ ssh-keygen -t ed25519 -C "tu@email.com"\nGenerating public/private ed25519 key pair.\nEnter file in which to save the key (/home/ana/.ssh/id_ed25519):\nEnter passphrase (empty for no passphrase):\n$ ls ~/.ssh\nid_ed25519  id_ed25519.pub'),
+ ('ul', ['`id_ed25519`: clave privada. No la compartas nunca.', '`id_ed25519.pub`: clave pública. Terraform la subirá a AWS.']),
+ ('warn', 'Si ya tenías una clave en `~/.ssh/id_ed25519`, no la sobrescribas: pulsa Enter con cuidado o usa la que ya tienes.'),
 ]
 
 TEST = [
@@ -134,3 +144,41 @@ $env:AWS_PROFILE = "curso-terraform"
 
 aws sts get-caller-identity   # ya no hace falta --profile""")},
 ]
+
+
+PROYECTO = {'titulo': 'Prepara el repositorio del proyecto',
+ 'bloques': [('p', 'Crea la carpeta del proyecto con su estructura y su `.gitignore`:'),
+             ('term',
+              '$ mkdir mi-web-en-la-nube\n'
+              '$ cd mi-web-en-la-nube\n'
+              '$ mkdir terraform ansible scripts\n'
+              '$ git init'),
+             ('code',
+              'text',
+              '.gitignore',
+              '# Terraform\n'
+              '.terraform/\n'
+              '*.tfstate\n'
+              '*.tfstate.*\n'
+              '*.tfplan\n'
+              'terraform/terraform.tfvars\n'
+              'terraform/backend.hcl\n'
+              '\n'
+              '# Generado por Terraform\n'
+              'ansible/inventario/hosts.ini'),
+             ('p', 'Averigua tu IP pública. Solo esa IP podrá entrar por SSH a tus servidores:'),
+             ('term', '$ curl -s https://checkip.amazonaws.com\n81.45.10.20'),
+             ('p', 'Comprueba que tienes todo lo necesario:'),
+             ('term',
+              '$ terraform version\n'
+              '$ ansible --version\n'
+              '$ aws sts get-caller-identity\n'
+              '$ ls ~/.ssh/id_ed25519.pub'),
+             ('p',
+              'Haz el primer commit y súbelo a un repositorio nuevo de GitHub llamado `mi-web-en-la-nube`:'),
+             ('term',
+              '$ git add .gitignore\n'
+              '$ git commit -m "Estructura inicial"\n'
+              '$ git remote add origin https://github.com/tu-usuario/mi-web-en-la-nube.git\n'
+              '$ git push -u origin main'),
+             ('p', 'Resultado de este paso: un repositorio vacío y ordenado, listo para empezar.')]}

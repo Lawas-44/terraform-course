@@ -208,6 +208,12 @@ code.cmd { background: none; border: 0; padding: 0; color: var(--text); font-siz
 .token.function, .token.type { color: var(--tok-function); }
 .token.interpolation, .token.punctuation { color: var(--term-muted); }
 
+/* ---------- Proyecto guiado ---------- */
+.proyecto .paso-label { margin: 0; font: 600 .75rem var(--mono); text-transform: uppercase; letter-spacing: .08em; color: var(--ok); }
+.proyecto .paso-titulo { margin-top: .3rem; font-size: 1.25rem; }
+.proyecto .paso-nav { margin-top: 24px; font-size: .9rem; }
+.proyecto h3:not(.paso-titulo) { font-size: 1.02rem; }
+
 /* ---------- Test ---------- */
 .quiz { display: grid; gap: 14px; }
 .quiz fieldset.q { margin: 0; border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; min-width: 0; }

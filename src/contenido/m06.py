@@ -218,3 +218,98 @@ data "aws_availability_zones" "disponibles" {
 # En el security group añade:   vpc_id = aws_vpc.main.id
 # En la instancia añade:        subnet_id = aws_subnet.publica.id""")},
 ]
+
+
+PROYECTO = {'titulo': 'Tu primer servidor',
+ 'bloques': [('p',
+              'Vas a crear un servidor Ubuntu en AWS, un firewall que solo deja entrar por SSH desde tu IP y '
+              'la clave SSH para entrar.'),
+             ('code',
+              'hcl',
+              'terraform/main.tf',
+              '# Imagen más reciente de Ubuntu 24.04\n'
+              'data "aws_ami" "ubuntu" {\n'
+              '  most_recent = true\n'
+              '  owners      = ["099720109477"] # Canonical, la empresa de Ubuntu\n'
+              '\n'
+              '  filter {\n'
+              '    name   = "name"\n'
+              '    values = ["ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"]\n'
+              '  }\n'
+              '}\n'
+              '\n'
+              '# Tu clave SSH pública, subida a AWS\n'
+              'resource "aws_key_pair" "this" {\n'
+              '  key_name   = "${local.prefijo}-clave"\n'
+              '  public_key = file(pathexpand(var.ruta_clave_publica))\n'
+              '}\n'
+              '\n'
+              '# Firewall\n'
+              'resource "aws_security_group" "web" {\n'
+              '  name_prefix = "${local.prefijo}-web-"\n'
+              '  description = "SSH desde mi IP y HTTP desde Internet"\n'
+              '}\n'
+              '\n'
+              'resource "aws_vpc_security_group_ingress_rule" "ssh" {\n'
+              '  security_group_id = aws_security_group.web.id\n'
+              '  cidr_ipv4         = var.mi_ip\n'
+              '  from_port         = 22\n'
+              '  to_port           = 22\n'
+              '  ip_protocol       = "tcp"\n'
+              '}\n'
+              '\n'
+              'resource "aws_vpc_security_group_ingress_rule" "http" {\n'
+              '  security_group_id = aws_security_group.web.id\n'
+              '  cidr_ipv4         = "0.0.0.0/0"\n'
+              '  from_port         = 80\n'
+              '  to_port           = 80\n'
+              '  ip_protocol       = "tcp"\n'
+              '}\n'
+              '\n'
+              'resource "aws_vpc_security_group_egress_rule" "todo" {\n'
+              '  security_group_id = aws_security_group.web.id\n'
+              '  cidr_ipv4         = "0.0.0.0/0"\n'
+              '  ip_protocol       = "-1"\n'
+              '}\n'
+              '\n'
+              '# El servidor\n'
+              'resource "aws_instance" "web" {\n'
+              '  ami                    = data.aws_ami.ubuntu.id\n'
+              '  instance_type          = "t3.micro"\n'
+              '  key_name               = aws_key_pair.this.key_name\n'
+              '  vpc_security_group_ids = [aws_security_group.web.id]\n'
+              '\n'
+              '  metadata_options {\n'
+              '    http_tokens = "required" # medida de seguridad recomendada\n'
+              '  }\n'
+              '\n'
+              '  root_block_device {\n'
+              '    encrypted = true # disco cifrado\n'
+              '  }\n'
+              '\n'
+              '  tags = {\n'
+              '    Name = "${local.prefijo}-web1"\n'
+              '    Rol  = "web"\n'
+              '  }\n'
+              '}'),
+             ('code',
+              'hcl',
+              'terraform/outputs.tf',
+              'output "ip" {\n  value = aws_instance.web.public_ip\n}'),
+             ('term',
+              '$ terraform plan\n'
+              'Plan: 6 to add, 0 to change, 0 to destroy.\n'
+              '$ terraform apply\n'
+              '...\n'
+              'Outputs:\n'
+              'ip = "54.170.10.20"\n'
+              '$ ssh ubuntu@54.170.10.20\n'
+              'Welcome to Ubuntu 24.04 LTS\n'
+              'ubuntu@ip-172-31-5-10:~$ exit'),
+             ('info',
+              'De momento el servidor usa la red por defecto de AWS. En el paso del módulo 11 crearás tu '
+              'propia red.'),
+             ('warn',
+              'A partir de aquí tienes un servidor encendido. Si terminas la sesión, ejecuta `terraform '
+              'destroy`; en la siguiente, `terraform apply` lo vuelve a crear igual.'),
+             ('p', 'Resultado de este paso: tienes un servidor en AWS y puedes entrar en él por SSH.')]}

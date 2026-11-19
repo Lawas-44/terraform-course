@@ -156,3 +156,42 @@ resource "local_file" "config" {
 # terraform workspace new prod && terraform apply
 # → config-dev.txt y config-prod.txt (2 archivos, 2 estados)""")},
 ]
+
+
+PROYECTO = {'titulo': 'Guarda el estado en S3',
+ 'bloques': [('p',
+              'Vas a guardar el estado del proyecto en un bucket de S3. Así no lo pierdes si cambias de '
+              'ordenador, y GitHub Actions podrá usarlo.'),
+             ('p',
+              '1. Crea el bucket con el bootstrap de la lección (está en `labs/10-backend-s3/bootstrap` del '
+              'repositorio del curso). Solo se hace una vez:'),
+             ('term',
+              '$ cd labs/10-backend-s3/bootstrap\n'
+              '$ terraform init && terraform apply\n'
+              '$ terraform output -raw bucket_estado\n'
+              'tfstate-123456789012-eu-west-1'),
+             ('p',
+              '2. En tu proyecto, añade el backend vacío dentro del bloque `terraform` de `versions.tf`:'),
+             ('code', 'hcl', 'terraform/versions.tf (añadir dentro de terraform { })', '  backend "s3" {}'),
+             ('p', '3. Pon los datos en un archivo aparte (configuración parcial):'),
+             ('code',
+              'hcl',
+              'terraform/backend.hcl',
+              'bucket       = "tfstate-123456789012-eu-west-1"\n'
+              'key          = "mi-web-en-la-nube/terraform.tfstate"\n'
+              'region       = "eu-west-1"\n'
+              'encrypt      = true\n'
+              'use_lockfile = true'),
+             ('p', '4. Mueve el estado:'),
+             ('term',
+              '$ terraform init -backend-config=backend.hcl -migrate-state\n'
+              'Do you want to copy existing state to the new backend?\n'
+              '  Enter a value: yes\n'
+              '\n'
+              'Successfully configured the backend "s3"!\n'
+              '$ terraform plan\n'
+              'No changes. Your infrastructure matches the configuration.\n'
+              '$ rm terraform.tfstate terraform.tfstate.backup'),
+             ('p', 'Sube un `backend.hcl.example` (sin tu número de cuenta) para que otros sepan qué poner.'),
+             ('p',
+              'Resultado de este paso: el estado del proyecto está seguro en S3, con versiones y bloqueo.')]}

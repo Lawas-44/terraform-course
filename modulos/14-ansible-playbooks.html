@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>14 · Playbooks | Terraform y Ansible desde cero</title>
+<meta name="description" content="Escribir playbooks en YAML para instalar programas, copiar archivos y arrancar servicios.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 23 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html" aria-current="page"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#yaml-en-cinco-minutos">YAML en cinco minutos</a></li><li><a href="#que-es-un-playbook">Qué es un playbook</a></li><li><a href="#ejecutar-un-playbook">Ejecutar un playbook</a></li><li><a href="#idempotencia-ejecutarlo-varias-veces">Idempotencia: ejecutarlo varias veces</a></li><li><a href="#probar-antes-de-cambiar">Probar antes de cambiar</a></li><li><a href="#los-modulos-mas-usados">Los módulos más usados</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 14</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 14</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 14</p>
+  <h1>Playbooks</h1>
+  <p class="lead">Escribir playbooks en YAML para instalar programas, copiar archivos y arrancar servicios.</p>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 2 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 14</span></div>
+</header>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Leer y escribir archivos YAML sin errores.</li><li>Crear un playbook con varias tareas.</li><li>Usar los módulos más comunes: apt, copy, file, service y user.</li><li>Entender por qué Ansible es idempotente y probar cambios con <code>--check</code>.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="yaml-en-cinco-minutos">YAML en cinco minutos</h3>
+<p>Los playbooks se escriben en <strong>YAML</strong>, un formato de texto muy sencillo. Solo hay tres reglas importantes:</p>
+<ol><li>La <strong>sangría</strong> (los espacios al principio) indica qué va dentro de qué. Usa siempre espacios, nunca tabuladores.</li><li><code>clave: valor</code> define un dato.</li><li>Un guion <code>- </code> al principio indica un elemento de una lista.</li></ol>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ejemplo.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+nombre: Ana            # texto
+edad: 30               # número
+activo: true           # verdadero o falso
+lenguajes:             # lista
+  - terraform
+  - ansible
+direccion:             # datos dentro de otro dato
+  ciudad: Madrid
+  cp: "28001"</code></pre></figure>
+<div class="callout tip"><span class="k">Consejo</span>Los archivos YAML suelen empezar con <code>---</code>. No es obligatorio, pero es la costumbre.</div>
+<h3 id="que-es-un-playbook">Qué es un playbook</h3>
+<p>Un <strong>playbook</strong> es un archivo con una lista de <strong>tareas</strong> que Ansible ejecuta en orden en un grupo de servidores. Es como una receta: primero esto, luego esto otro.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">site.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Configurar los servidores web
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Instalar nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+
+    - name: Arrancar nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true</code></pre></figure>
+<ul><li><code>name</code>: una descripción. Es lo que verás en pantalla.</li><li><code>hosts</code>: en qué grupo del inventario se ejecuta.</li><li><code>become: true</code>: ejecutar como administrador.</li><li><code>tasks</code>: la lista de tareas. Cada tarea usa un <strong>módulo</strong> (<code>apt</code>, <code>service</code>...) con sus opciones.</li></ul>
+<div class="callout "><span class="k">Nota</span><code>ansible.builtin.apt</code> es el nombre completo del módulo <code>apt</code>. Se recomienda escribir el nombre completo para evitar confusiones.</div>
+<h3 id="ejecutar-un-playbook">Ejecutar un playbook</h3>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-playbook site.yml">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml</span>
+<span class="out"></span>
+<span class="out">PLAY [Configurar los servidores web] ******************************</span>
+<span class="out"></span>
+<span class="out">TASK [Gathering Facts] ********************************************</span>
+<span class="out">ok: [web1]</span>
+<span class="out">ok: [web2]</span>
+<span class="out"></span>
+<span class="out">TASK [Instalar nginx] *********************************************</span>
+<span class="out">changed: [web1]</span>
+<span class="out">changed: [web2]</span>
+<span class="out"></span>
+<span class="out">TASK [Arrancar nginx] *********************************************</span>
+<span class="out">ok: [web1]</span>
+<span class="out">ok: [web2]</span>
+<span class="out"></span>
+<span class="out">PLAY RECAP ********************************************************</span>
+<span class="out">web1 : ok=3  changed=1  unreachable=0  failed=0</span>
+<span class="out">web2 : ok=3  changed=1  unreachable=0  failed=0</span></code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>Resultado</th><th>Significado</th></tr></thead><tbody><tr><td><code>ok</code></td><td>Ya estaba bien; no ha hecho falta cambiar nada</td></tr><tr><td><code>changed</code></td><td>Ha hecho un cambio</td></tr><tr><td><code>failed</code></td><td>Ha fallado</td></tr><tr><td><code>unreachable</code></td><td>No ha podido conectarse al servidor</td></tr></tbody></table></div>
+<h3 id="idempotencia-ejecutarlo-varias-veces">Idempotencia: ejecutarlo varias veces</h3>
+<p>Ejecuta el mismo playbook otra vez:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-playbook site.yml">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml</span>
+<span class="out">...</span>
+<span class="out">PLAY RECAP ********************************************************</span>
+<span class="out">web1 : ok=3  changed=0  unreachable=0  failed=0</span>
+<span class="out">web2 : ok=3  changed=0  unreachable=0  failed=0</span></code></pre></figure>
+<p><code>changed=0</code>: nginx ya estaba instalado y arrancado, así que no ha hecho nada. Como Terraform, Ansible describe <strong>cómo debe quedar</strong> el servidor y solo cambia lo necesario. Por eso puedes ejecutar un playbook tantas veces como quieras sin miedo.</p>
+<h3 id="probar-antes-de-cambiar">Probar antes de cambiar</h3>
+<p>Igual que <code>terraform plan</code>, Ansible puede enseñarte lo que haría sin cambiar nada:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-playbook site.yml --check --diff">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml --check --diff</span></code></pre></figure>
+<ul><li><code>--check</code>: simula; no cambia nada.</li><li><code>--diff</code>: muestra las líneas que cambiarían en los archivos.</li></ul>
+<p>Y para comprobar que el YAML está bien escrito:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-playbook site.yml --syntax-check">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml --syntax-check</span>
+<span class="out">playbook: site.yml</span></code></pre></figure>
+<h3 id="los-modulos-mas-usados">Los módulos más usados</h3>
+<div class="table-wrap"><table><thead><tr><th>Módulo</th><th>Para qué sirve</th><th>Ejemplo</th></tr></thead><tbody><tr><td><code>apt</code></td><td>Instalar o quitar paquetes (Ubuntu/Debian)</td><td><code>name: nginx</code>, <code>state: present</code></td></tr><tr><td><code>service</code></td><td>Arrancar, parar o reiniciar servicios</td><td><code>name: nginx</code>, <code>state: started</code></td></tr><tr><td><code>copy</code></td><td>Copiar un archivo o escribir un texto</td><td><code>src: web.css</code>, <code>dest: /var/www/web.css</code></td></tr><tr><td><code>file</code></td><td>Crear carpetas, enlaces o borrar archivos</td><td><code>path: /var/www</code>, <code>state: directory</code></td></tr><tr><td><code>template</code></td><td>Copiar un archivo rellenando variables (módulo 15)</td><td><code>src: index.html.j2</code></td></tr><tr><td><code>user</code></td><td>Crear usuarios</td><td><code>name: deploy</code></td></tr><tr><td><code>command</code></td><td>Ejecutar un comando (último recurso)</td><td><code>cmd: uptime</code></td></tr></tbody></table></div>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">más tareas</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">    - name: Crear la carpeta de la web
+      ansible.builtin.file:
+        path: /var/www/miweb
+        state: directory
+        mode: "0755"
+
+    - name: Crear una página sencilla
+      ansible.builtin.copy:
+        content: "&lt;h1&gt;Hola desde Ansible&lt;/h1&gt;"
+        dest: /var/www/miweb/index.html
+        mode: "0644"
+
+    - name: Crear el usuario deploy
+      ansible.builtin.user:
+        name: deploy
+        shell: /bin/bash</code></pre></figure>
+<div class="callout aviso"><span class="k">Importante</span>Evita <code>command</code> y <code>shell</code> siempre que exista un módulo para lo que quieres hacer. Los módulos saben si algo ya está hecho; un comando suelto se ejecuta siempre.</div></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 14 de 22</p><h3 class="paso-titulo">Instala nginx: tu primera web visible</h3><p>Vas a escribir el primer playbook del proyecto. Instalará el servidor web nginx en los dos servidores y publicará una página sencilla. Al terminar podrás abrir la web en el navegador.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/site.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Configurar los servidores web
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Actualizar la lista de paquetes
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Instalar nginx
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+
+    - name: Crear la carpeta de la web
+      ansible.builtin.file:
+        path: /var/www/html
+        state: directory
+        mode: "0755"
+
+    - name: Publicar una página de prueba
+      ansible.builtin.copy:
+        content: "&lt;h1&gt;Mi web en la nube&lt;/h1&gt;&lt;p&gt;Servidor {{ inventory_hostname }}&lt;/p&gt;"
+        dest: /var/www/html/index.html
+        mode: "0644"
+
+    - name: Arrancar nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true</code></pre></figure>
+<p><code>{{ inventory_hostname }}</code> es el nombre del servidor en el inventario (web1 o web2). Lo verás en detalle en el próximo módulo.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="cd ansible
+ansible-playbook site.yml --syntax-check
+ansible-playbook site.yml">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">cd ansible</span>
+<span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml --syntax-check</span>
+<span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml</span>
+<span class="out">...</span>
+<span class="out">PLAY RECAP ********************************************************</span>
+<span class="out">web1 : ok=6  changed=3  unreachable=0  failed=0</span>
+<span class="out">web2 : ok=6  changed=3  unreachable=0  failed=0</span></code></pre></figure>
+<p>Abre las direcciones que te da Terraform:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform -chdir=../terraform output urls
+curl http://54.170.10.20">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform -chdir=../terraform output urls</span>
+<span class="out">{</span>
+<span class="out">  "web1" = "http://54.170.10.20"</span>
+<span class="out">  "web2" = "http://54.170.10.21"</span>
+<span class="out">}</span>
+<span class="prompt">$ </span><span class="cmdline">curl http://54.170.10.20</span>
+<span class="out">&lt;h1&gt;Mi web en la nube&lt;/h1&gt;&lt;p&gt;Servidor web1&lt;/p&gt;</span></code></pre></figure>
+<div class="callout tip"><span class="k">Consejo</span>Ejecuta el playbook una segunda vez: debe terminar con <code>changed=0</code>.</div>
+<p>Resultado de este paso: tus dos servidores sirven una web. Es tu primer resultado visible del proyecto.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Mi primer playbook (carpeta <code>labs/14-ansible-playbooks</code>)</strong></p><ol class="pasos"><li>Lee el playbook <code>playbook.yml</code> del lab y localiza cada tarea.</li><li>Ejecútalo con <code>--check --diff</code> para ver qué haría.</li><li>Ejecútalo de verdad y luego otra vez: la segunda vez debe salir <code>changed=0</code>.</li><li>Añade una tarea que cree un archivo con <code>copy</code> y vuelve a ejecutarlo.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">ansible-playbook site.yml</code></td><td>Ejecuta un playbook.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-playbook site.yml" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-playbook site.yml --check --diff</code></td><td>Muestra qué cambiaría, sin cambiar nada.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-playbook site.yml --check --diff" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-playbook site.yml --syntax-check</code></td><td>Comprueba que el YAML está bien escrito.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-playbook site.yml --syntax-check" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-playbook site.yml --limit web1</code></td><td>Ejecuta solo en un servidor.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-playbook site.yml --limit web1" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-playbook site.yml -v</code></td><td>Más detalle en la salida (-vv, -vvv para más).</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-playbook site.yml -v" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>Syntax Error while loading YAML</code></dt><dd>En YAML la sangría importa: usa siempre espacios (nunca tabuladores) y alinea bien los guiones.</dd></div><div><dt><code>Missing sudo password</code> o <code>Permission denied</code></dt><dd>La tarea necesita permisos de administrador. Añade <code>become: true</code> al playbook.</dd></div><div><dt>Usar <code>command</code> o <code>shell</code> para todo</dt><dd>Busca primero un módulo específico (apt, copy, service...). Los módulos son idempotentes; los comandos sueltos no.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="14" data-total="6"><fieldset class="q" data-ok="3"><legend><span class="qn">01</span><span class="txt">En YAML, ¿qué indica la sangría?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Nada, es decorativa</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">El orden de ejecución</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Los comentarios</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Qué datos van dentro de otros</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Por eso hay que ser cuidadoso con los espacios.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">02</span><span class="txt">¿Qué indica <code>hosts: web</code> en un playbook?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">El puerto</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">El nombre del playbook</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">El grupo del inventario donde se ejecuta</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">El usuario SSH</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Las tareas se ejecutarán en todos los servidores del grupo web.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">03</span><span class="txt">Ejecutas un playbook dos veces seguidas sin cambiar nada. ¿Qué esperas ver la segunda vez?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">failed</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">changed=0</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">changed en todas las tareas</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">unreachable</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Ansible es idempotente: si todo está ya bien, no cambia nada.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">04</span><span class="txt">¿Qué hace <code>--check</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Comprueba la conexión</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Comprueba la sintaxis</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Revisa la seguridad</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Simula la ejecución sin cambiar nada</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Es el equivalente a terraform plan.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">05</span><span class="txt">¿Qué módulo usarías para crear una carpeta?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">service</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">copy</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">file</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">apt</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>file</code> con <code>state: directory</code>.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">06</span><span class="txt">¿Por qué evitar <code>command</code> cuando hay un módulo específico?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Porque es más lento</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Porque command no existe</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Porque los módulos saben si algo ya está hecho y command se ejecuta siempre</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Porque necesita internet</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los módulos son idempotentes; un comando suelto no.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Arregla el YAML</h3><p>Este playbook tiene tres errores de YAML o de Ansible. Encuéntralos y compruébalo con <code>--syntax-check</code>.</p><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">código del reto</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">- name: Mi playbook
+  hosts: local
+  tasks:
+  - name: Crear carpeta
+      ansible.builtin.file:
+        path: /tmp/prueba
+        state: directory
+    - name Crear archivo
+      ansible.builtin.copy:
+        content: "hola"
+        dest: /tmp/prueba/hola.txt</code></pre></figure><details><summary>Ver pista</summary><p>Mira la sangría de las tareas y los dos puntos.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">- name: Mi playbook
+  hosts: local
+  tasks:
+    - name: Crear carpeta            # 1. todas las tareas al mismo nivel
+      ansible.builtin.file:          # 2. el módulo, alineado con name
+        path: /tmp/prueba
+        state: directory
+    - name: Crear archivo            # 3. faltaban los dos puntos
+      ansible.builtin.copy:
+        content: "hola"
+        dest: /tmp/prueba/hola.txt</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2. Un playbook completo</h3><p>Escribe un playbook para el grupo <code>local</code> que cree la carpeta <code>/tmp/miweb</code>, escriba dentro un <code>index.html</code> con tu nombre y cree el archivo <code>/tmp/miweb/LEEME.txt</code>. Ejecútalo dos veces.</p><details><summary>Ver pista</summary><p>Usa <code>file</code> y <code>copy</code> con <code>content</code>. No hace falta <code>become</code> porque es <code>/tmp</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Mi web local
+  hosts: local
+  tasks:
+    - name: Crear la carpeta
+      ansible.builtin.file:
+        path: /tmp/miweb
+        state: directory
+        mode: "0755"
+
+    - name: Crear la página
+      ansible.builtin.copy:
+        content: "&lt;h1&gt;Ana&lt;/h1&gt;"
+        dest: /tmp/miweb/index.html
+        mode: "0644"
+
+    - name: Crear el LEEME
+      ansible.builtin.copy:
+        content: "Creado con Ansible"
+        dest: /tmp/miweb/LEEME.txt
+        mode: "0644"
+# Segunda ejecución: changed=0</code></pre></figure></details></article></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="14"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="13-ansible-introduccion.html"><small>Anterior</small>Introducción a Ansible</a><a class="next" href="15-ansible-variables-plantillas.html"><small>Siguiente</small>Variables, facts y plantillas</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
