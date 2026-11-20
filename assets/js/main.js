@@ -12,34 +12,80 @@
     try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { /* sin almacenamiento */ }
   }
 
-  /* ---------- Tema claro / oscuro ---------- */
+  /* ---------- Tema claro / oscuro ----------
+     Dos estados: seguir al sistema (sin valor guardado) o el contrario del sistema.
+     El CSS lee <meta name="color-scheme">; aquí solo se cambia su contenido. */
+  var metaTema = document.querySelector('meta[name="color-scheme"]');
+  var sistemaOscuro = window.matchMedia("(prefers-color-scheme: dark)");
   var tema = document.querySelector(".theme-toggle");
-  if (tema) {
+  function aplicarTema(valor) {
+    if (metaTema) metaTema.content = valor === "light" || valor === "dark" ? valor : "light dark";
+  }
+  if (tema && metaTema) {
     tema.addEventListener("click", function () {
-      var root = document.documentElement;
-      var oscuro = root.dataset.theme
-        ? root.dataset.theme === "dark"
-        : window.matchMedia("(prefers-color-scheme: dark)").matches;
-      root.dataset.theme = oscuro ? "light" : "dark";
-      try { localStorage.setItem("tema", root.dataset.theme); } catch (e) {}
+      var actual = metaTema.content === "light" || metaTema.content === "dark"
+        ? metaTema.content
+        : (sistemaOscuro.matches ? "dark" : "light");
+      var destino = actual === "dark" ? "light" : "dark";
+      var delSistema = sistemaOscuro.matches ? "dark" : "light";
+      try {
+        if (destino === delSistema) localStorage.removeItem("tema");
+        else localStorage.setItem("tema", destino);
+      } catch (e) { /* sin almacenamiento: el cambio vale para esta página */ }
+      aplicarTema(destino === delSistema ? null : destino);
     });
+    // Mantener sincronizadas otras pestañas abiertas
+    window.addEventListener("storage", function (e) { if (e.key === "tema") aplicarTema(e.newValue); });
   }
 
-  /* ---------- Menú lateral en móvil ---------- */
+  /* ---------- Menú lateral en móvil ----------
+     En pantallas anchas es una barra lateral normal. En móvil se comporta como
+     un diálogo modal: el resto de la página queda inerte y el foco vuelve al botón. */
   var menuBtn = document.querySelector(".menu-toggle");
-  function cerrarMenu() {
-    document.body.classList.remove("menu-open");
-    if (menuBtn) menuBtn.setAttribute("aria-expanded", "false");
+  var sidebar = document.querySelector(".sidebar");
+  var fondo = document.querySelector(".content");
+  var movil = window.matchMedia("(max-width: 1000px)");
+  function modoMenu() {
+    if (!sidebar) return;
+    var abierto = document.body.classList.contains("menu-open");
+    if (movil.matches) {
+      sidebar.setAttribute("role", "dialog");
+      sidebar.inert = !abierto;
+    } else {
+      sidebar.removeAttribute("role");
+      sidebar.removeAttribute("aria-modal");
+      sidebar.inert = false;
+      if (fondo) fondo.inert = false;
+    }
   }
-  if (menuBtn) {
+  function abrirMenu() {
+    document.body.classList.add("menu-open");
+    menuBtn.setAttribute("aria-expanded", "true");
+    sidebar.setAttribute("aria-modal", "true");
+    if (fondo) fondo.inert = true;
+    modoMenu();
+    var foco = sidebar.querySelector('[aria-current="page"]') || sidebar.querySelector("a");
+    if (foco) foco.focus({ preventScroll: true });
+  }
+  function cerrarMenu(devolverFoco) {
+    if (!document.body.classList.contains("menu-open")) return;
+    document.body.classList.remove("menu-open");
+    menuBtn.setAttribute("aria-expanded", "false");
+    sidebar.removeAttribute("aria-modal");
+    if (fondo) fondo.inert = false;
+    modoMenu();
+    if (devolverFoco) menuBtn.focus();
+  }
+  if (menuBtn && sidebar) {
+    modoMenu();
+    movil.addEventListener("change", function () { cerrarMenu(false); modoMenu(); });
     menuBtn.addEventListener("click", function () {
-      var abierto = document.body.classList.toggle("menu-open");
-      menuBtn.setAttribute("aria-expanded", abierto ? "true" : "false");
+      if (document.body.classList.contains("menu-open")) cerrarMenu(true); else abrirMenu();
     });
     var overlay = document.querySelector(".overlay");
-    if (overlay) overlay.addEventListener("click", cerrarMenu);
-    document.querySelectorAll(".sidebar a").forEach(function (a) { a.addEventListener("click", cerrarMenu); });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrarMenu(); });
+    if (overlay) overlay.addEventListener("click", function () { cerrarMenu(true); });
+    sidebar.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", function () { cerrarMenu(false); }); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") cerrarMenu(true); });
   }
 
   // Mostrar en el menú el módulo actual sin mover la página
@@ -95,23 +141,38 @@
     });
   }
 
-  /* ---------- Sección activa en el menú lateral ---------- */
+  /* ---------- Sección activa en el menú lateral ----------
+     Navegadores con scroll-target-group: el CSS (:target-current) lo resuelve solo
+     y aquí solo se refleja en aria-current. Resto: IntersectionObserver. */
   var tocLinks = Array.prototype.slice.call(document.querySelectorAll(".sidebar .sb-toc a"));
-  if (tocLinks.length) {
-    var objetivos = tocLinks.map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); });
-    var pendiente = false;
-    var marcar = function () {
-      pendiente = false;
-      var activo = -1;
-      for (var i = 0; i < objetivos.length; i++) {
-        if (objetivos[i] && objetivos[i].getBoundingClientRect().top < 140) activo = i;
-      }
-      tocLinks.forEach(function (a, i) { a.classList.toggle("active", i === activo); });
+  function sincronizarAria(esActivo) {
+    tocLinks.forEach(function (a) {
+      if (esActivo(a)) a.setAttribute("aria-current", "location"); else a.removeAttribute("aria-current");
+    });
+  }
+  if (tocLinks.length && CSS.supports("scroll-target-group: auto")) {
+    var sincronizar = function () {
+      sincronizarAria(function (a) { return a.matches(":target-current"); });
     };
-    window.addEventListener("scroll", function () {
-      if (!pendiente) { pendiente = true; window.requestAnimationFrame(marcar); }
-    }, { passive: true });
-    marcar();
+    sincronizar();
+    document.addEventListener("scrollend", sincronizar);
+  } else if (tocLinks.length && "IntersectionObserver" in window) {
+    var objetivos = tocLinks.map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); });
+    var visibles = new Set();
+    var marcar = function () {
+      // Activo: el último objetivo que ya ha cruzado la parte alta de la pantalla
+      var activo = -1;
+      objetivos.forEach(function (el, i) { if (el && visibles.has(el)) activo = i; });
+      tocLinks.forEach(function (a, i) { a.classList.toggle("target-current", i === activo); });
+      sincronizarAria(function (a) { return a.classList.contains("target-current"); });
+    };
+    var obs = new IntersectionObserver(function (entradas) {
+      entradas.forEach(function (e) {
+        if (e.isIntersecting || e.boundingClientRect.top < 0) visibles.add(e.target); else visibles.delete(e.target);
+      });
+      marcar();
+    }, { rootMargin: "-120px 0px -60% 0px" });
+    objetivos.forEach(function (el) { if (el) obs.observe(el); });
   }
 
   /* ---------- Copiar ---------- */
@@ -124,14 +185,23 @@
       var code = fig && fig.querySelector("pre code");
       texto = code ? code.innerText : "";
     }
-    var ok = function () {
-      btn.classList.add("copied");
-      var prev = btn.textContent;
-      btn.textContent = "Copiado";
-      setTimeout(function () { btn.classList.remove("copied"); btn.textContent = prev; }, 1400);
+    var avisar = function (clase, mensaje) {
+      if (btn.dataset.prev === undefined) btn.dataset.prev = btn.textContent;
+      btn.classList.remove("copied", "fallo");
+      btn.classList.add(clase);
+      btn.textContent = mensaje;
+      clearTimeout(btn._t);
+      btn._t = setTimeout(function () {
+        btn.classList.remove(clase);
+        btn.textContent = btn.dataset.prev;
+        delete btn.dataset.prev;
+      }, 1600);
     };
+    var fallo = function () { avisar("fallo", "Selecciona y copia"); };
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(texto).then(ok, function () {});
+      navigator.clipboard.writeText(texto).then(function () { avisar("copied", "Copiado"); }, fallo);
+    } else {
+      fallo();
     }
   });
 
@@ -183,7 +253,8 @@
           q.querySelectorAll(".opt").forEach(function (b) { b.disabled = false; b.classList.remove("correcta", "incorrecta"); });
         });
         resultado.textContent = mensajeInicial;
-        quiz.scrollIntoView({ behavior: "smooth", block: "start" });
+        var suave = window.matchMedia("(prefers-reduced-motion: no-preference)").matches;
+        quiz.scrollIntoView({ behavior: suave ? "smooth" : "auto", block: "start" });
       }
     });
   });

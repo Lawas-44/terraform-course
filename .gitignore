@@ -32,3 +32,6 @@ labs/**/user_data.sh
 Thumbs.db
 .vscode/
 .idea/
+
+# Python (generador de la web)
+__pycache__/

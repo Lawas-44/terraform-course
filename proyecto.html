@@ -9,20 +9,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('tema');if(t==='light'||t==='dark')document.querySelector('meta[name="color-scheme"]').content=t;}catch(e){}</script>
 <link rel="stylesheet" href="assets/css/styles.css">
-<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
 <header class="topbar">
-  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <button class="icon-btn menu-toggle" type="button" aria-label="Menú del curso" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
   <a class="brand" href="index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
   <span class="spacer"></span>
   <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
-  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+  <button class="icon-btn theme-toggle" type="button"><svg class="i-sol" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/></g></svg><svg class="i-luna" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span class="sr-only a-oscuro">Cambiar a tema oscuro</span><span class="sr-only a-claro">Cambiar a tema claro</span></button>
 </header>
 <div class="layout">
-<aside class="sidebar" id="sidebar">
+<aside class="sidebar" id="sidebar" aria-label="Menú del curso">
 <div class="progress-box" aria-live="polite">
   <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
   <div class="bar"><span class="fill js-fill"></span></div>
@@ -99,10 +100,10 @@
 <div class="overlay" aria-hidden="true"></div>
 <main class="content" id="contenido">
 <div class="content-inner">
-<header class="mod-head"><p class="eyebrow">Proyecto guiado</p><h1>Tu web en la nube</h1>
+<header class="mod-head"><h1>Tu web en la nube</h1>
 <p class="lead">A lo largo del curso construyes, paso a paso, una web personal que funciona de verdad en AWS. Cada módulo añade una pieza. Al final, un solo comando crea los servidores y los deja configurados.</p></header>
 
-<section id="resultado"><h2>El resultado</h2>
+<section id="resultado" tabindex="-1"><h2>El resultado</h2>
 <ul class="check">
 <li>Dos servidores Ubuntu en AWS, dentro de tu propia red y protegidos por un firewall.</li>
 <li>Tu web personal (nombre, descripción y proyectos) servida por nginx en los dos servidores.</li>
@@ -112,7 +113,7 @@
 <li>Tests y revisiones automáticas en GitHub Actions.</li>
 </ul></section>
 
-<section id="esquema"><h2>Cómo encaja todo</h2><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">esquema</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">             Tu ordenador
+<section id="esquema" tabindex="-1"><h2>Cómo encaja todo</h2><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">esquema</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">             Tu ordenador
    Terraform ──────────┐     Ansible (por SSH)
                        v            |
    +------------------ AWS ----------v--------------+
@@ -129,7 +130,7 @@
                 Visitantes (HTTP)</code></pre></figure>
 <p>Terraform crea todo lo que hay en AWS y escribe el inventario de Ansible con las IPs de los servidores. Ansible entra por SSH en cada servidor y lo configura.</p></section>
 
-<section id="estructura"><h2>Estructura final del repositorio</h2><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">mi-web-en-la-nube</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">mi-web-en-la-nube/
+<section id="estructura" tabindex="-1"><h2>Estructura final del repositorio</h2><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">mi-web-en-la-nube</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">mi-web-en-la-nube/
 ├── terraform/
 │   ├── versions.tf        providers y backend S3
 │   ├── variables.tf       datos de entrada (tu IP, servidores...)
@@ -152,11 +153,11 @@
     └── destruir.sh        lo borra todo</code></pre></figure>
 <p>El código terminado está en la carpeta <a href="https://github.com/lawas-44/terraform-course/tree/main/proyecto"><code>proyecto/</code></a> del repositorio del curso. Úsalo para comparar si te atascas.</p></section>
 
-<section id="pasos"><h2>Los pasos</h2>
+<section id="pasos" tabindex="-1"><h2>Los pasos</h2>
 <p class="muted">Cada paso está al final de la lección de su módulo. Hazlos en orden.</p>
 <ul class="mod-list"><li><a class="mod-row" href="modulos/00-introduccion.html#proyecto" data-mod="00"><span class="num">01</span><span><strong>Lo que vas a construir</strong><span class="desc">Módulo 00 · Introducción a la Infraestructura como Código</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/01-entorno.html#proyecto" data-mod="01"><span class="num">02</span><span><strong>Prepara el repositorio del proyecto</strong><span class="desc">Módulo 01 · Preparación del entorno</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/02-primer-proyecto.html#proyecto" data-mod="02"><span class="num">03</span><span><strong>Inicializa la carpeta de Terraform</strong><span class="desc">Módulo 02 · Tu primer proyecto: el flujo de trabajo</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/03-hcl.html#proyecto" data-mod="03"><span class="num">04</span><span><strong>Nombres y etiquetas comunes</strong><span class="desc">Módulo 03 · El lenguaje HCL</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/04-variables-outputs-locals.html#proyecto" data-mod="04"><span class="num">05</span><span><strong>Las variables del proyecto</strong><span class="desc">Módulo 04 · Variables, outputs y locals</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/05-providers.html#proyecto" data-mod="05"><span class="num">06</span><span><strong>Conecta con AWS</strong><span class="desc">Módulo 05 · Providers y conexión con la nube</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/06-recursos-dependencias.html#proyecto" data-mod="06"><span class="num">07</span><span><strong>Tu primer servidor</strong><span class="desc">Módulo 06 · Recursos, data sources y dependencias</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/07-meta-argumentos.html#proyecto" data-mod="07"><span class="num">08</span><span><strong>Dos servidores con for_each</strong><span class="desc">Módulo 07 · Meta-argumentos: count, for_each y lifecycle</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/08-expresiones-funciones.html#proyecto" data-mod="08"><span class="num">09</span><span><strong>Genera el inventario de Ansible</strong><span class="desc">Módulo 08 · Expresiones y funciones</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/09-estado.html#proyecto" data-mod="09"><span class="num">10</span><span><strong>Explora el estado del proyecto</strong><span class="desc">Módulo 09 · El estado (state) en profundidad</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/10-backends-workspaces.html#proyecto" data-mod="10"><span class="num">11</span><span><strong>Guarda el estado en S3</strong><span class="desc">Módulo 10 · Backends remotos, bloqueo y workspaces</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/11-modulos.html#proyecto" data-mod="11"><span class="num">12</span><span><strong>Módulos y una red propia</strong><span class="desc">Módulo 11 · Módulos</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/13-ansible-introduccion.html#proyecto" data-mod="13"><span class="num">13</span><span><strong>Conecta Ansible con tus servidores</strong><span class="desc">Módulo 13 · Introducción a Ansible</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/14-ansible-playbooks.html#proyecto" data-mod="14"><span class="num">14</span><span><strong>Instala nginx: tu primera web visible</strong><span class="desc">Módulo 14 · Playbooks</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/15-ansible-variables-plantillas.html#proyecto" data-mod="15"><span class="num">15</span><span><strong>Tu web personal con plantillas</strong><span class="desc">Módulo 15 · Variables, facts y plantillas</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/16-ansible-handlers-bucles.html#proyecto" data-mod="16"><span class="num">16</span><span><strong>Configura nginx a tu medida</strong><span class="desc">Módulo 16 · Handlers, condiciones y bucles</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/17-ansible-roles.html#proyecto" data-mod="17"><span class="num">17</span><span><strong>Ordena el proyecto en roles</strong><span class="desc">Módulo 17 · Roles y colecciones</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/18-ansible-vault.html#proyecto" data-mod="18"><span class="num">18</span><span><strong>Zona privada con contraseña cifrada</strong><span class="desc">Módulo 18 · Ansible Vault y buenas prácticas</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/19-terraform-ansible.html#proyecto" data-mod="19"><span class="num">19</span><span><strong>Despliegue con un solo comando</strong><span class="desc">Módulo 19 · Terraform y Ansible juntos</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/20-calidad-testing.html#proyecto" data-mod="20"><span class="num">20</span><span><strong>Añade tests y revisiones al proyecto</strong><span class="desc">Módulo 20 · Calidad, tests y seguridad</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/21-equipo-cicd.html#proyecto" data-mod="21"><span class="num">21</span><span><strong>Revisiones automáticas en GitHub</strong><span class="desc">Módulo 21 · Trabajo en equipo y CI/CD</span></span><span class="info"><span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/22-proyecto-final.html#proyecto" data-mod="22"><span class="num">22</span><span><strong>Despliegue final y entrega</strong><span class="desc">Módulo 22 · Proyecto final y siguientes pasos</span></span><span class="info"><span class="estado"></span></span></a></li></ul></section>
 
-<section id="coste"><h2>Cuánto cuesta</h2>
+<section id="coste" tabindex="-1"><h2>Cuánto cuesta</h2>
 <p>Los servidores <code>t3.micro</code> y el resto de recursos entran en la capa gratuita de AWS para cuentas nuevas. Fuera de ella, los dos servidores cuestan unos céntimos por hora. Borra todo con <code>terraform destroy</code> al terminar cada sesión y vuelve a crearlo la siguiente: es justo la ventaja de tenerlo en código.</p></section>
 <footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
 </div>
