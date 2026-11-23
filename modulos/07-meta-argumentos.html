@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>07 · Meta-argumentos: count, for_each y lifecycle | Terraform y Ansible desde cero</title>
+<meta name="description" content="Crear múltiples recursos y controlar su ciclo de vida.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 23 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html" aria-current="page"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#que-son-los-meta-argumentos">Qué son los meta-argumentos</a></li><li><a href="#count-varias-copias">count: varias copias</a></li><li><a href="#for-each-copias-con-nombre">for_each: copias con nombre</a></li><li><a href="#por-que-for-each-suele-ser-mejor">Por qué for_each suele ser mejor</a></li><li><a href="#lifecycle-proteger-y-controlar">lifecycle: proteger y controlar</a></li><li><a href="#forzar-que-se-cree-de-nuevo">Forzar que se cree de nuevo</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 8</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 07</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 07</p>
+  <h1>Meta-argumentos: count, for_each y lifecycle</h1>
+  <p class="lead">Crear múltiples recursos y controlar su ciclo de vida.</p>
+  <div class="meta-row"><span>Nivel: Intermedio</span><span>Duración: 2 h</span><span>Test: 7 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 8</span></div>
+</header>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Crear N recursos con <code>count</code> y con <code>for_each</code>, y elegir entre ellos.</li><li>Controlar el ciclo de vida con <code>lifecycle</code>.</li><li>Proteger recursos críticos contra borrados accidentales.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="que-son-los-meta-argumentos">Qué son los meta-argumentos</h3>
+<p>Son opciones especiales que puedes poner en <strong>cualquier</strong> recurso para cambiar cómo lo trata Terraform:</p>
+<div class="table-wrap"><table><thead><tr><th>Opción</th><th>Para qué sirve</th></tr></thead><tbody><tr><td><code>count</code></td><td>Crear varias copias numeradas</td></tr><tr><td><code>for_each</code></td><td>Crear una copia por cada elemento de una lista de nombres</td></tr><tr><td><code>lifecycle</code></td><td>Proteger un recurso o cambiar cómo se reemplaza</td></tr><tr><td><code>depends_on</code></td><td>Indicar un orden a mano (módulo 6)</td></tr><tr><td><code>provider</code></td><td>Elegir otra región o cuenta (módulo 5)</td></tr></tbody></table></div>
+<p>En los ejemplos usamos archivos locales para practicar gratis. Con recursos de AWS funciona igual.</p>
+<h3 id="count-varias-copias">count: varias copias</h3>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">count.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "local_file" "nota" {
+  count    = 3
+  filename = "nota-${count.index}.txt"
+  content  = "Soy la nota ${count.index}"
+}</code></pre></figure>
+<p>Crea <code>nota-0.txt</code>, <code>nota-1.txt</code> y <code>nota-2.txt</code>. <code>count.index</code> es el número de cada copia, empezando por 0.</p>
+<p>Un uso muy común: crear algo <strong>solo si</strong> se cumple una condición. Con 1 se crea y con 0 no:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">crear solo si...</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">variable "crear_backup" {
+  type    = bool
+  default = false
+}
+
+resource "aws_s3_bucket" "backup" {
+  count         = var.crear_backup ? 1 : 0
+  bucket_prefix = "backup-"
+}</code></pre></figure>
+<h3 id="for-each-copias-con-nombre">for_each: copias con nombre</h3>
+<p><code>for_each</code> crea una copia por cada elemento, y cada copia se identifica <strong>por su nombre</strong>, no por un número:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">for_each.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">variable "usuarios" {
+  type    = set(string)
+  default = ["ana", "luis", "marta"]
+}
+
+resource "local_file" "perfil" {
+  for_each = var.usuarios
+  filename = "${each.key}.txt"
+  content  = "Perfil de ${each.key}"
+}</code></pre></figure>
+<p>Dentro del bloque, <code>each.key</code> es el elemento actual: "ana", "luis" o "marta".</p>
+<p>También puedes usar un mapa para dar datos distintos a cada copia. Entonces <code>each.key</code> es el nombre y <code>each.value</code> su valor:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">for_each con mapa</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "local_file" "servicio" {
+  for_each = {
+    web = 80
+    api = 8080
+  }
+  filename = "${each.key}.conf"
+  content  = "puerto=${each.value}"
+}</code></pre></figure>
+<h3 id="por-que-for-each-suele-ser-mejor">Por qué for_each suele ser mejor</h3>
+<p>Imagina que creas los perfiles con <code>count</code> sobre la lista <code>["ana", "luis", "marta"]</code> y luego quitas a luis. Con <code>count</code> las copias se identifican por posición: marta pasa de la posición 2 a la 1, y Terraform cree que ha cambiado:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform plan">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform plan</span>
+<span class="out">  # local_file.perfil[1] must be replaced</span>
+<span class="out">  # local_file.perfil[2] will be destroyed</span>
+<span class="out"></span>
+<span class="out">Plan: 1 to add, 0 to change, 2 to destroy.</span></code></pre></figure>
+<p>Con <code>for_each</code> solo se borra lo que has quitado:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform plan">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform plan</span>
+<span class="out">  # local_file.perfil["luis"] will be destroyed</span>
+<span class="out"></span>
+<span class="out">Plan: 0 to add, 0 to change, 1 to destroy.</span></code></pre></figure>
+<div class="callout tip"><span class="k">Consejo</span>Regla sencilla: usa <code>count</code> para «N copias iguales» o «crear sí/no», y <code>for_each</code> para listas de cosas con nombre.</div>
+<h3 id="lifecycle-proteger-y-controlar">lifecycle: proteger y controlar</h3>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">lifecycle</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "aws_s3_bucket" "datos" {
+  bucket_prefix = "datos-"
+
+  lifecycle {
+    prevent_destroy = true            # impide borrarlo
+    ignore_changes  = [tags]          # no deshacer cambios de etiquetas hechos a mano
+  }
+}</code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>Opción</th><th>Qué hace</th></tr></thead><tbody><tr><td><code>prevent_destroy</code></td><td>Da error si algo intenta borrar el recurso. Ideal para bases de datos</td></tr><tr><td><code>ignore_changes</code></td><td>Terraform no toca esos datos aunque alguien los cambie fuera</td></tr><tr><td><code>create_before_destroy</code></td><td>Al reemplazar, crea el nuevo antes de borrar el viejo</td></tr></tbody></table></div>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform destroy">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform destroy</span>
+<span class="out">Error: Instance cannot be destroyed</span>
+<span class="out"></span>
+<span class="out">Resource aws_s3_bucket.datos has lifecycle.prevent_destroy set</span></code></pre></figure>
+<p>Para poder borrarlo, primero tienes que quitar <code>prevent_destroy</code> del código.</p>
+<h3 id="forzar-que-se-cree-de-nuevo">Forzar que se cree de nuevo</h3>
+<p>Si un recurso funciona mal y quieres que Terraform lo cree otra vez:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform apply -replace=&quot;aws_instance.web&quot;">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform apply -replace="aws_instance.web"</span></code></pre></figure>
+<div class="callout "><span class="k">Nota</span>En tutoriales antiguos verás <code>terraform taint</code>. Hace lo mismo, pero ya no se usa.</div></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 8 de 22</p><h3 class="paso-titulo">Dos servidores con for_each</h3><p>Queremos dos servidores, <code>web1</code> y <code>web2</code>. En lugar de copiar el bloque, usa <code>for_each</code> con una variable. Añade a <code>variables.tf</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/variables.tf (añadir)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">variable "servidores" {
+  description = "Servidores a crear: nombre =&gt; tipo de instancia"
+  type        = map(string)
+  default = {
+    web1 = "t3.micro"
+    web2 = "t3.micro"
+  }
+}</code></pre></figure>
+<p>Cambia el bloque del servidor en <code>main.tf</code>. Fíjate en las líneas con <code>each</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/main.tf (cambiar aws_instance)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "aws_instance" "web" {
+  for_each = var.servidores
+
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = each.value
+  key_name               = aws_key_pair.this.key_name
+  vpc_security_group_ids = [aws_security_group.web.id]
+
+  metadata_options {
+    http_tokens = "required"
+  }
+
+  root_block_device {
+    encrypted = true
+  }
+
+  tags = {
+    Name = "${local.prefijo}-${each.key}"
+    Rol  = "web"
+  }
+}
+
+# El servidor que ya existía pasa a ser web1 (así no se recrea)
+moved {
+  from = aws_instance.web
+  to   = aws_instance.web["web1"]
+}</code></pre></figure>
+<p>Y el output ahora devuelve un mapa con la IP de cada servidor:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/outputs.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">output "ips" {
+  description = "IP pública de cada servidor"
+  value       = { for nombre, servidor in aws_instance.web : nombre =&gt; servidor.public_ip }
+}</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform plan
+terraform apply">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform plan</span>
+<span class="out">  # aws_instance.web has moved to aws_instance.web["web1"]</span>
+<span class="out">  # aws_instance.web["web2"] will be created</span>
+<span class="out">Plan: 1 to add, 0 to change, 0 to destroy.</span>
+<span class="prompt">$ </span><span class="cmdline">terraform apply</span>
+<span class="out">...</span>
+<span class="out">Outputs:</span>
+<span class="out">ips = {</span>
+<span class="out">  "web1" = "54.170.10.20"</span>
+<span class="out">  "web2" = "54.170.10.21"</span>
+<span class="out">}</span></code></pre></figure>
+<div class="callout "><span class="k">Nota</span>El bloque <code>moved</code> (lo verás en detalle en el módulo 12) le dice a Terraform que el servidor que ya tenías ahora se llama <code>web["web1"]</code>. Sin él, lo borraría y crearía uno nuevo.</div>
+<p>Resultado de este paso: dos servidores. Para tener tres, solo añadirías una línea a la variable.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>count vs for_each</strong></p><ol class="pasos"><li>Crea 3 archivos locales con <code>count</code> a partir de una lista.</li><li>Elimina el elemento del medio y observa el plan.</li><li>Repite con <code>for_each</code> y compara.</li><li>Añade <code>prevent_destroy</code> a un recurso e intenta destruirlo.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform apply -replace=&quot;aws_instance.web&quot;</code></td><td>Fuerza la recreación de un recurso.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply -replace=&quot;aws_instance.web&quot;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform state list &#x27;aws_iam_user.equipo&#x27;</code></td><td>Lista las instancias de un recurso con for_each.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform state list &#x27;aws_iam_user.equipo&#x27;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform plan -target=&#x27;aws_iam_user.equipo[&quot;ana&quot;]&#x27;</code></td><td>Planifica solo un recurso (uso excepcional).</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -target=&#x27;aws_iam_user.equipo[&quot;ana&quot;]&#x27;" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>The "for_each" value depends on resource attributes that cannot be determined until apply</code></dt><dd>Las claves de <code>for_each</code> deben conocerse en el plan; usa valores estáticos o variables.</dd></div><div><dt>Abusar de <code>-target</code></dt><dd>Es para emergencias; deja el estado desalineado con el código si se usa como rutina.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="07" data-total="7"><fieldset class="q" data-ok="2"><legend><span class="qn">01</span><span class="txt">¿Qué valor tiene <code>count.index</code> en la tercera copia de un recurso?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">c</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">1</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">2</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">3</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los índices empiezan en 0: 0, 1, 2.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">02</span><span class="txt">¿Cómo creas un recurso solo si <code>var.activar</code> es true?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">count = var.activar ? 1 : 0</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">for_each = var.activar</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">enabled = var.activar</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">if var.activar { ... }</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Es el patrón clásico: 1 copia o ninguna.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">03</span><span class="txt">Usas <code>count</code> sobre una lista de 5 nombres y eliminas el segundo. ¿Qué pasa?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Nada</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Error</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Se recrean/desplazan los recursos posteriores</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Solo se borra el segundo</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los índices se desplazan y Terraform cree que los recursos 1-3 han cambiado.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">04</span><span class="txt">Con <code>for_each = { web = 80, api = 8080 }</code>, ¿qué vale <code>each.value</code> en la copia "api"?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">8080</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">{api = 8080}</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">"api"</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">1</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>each.key</code> es la clave ("api") y <code>each.value</code> su valor (8080).</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">05</span><span class="txt">¿Qué opción de lifecycle evita borrar un recurso por accidente?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">create_before_destroy</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">ignore_changes</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">prevent_destroy</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">replace_triggered_by</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Hace que cualquier plan que implique destruirlo falle.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">06</span><span class="txt">Un equipo modifica las etiquetas de una instancia desde la consola y no quieres que Terraform las revierta. ¿Qué usas?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">ignore_changes = [tags]</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">depends_on</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">-replace</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">prevent_destroy</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>ignore_changes</code> hace que Terraform no proponga cambios en esos atributos.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">07</span><span class="txt">¿Cuál es la alternativa moderna a <code>terraform taint</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform destroy -target</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform apply -replace=DIRECCION</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform state rm</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">terraform refresh</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>-replace</code> fuerza la recreación y muestra el plan antes.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Equipo con permisos</h3><p>Crea una variable <code>equipo</code> de tipo <code>map(string)</code> que asocie nombre → rol (<code>ana = "admin"</code>, <code>luis = "dev"</code>, <code>marta = "dev"</code>). Genera un archivo por persona con su rol. Después quita a <code>luis</code> y comprueba que el plan solo destruye su archivo.</p><details><summary>Ver pista</summary><p><code>for_each = var.equipo</code>, <code>each.key</code> es el nombre y <code>each.value</code> el rol.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">variable "equipo" {
+  type = map(string)
+  default = {
+    ana   = "admin"
+    luis  = "dev"
+    marta = "dev"
+  }
+}
+
+resource "local_file" "miembro" {
+  for_each = var.equipo
+  filename = "${path.module}/equipo/${each.key}.txt"
+  content  = "${each.key} tiene el rol ${each.value}\n"
+}</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2. Migrar de count a for_each</h3><p>Tienes <code>local_file.perfil</code> creado con <code>count</code> sobre <code>["ana", "luis"]</code>. Cámbialo a <code>for_each</code> sin que Terraform recree los archivos.</p><details><summary>Ver pista</summary><p>Necesitas decirle a Terraform que <code>perfil[0]</code> ahora se llama <code>perfil["ana"]</code>. Mira el bloque <code>moved</code> (módulo 12) o <code>terraform state mv</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "local_file" "perfil" {
+  for_each = toset(["ana", "luis"])
+  filename = "${path.module}/${each.key}.txt"
+  content  = "Perfil de ${each.key}"
+}
+
+moved {
+  from = local_file.perfil[0]
+  to   = local_file.perfil["ana"]
+}
+
+moved {
+  from = local_file.perfil[1]
+  to   = local_file.perfil["luis"]
+}
+# terraform plan → "has moved to ..." y 0 to add, 0 to destroy</code></pre></figure></details></article></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="07"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="06-recursos-dependencias.html"><small>Anterior</small>Recursos, data sources y dependencias</a><a class="next" href="08-expresiones-funciones.html"><small>Siguiente</small>Expresiones y funciones</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# Terraform genera inventario/hosts.ini automáticamente (paso 8).
+# Este archivo es solo un ejemplo de cómo queda.
+[web]
+web1 ansible_host=203.0.113.10
+web2 ansible_host=203.0.113.11
+
+[web:vars]
+ansible_user=ubuntu

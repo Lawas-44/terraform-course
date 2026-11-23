@@ -1,0 +1,17 @@
+---
+- name: Usar un secreto
+  hosts: local
+  vars_files:
+    - secretos.yml
+
+  tasks:
+    - name: Guardar el token
+      ansible.builtin.copy:
+        content: "{{ api_token }}\n"
+        dest: /tmp/lab18-token.txt
+        mode: "0600"
+      no_log: true
+
+    - name: Confirmar sin mostrar el secreto
+      ansible.builtin.debug:
+        msg: "Token guardado ({{ api_token | length }} caracteres)"

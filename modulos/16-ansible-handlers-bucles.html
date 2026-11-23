@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>16 · Handlers, condiciones y bucles | Terraform y Ansible desde cero</title>
+<meta name="description" content="Reiniciar servicios solo cuando hace falta, repetir tareas y ejecutarlas solo si se cumple algo.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 23 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html" aria-current="page"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#handlers-reiniciar-solo-cuando-hace-falta">Handlers: reiniciar solo cuando hace falta</a></li><li><a href="#bucles-repetir-una-tarea">Bucles: repetir una tarea</a></li><li><a href="#condiciones-when">Condiciones: when</a></li><li><a href="#guardar-resultados-register">Guardar resultados: register</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 16</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 16</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 16</p>
+  <h1>Handlers, condiciones y bucles</h1>
+  <p class="lead">Reiniciar servicios solo cuando hace falta, repetir tareas y ejecutarlas solo si se cumple algo.</p>
+  <div class="meta-row"><span>Nivel: Intermedio</span><span>Duración: 1,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 16</span></div>
+</header>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Usar handlers para recargar un servicio solo si cambió su configuración.</li><li>Repetir una tarea con <code>loop</code>.</li><li>Ejecutar una tarea solo si se cumple una condición con <code>when</code>.</li><li>Guardar el resultado de una tarea con <code>register</code>.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="handlers-reiniciar-solo-cuando-hace-falta">Handlers: reiniciar solo cuando hace falta</h3>
+<p>Cuando cambias el archivo de configuración de un programa (por ejemplo, nginx), hay que recargarlo para que lea los cambios. Pero si la configuración no ha cambiado, recargarlo es innecesario.</p>
+<p>Para eso están los <strong>handlers</strong>: tareas especiales que solo se ejecutan si otra tarea <strong>les avisa</strong> con <code>notify</code> y además esa tarea <strong>ha cambiado algo</strong>.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">site.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Configurar nginx
+  hosts: web
+  become: true
+
+  tasks:
+    - name: Configurar el sitio
+      ansible.builtin.template:
+        src: templates/sitio.conf.j2
+        dest: /etc/nginx/sites-available/miweb
+        mode: "0644"
+      notify: Recargar nginx
+
+  handlers:
+    - name: Recargar nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded</code></pre></figure>
+<ul><li>Si la plantilla cambia el archivo, la tarea sale <code>changed</code> y avisa al handler.</li><li>Si el archivo ya estaba igual, la tarea sale <code>ok</code> y el handler <strong>no</strong> se ejecuta.</li><li>Los handlers se ejecutan al <strong>final</strong> del playbook, y una sola vez aunque varias tareas les avisen.</li></ul>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-playbook site.yml">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml</span>
+<span class="out">TASK [Configurar el sitio] ****************************************</span>
+<span class="out">changed: [web1]</span>
+<span class="out"></span>
+<span class="out">RUNNING HANDLER [Recargar nginx] **********************************</span>
+<span class="out">changed: [web1]</span></code></pre></figure>
+<div class="callout aviso"><span class="k">Importante</span>El texto de <code>notify</code> debe ser <strong>exactamente igual</strong> al <code>name</code> del handler, incluidas mayúsculas.</div>
+<h3 id="bucles-repetir-una-tarea">Bucles: repetir una tarea</h3>
+<p>Con <code>loop</code> una tarea se repite para cada elemento de una lista. El elemento actual se llama <code>item</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">loop</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">    - name: Crear carpetas
+      ansible.builtin.file:
+        path: "/var/www/miweb/{{ item }}"
+        state: directory
+        mode: "0755"
+      loop:
+        - imagenes
+        - css
+        - privado</code></pre></figure>
+<div class="callout tip"><span class="k">Consejo</span>Algunos módulos aceptan una lista directamente y son más rápidos así. Por ejemplo, <code>apt</code> puede instalar varios paquetes de una vez: <code>name: [curl, htop, unzip]</code>.</div>
+<p>Con una lista de objetos, se accede a cada campo con un punto:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">loop con objetos</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">    - name: Crear usuarios
+      ansible.builtin.user:
+        name: "{{ item.nombre }}"
+        shell: "{{ item.shell }}"
+      loop:
+        - { nombre: ana, shell: /bin/bash }
+        - { nombre: luis, shell: /bin/sh }</code></pre></figure>
+<h3 id="condiciones-when">Condiciones: when</h3>
+<p><code>when</code> hace que una tarea solo se ejecute si se cumple una condición. No se ponen las llaves <code>{{ }}</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">when</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">    - name: Instalar nginx en Ubuntu
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+      when: ansible_facts['distribution'] == "Ubuntu"
+
+    - name: Activar la zona privada
+      ansible.builtin.template:
+        src: templates/privado.html.j2
+        dest: /var/www/miweb/privado/index.html
+        mode: "0644"
+      when: web_privado_activo | default(false)</code></pre></figure>
+<p>Si la condición no se cumple, la tarea aparece como <code>skipping</code> en la salida.</p>
+<h3 id="guardar-resultados-register">Guardar resultados: register</h3>
+<p><code>register</code> guarda el resultado de una tarea en una variable para usarlo después:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">register</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">    - name: Ver la versión de nginx
+      ansible.builtin.command: nginx -v
+      register: version_nginx
+      changed_when: false
+
+    - name: Mostrar la versión
+      ansible.builtin.debug:
+        msg: "{{ version_nginx.stderr }}"</code></pre></figure>
+<ul><li><code>changed_when: false</code> le dice a Ansible que esa tarea nunca cambia nada (solo consulta). Así no aparece como <code>changed</code>.</li><li>El módulo <code>debug</code> muestra un mensaje en pantalla. Muy útil para aprender y para buscar errores.</li></ul>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain"><span class="out">TASK [Mostrar la versión] *****************************************</span>
+<span class="out">ok: [web1] =&gt; {</span>
+<span class="out">    "msg": "nginx version: nginx/1.24.0 (Ubuntu)"</span>
+<span class="out">}</span></code></pre></figure></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 16 de 22</p><h3 class="paso-titulo">Configura nginx a tu medida</h3><p>Hasta ahora usabas la configuración por defecto de nginx. Vas a poner la tuya: tu web en su propia carpeta (<code>/var/www/miweb</code>), con un handler que recarga nginx solo si cambia la configuración.</p>
+<p>1. Crea la plantilla de configuración de nginx:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/templates/sitio.conf.j2</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain"># Archivo gestionado por Ansible
+server {
+    listen 80 default_server;
+    server_name _;
+
+    root {{ web_raiz }};
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}</code></pre></figure>
+<p>2. Actualiza <code>site.yml</code> completo. Fíjate en el <code>loop</code>, los <code>notify</code> y el handler:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/site.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Configurar los servidores web
+  hosts: web
+  become: true
+  vars:
+    web_raiz: /var/www/miweb
+
+  tasks:
+    - name: Actualizar la lista de paquetes
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Instalar paquetes
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - nginx
+        - curl
+        - htop
+
+    - name: Crear la carpeta de la web
+      ansible.builtin.file:
+        path: "{{ web_raiz }}"
+        state: directory
+        mode: "0755"
+
+    - name: Configurar el sitio
+      ansible.builtin.template:
+        src: templates/sitio.conf.j2
+        dest: /etc/nginx/sites-available/miweb
+        mode: "0644"
+      notify: Recargar nginx
+
+    - name: Activar el sitio
+      ansible.builtin.file:
+        src: /etc/nginx/sites-available/miweb
+        dest: /etc/nginx/sites-enabled/miweb
+        state: link
+      notify: Recargar nginx
+
+    - name: Desactivar el sitio por defecto
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify: Recargar nginx
+
+    - name: Generar las páginas
+      ansible.builtin.template:
+        src: "templates/{{ item }}.j2"
+        dest: "{{ web_raiz }}/{{ item }}"
+        mode: "0644"
+      loop:
+        - index.html
+        - estado.html
+
+    - name: Arrancar nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+  handlers:
+    - name: Recargar nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-playbook site.yml
+ansible-playbook site.yml">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml</span>
+<span class="out">...</span>
+<span class="out">RUNNING HANDLER [Recargar nginx] **********************************</span>
+<span class="out">changed: [web1]</span>
+<span class="out">changed: [web2]</span>
+<span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml</span>
+<span class="out">...</span>
+<span class="out">web1 : ok=10  changed=0  unreachable=0  failed=0</span></code></pre></figure>
+<p>La segunda vez no hay cambios y el handler no se ejecuta: nginx no se recarga sin motivo.</p>
+<p>Resultado de este paso: nginx usa tu configuración y tu web vive en <code>/var/www/miweb</code>. El playbook ya es largo; en el próximo módulo lo ordenarás en roles.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Handlers, bucles y condiciones (carpeta <code>labs/16-ansible-handlers</code>)</strong></p><ol class="pasos"><li>Ejecuta el playbook del lab y fíjate en cuándo se ejecuta el handler.</li><li>Vuelve a ejecutarlo sin cambios: el handler no se ejecuta.</li><li>Ejecútalo con <code>-e app_puerto=9090</code>: cambia la plantilla y el handler vuelve a ejecutarse.</li><li>Ejecútalo con <code>-e app_modo=produccion</code> y mira cómo se salta la tarea con <code>when</code>.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">ansible-playbook site.yml --list-tasks</code></td><td>Lista las tareas sin ejecutarlas.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-playbook site.yml --list-tasks" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-playbook site.yml --start-at-task &quot;Configurar el sitio&quot;</code></td><td>Empieza desde una tarea concreta.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-playbook site.yml --start-at-task &quot;Configurar el sitio&quot;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-playbook site.yml --step</code></td><td>Pide confirmación antes de cada tarea.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-playbook site.yml --step" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt>El handler no se ejecuta</dt><dd>Solo se ejecuta si la tarea que lo avisa (<code>notify</code>) ha cambiado algo, y el nombre debe coincidir exactamente.</dd></div><div><dt>Reiniciar un servicio en cada ejecución</dt><dd>Usa un handler en lugar de una tarea con <code>state: restarted</code>.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="16" data-total="6"><fieldset class="q" data-ok="0"><legend><span class="qn">01</span><span class="txt">¿Cuándo se ejecuta un handler?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Solo si una tarea le avisa con notify y esa tarea ha cambiado algo</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Al principio del playbook</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Siempre al final</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Cada vez que hay un error</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Si la tarea sale ok (sin cambios), el handler no se ejecuta.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">02</span><span class="txt">Tres tareas avisan al mismo handler y las tres cambian algo. ¿Cuántas veces se ejecuta?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Dos</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Tres</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Una, al final</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Ninguna</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los handlers se ejecutan una sola vez, al final.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">03</span><span class="txt">¿Cómo se llama el elemento actual dentro de un <code>loop</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">item</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">element</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">each.value</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">i</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Ansible usa <code>item</code>.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">04</span><span class="txt">¿Qué hace <code>when: ansible_facts['distribution'] == "Ubuntu"</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Muestra el sistema</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Falla si no es Ubuntu</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Ejecuta la tarea solo en servidores Ubuntu</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Instala Ubuntu</span></button></div><p class="exp" hidden><strong class="verdict"></strong> En los demás servidores la tarea aparece como skipping.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">05</span><span class="txt">¿Para qué sirve <code>register</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Para registrar un servidor</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para crear un usuario</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para guardar el resultado de una tarea en una variable</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para cifrar</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Después puedes usar esa variable en otras tareas.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">06</span><span class="txt">¿Qué consigue <code>changed_when: false</code> en una tarea que solo consulta algo?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Que no se ejecute</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Que se repita</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Que falle</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Que nunca aparezca como changed</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Así el resultado del playbook refleja solo los cambios reales.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Paquetes y carpetas</h3><p>Escribe un playbook para el grupo <code>local</code> que cree en <code>/tmp/miweb</code> las carpetas <code>css</code>, <code>js</code> e <code>img</code> con un <code>loop</code>, y muestre con <code>debug</code> cuántas carpetas ha creado.</p><details><summary>Ver pista</summary><p>Usa <code>register</code> en la tarea con loop: el resultado tiene una lista <code>results</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Carpetas
+  hosts: local
+  tasks:
+    - name: Crear carpetas
+      ansible.builtin.file:
+        path: "/tmp/miweb/{{ item }}"
+        state: directory
+        mode: "0755"
+      loop: [css, js, img]
+      register: carpetas
+
+    - name: Resumen
+      ansible.builtin.debug:
+        msg: "Carpetas procesadas: {{ carpetas.results | length }}"</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2. Handler que no se dispara</h3><p>¿Por qué este handler no se ejecuta nunca? Corrígelo.</p><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">código del reto</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">  tasks:
+    - name: Configurar nginx
+      ansible.builtin.template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+        mode: "0644"
+      notify: recargar nginx
+
+  handlers:
+    - name: Recargar nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded</code></pre></figure><details><summary>Ver pista</summary><p>Compara letra por letra el notify y el nombre del handler.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">      notify: Recargar nginx   # debe coincidir exactamente, con la R mayúscula</code></pre></figure></details></article></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="16"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="15-ansible-variables-plantillas.html"><small>Anterior</small>Variables, facts y plantillas</a><a class="next" href="17-ansible-roles.html"><small>Siguiente</small>Roles y colecciones</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

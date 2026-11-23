@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>04 · Variables, outputs y locals | Terraform y Ansible desde cero</title>
+<meta name="description" content="Parametrizar configuraciones, exponer resultados y evitar repetición.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 23 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html" aria-current="page"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#para-que-sirven">Para qué sirven</a></li><li><a href="#crear-una-variable">Crear una variable</a></li><li><a href="#comprobar-que-el-valor-es-correcto">Comprobar que el valor es correcto</a></li><li><a href="#dar-valores-a-las-variables">Dar valores a las variables</a></li><li><a href="#outputs-mostrar-resultados">Outputs: mostrar resultados</a></li><li><a href="#locals-no-repetir">Locals: no repetir</a></li><li><a href="#valores-secretos">Valores secretos</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 5</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 04</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 04</p>
+  <h1>Variables, outputs y locals</h1>
+  <p class="lead">Parametrizar configuraciones, exponer resultados y evitar repetición.</p>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 2 h</span><span>Test: 7 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 5</span></div>
+</header>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Declarar variables con tipo, descripción, valor por defecto y validación.</li><li>Conocer todas las formas de asignar valores y su orden de precedencia.</li><li>Exponer datos con outputs y consumirlos desde la terminal.</li><li>Usar <code>locals</code> para nombres y etiquetas comunes.</li><li>Marcar valores como <code>sensitive</code> y saber sus limitaciones.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="para-que-sirven">Para qué sirven</h3>
+<p>Hasta ahora escribíamos los valores directamente en el código. Pero a menudo quieres usar el mismo código con datos distintos: un entorno de pruebas pequeño y uno de producción grande, un nombre u otro...</p>
+<div class="table-wrap"><table><thead><tr><th>Herramienta</th><th>Qué es</th><th>Cómo se usa</th></tr></thead><tbody><tr><td><strong>variable</strong></td><td>Un dato de entrada que puedes cambiar</td><td><code>var.nombre</code></td></tr><tr><td><strong>output</strong></td><td>Un dato que se muestra al terminar</td><td>bloque <code>output</code></td></tr><tr><td><strong>locals</strong></td><td>Un valor de ayuda calculado dentro del código</td><td><code>local.nombre</code></td></tr></tbody></table></div>
+<h3 id="crear-una-variable">Crear una variable</h3>
+<p>Una variable se crea con un bloque <code>variable</code>. Lo recomendable es indicar su tipo y una descripción:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">variables.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">variable "proyecto" {
+  description = "Nombre del proyecto"
+  type        = string
+}
+
+variable "entorno" {
+  description = "Entorno: dev o prod"
+  type        = string
+  default     = "dev"
+}
+
+variable "replicas" {
+  type    = number
+  default = 1
+}</code></pre></figure>
+<ul><li><code>type</code>: el tipo de dato (<code>string</code> es texto, <code>number</code> es número, <code>bool</code> es verdadero/falso).</li><li><code>default</code>: el valor si nadie da otro. Si una variable <strong>no tiene default, es obligatoria</strong>.</li></ul>
+<p>Para usarla escribe <code>var.</code> delante del nombre:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">main.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">resource "local_file" "config" {
+  filename = "${var.proyecto}-${var.entorno}.conf"
+  content  = "replicas=${var.replicas}"
+}</code></pre></figure>
+<p>Si una variable obligatoria no tiene valor, Terraform te lo pregunta:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform plan">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform plan</span>
+<span class="out">var.proyecto</span>
+<span class="out">  Nombre del proyecto</span>
+<span class="out"></span>
+<span class="out">  Enter a value: tienda</span></code></pre></figure>
+<h3 id="comprobar-que-el-valor-es-correcto">Comprobar que el valor es correcto</h3>
+<p>Con un bloque <code>validation</code> puedes rechazar valores incorrectos antes de crear nada:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">variables.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">variable "entorno" {
+  type    = string
+  default = "dev"
+
+  validation {
+    condition     = contains(["dev", "prod"], var.entorno)
+    error_message = "El entorno debe ser dev o prod."
+  }
+}</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform plan -var=&quot;entorno=pruebas&quot;">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform plan -var="entorno=pruebas"</span>
+<span class="out">Error: Invalid value for variable</span>
+<span class="out"></span>
+<span class="out">El entorno debe ser dev o prod.</span></code></pre></figure>
+<h3 id="dar-valores-a-las-variables">Dar valores a las variables</h3>
+<p>Hay varias formas. La más cómoda es un archivo <code>terraform.tfvars</code>, que Terraform lee solo:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform.tfvars</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">proyecto = "tienda"
+entorno  = "dev"</code></pre></figure>
+<p>Otras formas:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform plan -var=&quot;entorno=prod&quot;
+terraform plan -var-file=&quot;prod.tfvars&quot;
+export TF_VAR_proyecto=tienda">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform plan -var="entorno=prod"</span>
+<span class="prompt">$ </span><span class="cmdline">terraform plan -var-file="prod.tfvars"</span>
+<span class="prompt">$ </span><span class="cmdline">export TF_VAR_proyecto=tienda</span></code></pre></figure>
+<p>Si el mismo valor está en varios sitios, gana el de más abajo en esta tabla:</p>
+<div class="table-wrap"><table><thead><tr><th>Prioridad</th><th>Dónde está el valor</th></tr></thead><tbody><tr><td>1 (la más baja)</td><td><code>default</code> de la variable</td></tr><tr><td>2</td><td>Variable de entorno <code>TF_VAR_nombre</code></td></tr><tr><td>3</td><td>Archivo <code>terraform.tfvars</code></td></tr><tr><td>4</td><td>Archivos <code>*.auto.tfvars</code></td></tr><tr><td>5 (la más alta)</td><td><code>-var</code> o <code>-var-file</code> al ejecutar el comando</td></tr></tbody></table></div>
+<div class="callout tip"><span class="k">Consejo</span>Una forma ordenada de trabajar: lo común en <code>terraform.tfvars</code> y un archivo por entorno (<code>dev.tfvars</code>, <code>prod.tfvars</code>) que pasas con <code>-var-file</code>.</div>
+<h3 id="outputs-mostrar-resultados">Outputs: mostrar resultados</h3>
+<p>Los outputs muestran datos útiles al terminar, como una dirección web o un nombre:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">outputs.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">output "archivo" {
+  description = "Archivo generado"
+  value       = local_file.config.filename
+}</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform output
+terraform output -raw archivo">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform output</span>
+<span class="out">archivo = "tienda-dev.conf"</span>
+<span class="prompt">$ </span><span class="cmdline">terraform output -raw archivo</span>
+<span class="out">tienda-dev.conf</span></code></pre></figure>
+<p>Con <code>-raw</code> sale el valor sin comillas, útil para usarlo en otros comandos.</p>
+<h3 id="locals-no-repetir">Locals: no repetir</h3>
+<p>Si escribes lo mismo muchas veces, guárdalo en un <code>local</code>. A diferencia de una variable, un local <strong>no se puede cambiar desde fuera</strong>: es un cálculo interno.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">locals.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">locals {
+  prefijo = "${var.proyecto}-${var.entorno}"
+
+  etiquetas = {
+    Proyecto = var.proyecto
+    Entorno  = var.entorno
+  }
+}
+
+resource "local_file" "config" {
+  filename = "${local.prefijo}.conf"
+  content  = jsonencode(local.etiquetas)
+}</code></pre></figure>
+<h3 id="valores-secretos">Valores secretos</h3>
+<p>Si una variable o un output contiene una contraseña, márcalo con <code>sensitive = true</code>. Así Terraform no la muestra en pantalla:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">secretos</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">variable "db_password" {
+  type      = string
+  sensitive = true
+}</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform apply">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform apply</span>
+<span class="out">...</span>
+<span class="out">Outputs:</span>
+<span class="out">password = &lt;sensitive&gt;</span></code></pre></figure>
+<div class="callout aviso"><span class="k">Importante</span><code>sensitive</code> solo <strong>oculta</strong> el valor en pantalla. El valor sigue guardado sin cifrar en el archivo de estado (<code>terraform.tfstate</code>). Por eso ese archivo nunca se comparte.</div></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 5 de 22</p><h3 class="paso-titulo">Las variables del proyecto</h3><p>Define los datos de entrada del proyecto. Algunos tienen valor por defecto y otros (como tu IP) los das tú:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/variables.tf</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">variable "proyecto" {
+  description = "Nombre del proyecto. Se usa en los nombres de los recursos"
+  type        = string
+  default     = "miweb"
+
+  validation {
+    condition     = can(regex("^[a-z][a-z0-9-]{2,15}$", var.proyecto))
+    error_message = "Solo minúsculas, números y guiones (3 a 16 caracteres)."
+  }
+}
+
+variable "entorno" {
+  description = "Entorno: dev o prod"
+  type        = string
+  default     = "dev"
+
+  validation {
+    condition     = contains(["dev", "prod"], var.entorno)
+    error_message = "El entorno debe ser dev o prod."
+  }
+}
+
+variable "region" {
+  description = "Región de AWS"
+  type        = string
+  default     = "eu-west-1"
+}
+
+variable "mi_ip" {
+  description = "Tu IP pública en formato CIDR (por ejemplo 81.45.10.20/32)"
+  type        = string
+
+  validation {
+    condition     = can(cidrhost(var.mi_ip, 0))
+    error_message = "mi_ip debe tener formato CIDR, por ejemplo 81.45.10.20/32."
+  }
+}
+
+variable "ruta_clave_publica" {
+  description = "Ruta de tu clave SSH pública"
+  type        = string
+  default     = "~/.ssh/id_ed25519.pub"
+}</code></pre></figure>
+<p>Da valor a tu IP en <code>terraform.tfvars</code>. Añade <code>/32</code> al final: significa «solo esta IP».</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/terraform.tfvars</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl">mi_ip = "81.45.10.20/32"</code></pre></figure>
+<p>Este archivo tiene un dato personal y está en el <code>.gitignore</code>. Sube en su lugar un ejemplo para que otros sepan qué poner:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terraform/terraform.tfvars.example</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl"># Copia este archivo como terraform.tfvars y cambia los valores.
+mi_ip = "81.45.10.20/32"   # tu IP: curl -s https://checkip.amazonaws.com</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform validate">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform validate</span>
+<span class="out">Success! The configuration is valid.</span></code></pre></figure>
+<p>Resultado de este paso: el error del paso anterior ha desaparecido y el proyecto ya tiene sus datos de entrada.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Parametriza el proyecto del módulo 2</strong></p><ol class="pasos"><li>Convierte el nombre del archivo y el contenido en variables.</li><li>Crea <code>dev.tfvars</code> y <code>prod.tfvars</code> y aplica con <code>-var-file</code>.</li><li>Prueba a dar un valor no permitido y observa la validación.</li><li>Exporta <code>TF_VAR_proyecto=demo</code> y comprueba la precedencia.</li><li>Saca un output en JSON y fíltralo con <code>jq</code>.</li></ol></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform plan -var=&quot;entorno=prod&quot;</code></td><td>Asigna una variable desde la línea de comandos.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform plan -var=&quot;entorno=prod&quot;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform apply -var-file=&quot;prod.tfvars&quot;</code></td><td>Carga variables desde un archivo.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform apply -var-file=&quot;prod.tfvars&quot;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">export TF_VAR_proyecto=demo</code></td><td>Asigna una variable vía entorno (bash).</td><td class="copy-cell"><button class="copy" type="button" data-copy="export TF_VAR_proyecto=demo" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">$env:TF_VAR_proyecto = &quot;demo&quot;</code></td><td>Lo mismo en PowerShell.</td><td class="copy-cell"><button class="copy" type="button" data-copy="$env:TF_VAR_proyecto = &quot;demo&quot;" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform output -json | jq</code></td><td>Outputs en JSON formateado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform output -json | jq" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform output -raw prefijo</code></td><td>Valor sin comillas, ideal para scripts.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform output -raw prefijo" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt>Terraform pregunta por una variable cada vez</dt><dd>No tiene <code>default</code> ni valor asignado. Añádelo a <code>terraform.tfvars</code>.</dd></div><div><dt>Creer que <code>sensitive</code> cifra el valor</dt><dd>Solo lo oculta en la salida. Protege el estado (backend cifrado, acceso restringido).</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="04" data-total="7"><fieldset class="q" data-ok="0"><legend><span class="qn">01</span><span class="txt">¿Cómo se lee el valor de la variable <code>region</code> dentro del código?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">var.region</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">variable.region</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">${region}</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">local.region</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Las variables se referencian con el prefijo <code>var.</code>.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">02</span><span class="txt">Una variable sin <code>default</code>…</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">provoca un error de sintaxis</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">toma el valor null</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">vale cadena vacía</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">es obligatoria: hay que darle valor o Terraform lo pedirá</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Sin default, Terraform necesita que le des un valor por alguna vía.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">03</span><span class="txt"><code>entorno</code> vale "dev" en terraform.tfvars y ejecutas <code>terraform plan -var="entorno=prod"</code>. ¿Qué valor usa?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">El default</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">prod</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Da error por conflicto</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">dev</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los flags de la línea de comandos tienen la máxima prioridad.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">04</span><span class="txt">¿Qué variable de entorno da valor a <code>var.proyecto</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">TF_PROYECTO</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">TF_VAR_proyecto</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">VAR_proyecto</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">PROYECTO</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El prefijo es <code>TF_VAR_</code> seguido del nombre exacto de la variable.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">05</span><span class="txt">¿Qué hace realmente <code>sensitive = true</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Cifra el valor en el estado</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Impide usar la variable</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Lo guarda en AWS Secrets Manager</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Oculta el valor en la salida por pantalla</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El valor sigue en texto plano en el estado.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">06</span><span class="txt">¿Cuándo es mejor un <code>local</code> que una <code>variable</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Nunca</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para secretos</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Cuando el usuario debe poder cambiarlo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Cuando es un valor calculado interno que se repite</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Los locals evitan repetición y no son configurables desde fuera.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">07</span><span class="txt">¿Qué comando devuelve un output sin comillas, listo para un script?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform output -raw nombre</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform output -json</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform show</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">terraform output --plain</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>-raw</code> imprime el valor tal cual.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Configuración multi-entorno</h3><p>Crea un proyecto con las variables <code>proyecto</code> (obligatoria, validada), <code>entorno</code> (validada) y <code>replicas</code>. Genera un archivo <code>&lt;proyecto&gt;-&lt;entorno&gt;.json</code> con un objeto que contenga las tres. Crea <code>dev.tfvars</code> y <code>prod.tfvars</code> y comprueba que generan archivos distintos.</p><details><summary>Ver pista</summary><p><code>jsonencode()</code> convierte un objeto HCL en texto JSON.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl"># variables.tf
+variable "proyecto" {
+  type = string
+  validation {
+    condition     = length(var.proyecto) &gt;= 3
+    error_message = "Mínimo 3 caracteres."
+  }
+}
+
+variable "entorno" {
+  type = string
+  validation {
+    condition     = contains(["dev", "prod"], var.entorno)
+    error_message = "Solo dev o prod."
+  }
+}
+
+variable "replicas" {
+  type    = number
+  default = 1
+}
+
+# main.tf
+resource "local_file" "config" {
+  filename = "${path.module}/${var.proyecto}-${var.entorno}.json"
+  content = jsonencode({
+    proyecto = var.proyecto
+    entorno  = var.entorno
+    replicas = var.replicas
+  })
+}
+
+# dev.tfvars  →  proyecto = "tienda"  entorno = "dev"
+# prod.tfvars →  proyecto = "tienda"  entorno = "prod"  replicas = 3
+# terraform apply -var-file=dev.tfvars</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2. Adivina la precedencia</h3><p><code>default = "a"</code>, <code>export TF_VAR_x=b</code>, <code>terraform.tfvars</code> con <code>x = "c"</code>, <code>z.auto.tfvars</code> con <code>x = "d"</code>. Ejecutas <code>terraform plan</code>. ¿Qué valor tiene <code>var.x</code>? ¿Y si añades <code>-var=x=e</code>?</p><details><summary>Ver pista</summary><p>Repasa la tabla de prioridades.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">Sin -var  → "d"  (*.auto.tfvars gana a terraform.tfvars, entorno y default)
+Con -var  → "e"  (la línea de comandos gana a todo)</code></pre></figure></details></article></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="04"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="03-hcl.html"><small>Anterior</small>El lenguaje HCL</a><a class="next" href="05-providers.html"><small>Siguiente</small>Providers y conexión con la nube</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

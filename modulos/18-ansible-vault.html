@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>18 · Ansible Vault y buenas prácticas | Terraform y Ansible desde cero</title>
+<meta name="description" content="Guardar contraseñas cifradas y mantener el código de Ansible limpio con ansible-lint.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 23 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html" aria-current="page"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#el-problema-de-las-contrasenas">El problema de las contraseñas</a></li><li><a href="#cifrar-un-archivo">Cifrar un archivo</a></li><li><a href="#usar-variables-cifradas">Usar variables cifradas</a></li><li><a href="#que-no-se-vean-en-pantalla-no-log">Que no se vean en pantalla: no_log</a></li><li><a href="#configurar-ansible-ansible-cfg">Configurar Ansible: ansible.cfg</a></li><li><a href="#revisar-el-codigo-ansible-lint">Revisar el código: ansible-lint</a></li><li><a href="#buenas-practicas">Buenas prácticas</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 18</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 18</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 18</p>
+  <h1>Ansible Vault y buenas prácticas</h1>
+  <p class="lead">Guardar contraseñas cifradas y mantener el código de Ansible limpio con ansible-lint.</p>
+  <div class="meta-row"><span>Nivel: Intermedio</span><span>Duración: 1,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 18</span></div>
+</header>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Cifrar y descifrar archivos con Ansible Vault.</li><li>Usar variables cifradas en un playbook.</li><li>Configurar Ansible con <code>ansible.cfg</code>.</li><li>Revisar el código con ansible-lint.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="el-problema-de-las-contrasenas">El problema de las contraseñas</h3>
+<p>Tarde o temprano necesitarás una contraseña en tu código: la de una base de datos, la de una zona privada... Si la escribes tal cual en un archivo YAML y lo subes a Git, cualquiera con acceso al repositorio la verá.</p>
+<p><strong>Ansible Vault</strong> cifra archivos con una contraseña. El archivo cifrado sí se puede subir a Git: sin la contraseña del vault no se puede leer.</p>
+<h3 id="cifrar-un-archivo">Cifrar un archivo</h3>
+<p>Crea un archivo de variables normal y luego cífralo:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">secretos.yml (antes de cifrar)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+db_password: "MiContraseñaSecreta123"</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-vault encrypt secretos.yml
+cat secretos.yml">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-vault encrypt secretos.yml</span>
+<span class="out">New Vault password:</span>
+<span class="out">Confirm New Vault password:</span>
+<span class="out">Encryption successful</span>
+<span class="prompt">$ </span><span class="cmdline">cat secretos.yml</span>
+<span class="out">$ANSIBLE_VAULT;1.1;AES256</span>
+<span class="out">62313365396662343061393464336163383764373764613633653634306231386433626436623361</span>
+<span class="out">6230653332656362336431643739643739653330643738310a3632626565313236363461366366...</span></code></pre></figure>
+<p>Ahora el archivo es ilegible. Comandos útiles:</p>
+<div class="table-wrap"><table><thead><tr><th>Comando</th><th>Qué hace</th></tr></thead><tbody><tr><td><code>ansible-vault create archivo.yml</code></td><td>Crea un archivo nuevo ya cifrado</td></tr><tr><td><code>ansible-vault encrypt archivo.yml</code></td><td>Cifra un archivo existente</td></tr><tr><td><code>ansible-vault view archivo.yml</code></td><td>Muestra el contenido sin descifrar el archivo</td></tr><tr><td><code>ansible-vault edit archivo.yml</code></td><td>Abre el editor para cambiarlo</td></tr><tr><td><code>ansible-vault decrypt archivo.yml</code></td><td>Lo deja sin cifrar (con cuidado)</td></tr></tbody></table></div>
+<h3 id="usar-variables-cifradas">Usar variables cifradas</h3>
+<p>Las variables cifradas se usan igual que las demás. Si el archivo está en <code>group_vars</code>, Ansible lo carga solo. Al ejecutar, hay que darle la contraseña del vault:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-playbook site.yml --ask-vault-pass">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml --ask-vault-pass</span>
+<span class="out">Vault password:</span></code></pre></figure>
+<p>Si no la das, Ansible avisa:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain"><span class="out">ERROR! Attempting to decrypt but no vault secrets found</span></code></pre></figure>
+<p>También puedes guardar la contraseña en un archivo (fuera del repositorio) y usar <code>--vault-password-file</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="echo &quot;mi-contraseña-del-vault&quot; &gt; ~/.vault_pass
+chmod 600 ~/.vault_pass
+ansible-playbook site.yml --vault-password-file ~/.vault_pass">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">echo "mi-contraseña-del-vault" &gt; ~/.vault_pass</span>
+<span class="prompt">$ </span><span class="cmdline">chmod 600 ~/.vault_pass</span>
+<span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml --vault-password-file ~/.vault_pass</span></code></pre></figure>
+<div class="callout aviso"><span class="k">Importante</span>La contraseña del vault <strong>nunca</strong> se sube a Git. Guárdala en un gestor de contraseñas.</div>
+<h3 id="que-no-se-vean-en-pantalla-no-log">Que no se vean en pantalla: no_log</h3>
+<p>Aunque la variable esté cifrada, si una tarea la usa, Ansible podría mostrarla en la salida. Para evitarlo, añade <code>no_log: true</code> a esa tarea:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">no_log</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">- name: Guardar la contraseña de la base de datos
+  ansible.builtin.copy:
+    content: "{{ db_password }}"
+    dest: /etc/miapp/db_pass
+    mode: "0600"
+  no_log: true</code></pre></figure>
+<h3 id="configurar-ansible-ansible-cfg">Configurar Ansible: ansible.cfg</h3>
+<p>Ya usas <code>ansible.cfg</code>. Estas son las opciones más útiles:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible.cfg</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">[defaults]
+inventory = inventario/hosts.ini      # inventario por defecto
+roles_path = roles                    # dónde están los roles
+host_key_checking = False             # no preguntar por servidores nuevos
+interpreter_python = auto_silent      # elegir Python sin avisos
+
+[ssh_connection]
+pipelining = True                     # conexiones más rápidas</code></pre></figure>
+<h3 id="revisar-el-codigo-ansible-lint">Revisar el código: ansible-lint</h3>
+<p><strong>ansible-lint</strong> revisa tus playbooks y roles y avisa de errores y malas prácticas: nombres de módulos incompletos, permisos de archivo sin indicar, comandos que deberían ser módulos...</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="pipx install ansible-lint
+ansible-lint">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">pipx install ansible-lint</span>
+<span class="prompt">$ </span><span class="cmdline">ansible-lint</span>
+<span class="out">WARNING  Listing 2 violation(s) that are fatal</span>
+<span class="out">fqcn[action-core]: Use FQCN for builtin module actions (copy).</span>
+<span class="out">roles/web/tasks/main.yml:3</span>
+<span class="out">risky-file-permissions: File permissions unset or incorrect.</span>
+<span class="out">roles/web/tasks/main.yml:3</span>
+<span class="out"></span>
+<span class="out">Failed: 2 failure(s), 0 warning(s) in 9 files processed.</span></code></pre></figure>
+<p>En este ejemplo pide escribir <code>ansible.builtin.copy</code> en lugar de <code>copy</code>, e indicar los permisos con <code>mode</code>. Tras corregirlo:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-lint">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-lint</span>
+<span class="out">Passed: 0 failure(s), 0 warning(s) in 9 files processed.</span></code></pre></figure>
+<h3 id="buenas-practicas">Buenas prácticas</h3>
+<ul><li>Pon un <code>name</code> claro a cada tarea.</li><li>Usa el nombre completo de los módulos (<code>ansible.builtin.apt</code>).</li><li>Indica siempre <code>mode</code> al crear archivos y carpetas.</li><li>Usa módulos en lugar de <code>command</code> o <code>shell</code>. Si usas <code>command</code>, añade <code>changed_when</code>.</li><li>Ejecuta los playbooks dos veces: la segunda debe salir <code>changed=0</code>.</li><li>Prueba primero con <code>--check --diff</code>.</li><li>Cifra los secretos con Vault y marca sus tareas con <code>no_log: true</code>.</li></ul></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 18 de 22</p><h3 class="paso-titulo">Zona privada con contraseña cifrada</h3><p>Vas a añadir a tu web una zona <code>/privado/</code> protegida con usuario y contraseña. La contraseña estará cifrada con Ansible Vault.</p>
+<p>1. Crea el archivo cifrado con la contraseña:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="cd ansible
+ansible-vault create inventario/group_vars/all/vault.yml">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">cd ansible</span>
+<span class="prompt">$ </span><span class="cmdline">ansible-vault create inventario/group_vars/all/vault.yml</span>
+<span class="out">New Vault password:</span>
+<span class="out">Confirm New Vault password:</span></code></pre></figure>
+<p>Se abrirá el editor. Escribe esto y guarda:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">inventario/group_vars/all/vault.yml (descifrado)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+web_privado_password: "elige-una-contraseña"</code></pre></figure>
+<p>2. Añade el usuario (no es secreto) a <code>web.yml</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">inventario/group_vars/all/web.yml (añadir al final)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">web_privado_usuario: "admin"</code></pre></figure>
+<p>3. Pide la contraseña en nginx. Añade esto dentro del bloque <code>server</code> de <code>roles/nginx/templates/sitio.conf.j2</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">roles/nginx/templates/sitio.conf.j2 (añadir)</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">    location /privado/ {
+        auth_basic "Zona privada";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+    }</code></pre></figure>
+<p>4. Añade estas tareas al final de <code>roles/web/tasks/main.yml</code>. nginx necesita la contraseña en un formato especial (cifrada); la calculamos con <code>openssl</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">roles/web/tasks/main.yml (añadir)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">- name: Crear la carpeta privada
+  ansible.builtin.file:
+    path: "{{ web_raiz }}/privado"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Generar la página privada
+  ansible.builtin.template:
+    src: privado.html.j2
+    dest: "{{ web_raiz }}/privado/index.html"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Calcular la contraseña cifrada de la zona privada
+  ansible.builtin.command:
+    cmd: "openssl passwd -6 -salt {{ (inventory_hostname | hash('sha1'))[:16] }} -stdin"
+    stdin: "{{ web_privado_password }}"
+  register: web_hash
+  changed_when: false
+  no_log: true
+
+- name: Guardar usuario y contraseña de la zona privada
+  ansible.builtin.copy:
+    content: "{{ web_privado_usuario }}:{{ web_hash.stdout }}\n"
+    dest: /etc/nginx/.htpasswd
+    owner: root
+    group: www-data
+    mode: "0640"
+  no_log: true</code></pre></figure>
+<div class="callout "><span class="k">Nota</span>El <code>salt</code> es un valor que se mezcla con la contraseña al cifrarla. Lo calculamos a partir del nombre del servidor para que siempre salga igual y la tarea no cambie en cada ejecución.</div>
+<p>5. Crea la plantilla <code>roles/web/templates/privado.html.j2</code> (está en el repositorio del curso), ejecuta y comprueba:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-playbook site.yml --ask-vault-pass
+curl -s -o /dev/null -w &quot;%{http_code}\n&quot; http://54.170.10.20/privado/
+curl -s -u admin:elige-una-contraseña http://54.170.10.20/privado/ | grep h1
+ansible-lint">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml --ask-vault-pass</span>
+<span class="prompt">$ </span><span class="cmdline">curl -s -o /dev/null -w "%{http_code}\n" http://54.170.10.20/privado/</span>
+<span class="out">401</span>
+<span class="prompt">$ </span><span class="cmdline">curl -s -u admin:elige-una-contraseña http://54.170.10.20/privado/ | grep h1</span>
+<span class="out">  &lt;h1&gt;Zona privada&lt;/h1&gt;</span>
+<span class="prompt">$ </span><span class="cmdline">ansible-lint</span>
+<span class="out">Passed: 0 failure(s), 0 warning(s)</span></code></pre></figure>
+<p>Resultado de este paso: tu web tiene una zona privada. La contraseña está cifrada en Git y nunca aparece en pantalla.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Un secreto cifrado (carpeta <code>labs/18-ansible-vault</code>)</strong></p><ol class="pasos"><li>Cifra el archivo <code>secretos.yml</code> con <code>ansible-vault encrypt</code>.</li><li>Ábrelo con <code>cat</code> y comprueba que no se puede leer.</li><li>Ejecuta el playbook con <code>--ask-vault-pass</code>.</li><li>Pasa <code>ansible-lint</code> y corrige los avisos.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">ansible-vault create secretos.yml</code></td><td>Crea un archivo cifrado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-vault create secretos.yml" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-vault encrypt secretos.yml</code></td><td>Cifra un archivo existente.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-vault encrypt secretos.yml" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-vault edit secretos.yml</code></td><td>Edita un archivo cifrado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-vault edit secretos.yml" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-vault view secretos.yml</code></td><td>Muestra el contenido descifrado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-vault view secretos.yml" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-playbook site.yml --ask-vault-pass</code></td><td>Pide la contraseña del vault al ejecutar.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-playbook site.yml --ask-vault-pass" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-lint</code></td><td>Revisa el código y avisa de malas prácticas.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-lint" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>Attempting to decrypt but no vault secrets found</code></dt><dd>El playbook usa un archivo cifrado. Añade <code>--ask-vault-pass</code>.</dd></div><div><dt>Subir la contraseña del vault a Git</dt><dd>La contraseña del vault nunca se sube. Guárdala en un gestor de contraseñas o en los secretos del CI.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="18" data-total="6"><fieldset class="q" data-ok="0"><legend><span class="qn">01</span><span class="txt">¿Para qué sirve Ansible Vault?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Para cifrar archivos con datos secretos</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para instalar roles</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para conectar por SSH</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para guardar copias de seguridad</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El archivo cifrado puede subirse a Git sin riesgo.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">02</span><span class="txt">¿Qué comando cifra un archivo existente?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">ansible-vault encrypt</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">ansible-vault create</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">ansible-vault lock</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">ansible-playbook --encrypt</span></button></div><p class="exp" hidden><strong class="verdict"></strong> </p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">03</span><span class="txt">Ejecutas un playbook que usa un archivo cifrado y sale "no vault secrets found". ¿Qué falta?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Descifrar el archivo</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Instalar Vault</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Reiniciar</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Añadir --ask-vault-pass</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Ansible necesita la contraseña del vault.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">04</span><span class="txt">¿Qué hace <code>no_log: true</code> en una tarea?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Que no se ejecute</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Que no muestre sus datos en la salida</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Que no cambie nada</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Que no se guarde en Git</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Evita que un secreto aparezca en pantalla o en los registros.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">05</span><span class="txt">¿Qué se puede subir a Git?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">El archivo de contraseñas sin cifrar</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Nada</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">La contraseña del vault</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">El archivo cifrado con Vault</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El archivo cifrado sí; su contraseña nunca.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">06</span><span class="txt">¿Para qué sirve ansible-lint?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Para ejecutar playbooks más rápido</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para crear roles</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para cifrar</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para revisar el código y avisar de errores y malas prácticas</span></button></div><p class="exp" hidden><strong class="verdict"></strong> </p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Tu primer secreto</h3><p>Crea con <code>ansible-vault create</code> un archivo <code>secretos.yml</code> con la variable <code>api_token</code>. Escribe un playbook para <code>local</code> que guarde el token en <code>/tmp/token.txt</code> con permisos 0600 sin mostrarlo en pantalla.</p><details><summary>Ver pista</summary><p>Carga el archivo con <code>vars_files</code> y usa <code>no_log: true</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Guardar un secreto
+  hosts: local
+  vars_files:
+    - secretos.yml
+  tasks:
+    - name: Guardar el token
+      ansible.builtin.copy:
+        content: "{{ api_token }}"
+        dest: /tmp/token.txt
+        mode: "0600"
+      no_log: true
+# ansible-playbook secreto.yml --ask-vault-pass</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2. Limpia un playbook con ansible-lint</h3><p>Pasa <code>ansible-lint</code> sobre este playbook y corrige todos los avisos.</p><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">código del reto</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">- hosts: local
+  tasks:
+    - copy:
+        content: hola
+        dest: /tmp/hola.txt
+    - shell: mkdir -p /tmp/datos</code></pre></figure><details><summary>Ver pista</summary><p>Faltan nombres, el nombre completo de los módulos y permisos. Y <code>mkdir</code> tiene un módulo.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Ejemplo limpio
+  hosts: local
+  tasks:
+    - name: Crear hola.txt
+      ansible.builtin.copy:
+        content: hola
+        dest: /tmp/hola.txt
+        mode: "0644"
+
+    - name: Crear la carpeta de datos
+      ansible.builtin.file:
+        path: /tmp/datos
+        state: directory
+        mode: "0755"</code></pre></figure></details></article></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="18"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="17-ansible-roles.html"><small>Anterior</small>Roles y colecciones</a><a class="next" href="19-terraform-ansible.html"><small>Siguiente</small>Terraform y Ansible juntos</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

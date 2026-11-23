@@ -1,0 +1,5 @@
+---
+- name: Usar el rol miweb
+  hosts: local
+  roles:
+    - miweb

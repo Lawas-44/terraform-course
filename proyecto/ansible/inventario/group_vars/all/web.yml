@@ -1,0 +1,15 @@
+---
+# Datos de tu web personal (paso 15). Cámbialos por los tuyos.
+web_nombre: "Ana García"
+web_titulo: "Mi web en la nube"
+web_descripcion: "Aprendiendo Terraform y Ansible paso a paso."
+web_proyectos:
+  - nombre: "Infraestructura con Terraform"
+    descripcion: "Red, servidores y firewall en AWS creados con código."
+  - nombre: "Configuración con Ansible"
+    descripcion: "Servidores configurados automáticamente con roles."
+  - nombre: "Despliegue automático"
+    descripcion: "Un solo comando crea y configura todo."
+
+# Usuario de la zona privada (paso 18). La contraseña está en vault.yml.
+web_privado_usuario: "admin"

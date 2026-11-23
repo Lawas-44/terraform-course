@@ -1,0 +1,34 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+!example.tfvars
+# Los .tfvars de los labs no contienen secretos
+!labs/**/*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+# Archivos generados por los labs
+labs/**/saludo.txt
+labs/**/presentacion.txt
+labs/**/salida/
+labs/**/.env
+labs/**/inventario.txt
+labs/**/*.conf
+labs/**/*.json
+labs/**/config-*.txt
+labs/**/user_data.sh
+.tf-plugin-cache/
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

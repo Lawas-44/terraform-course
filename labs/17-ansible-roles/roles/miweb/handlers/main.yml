@@ -1,0 +1,4 @@
+---
+- name: Avisar del cambio
+  ansible.builtin.debug:
+    msg: "La página ha cambiado"

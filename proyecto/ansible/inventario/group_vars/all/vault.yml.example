@@ -1,0 +1,4 @@
+---
+# Copia este archivo como vault.yml y cífralo con:
+#   ansible-vault encrypt inventario/group_vars/all/vault.yml
+web_privado_password: "cambia-esta-contraseña"

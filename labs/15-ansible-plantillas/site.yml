@@ -1,0 +1,18 @@
+---
+- name: Página generada con plantilla
+  hosts: local
+  vars:
+    carpeta: /tmp/lab15
+
+  tasks:
+    - name: Crear la carpeta
+      ansible.builtin.file:
+        path: "{{ carpeta }}"
+        state: directory
+        mode: "0755"
+
+    - name: Generar la página
+      ansible.builtin.template:
+        src: templates/pagina.html.j2
+        dest: "{{ carpeta }}/pagina.html"
+        mode: "0644"

@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terraform y Ansible desde cero · Curso para principiantes</title>
+<meta name="description" content="Curso gratuito de Terraform y Ansible en español para principiantes, con un proyecto real paso a paso.">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 23 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="index.html" aria-current="page"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="02" href="modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="06" href="modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="09" href="modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+
+<section class="hero">
+  <p class="eyebrow">Curso gratuito · En español · Desde cero</p>
+  <h1>Aprende Terraform y Ansible desde cero</h1>
+  <p class="lead">Aprende a crear servidores en la nube con Terraform y a configurarlos con Ansible. Mientras aprendes, construyes paso a paso un proyecto real: tu propia web funcionando en AWS.</p>
+  <div class="cta"><a class="btn primary js-continuar" href="modulos/00-introduccion.html">Empezar el curso</a><a class="btn" href="comandos.html">Chuleta de comandos</a></div>
+  <ul class="stats">
+    <li><strong>23</strong><span>módulos</span></li>
+    <li><strong>22</strong><span>pasos del proyecto guiado</span></li>
+    <li><strong>~50 h</strong><span>de contenido y prácticas</span></li>
+    <li><strong>0 €</strong><span>para empezar (capa gratuita de AWS)</span></li>
+  </ul>
+</section>
+
+<section id="resultado">
+  <h2>Lo que tendrás al terminar</h2>
+  <p>Una web personal funcionando en dos servidores de AWS. Terraform crea la red, el firewall y los servidores; Ansible instala nginx, publica tu web, añade una página de estado y una zona privada con contraseña. Todo se crea con un solo comando y se borra con otro.</p>
+  <div class="grid-2">
+    <div class="card"><h3>Terraform</h3><p>Red propia (VPC), firewall, clave SSH y dos servidores Ubuntu. Estado guardado en S3.</p></div>
+    <div class="card"><h3>Ansible</h3><p>Roles para preparar el sistema, instalar nginx y publicar tu web con plantillas.</p></div>
+    <div class="card"><h3>Integración</h3><p>Terraform genera el inventario de Ansible y un script lo despliega todo.</p></div>
+    <div class="card"><h3>Calidad</h3><p>Tests, ansible-lint y GitHub Actions revisando cada cambio.</p></div>
+  </div>
+  <div class="cta"><a class="btn" href="proyecto.html">Ver el proyecto paso a paso</a></div>
+</section>
+
+<section id="enfoque">
+  <h2>Cómo funciona el curso</h2>
+  <div class="grid-2">
+    <div class="card"><h3>Para quién</h3><p>Para cualquier persona que empiece de cero. No hace falta saber programar ni haber usado la nube.</p></div>
+    <div class="card"><h3>Qué necesitas</h3><p>Un ordenador con Windows (con WSL), macOS o Linux. A partir del módulo 5, una cuenta de AWS.</p></div>
+    <div class="card"><h3>Cómo se aprende</h3><p>Cada módulo tiene: objetivos, lección, un paso del proyecto, práctica guiada, comandos, errores frecuentes, test y retos.</p></div>
+    <div class="card"><h3>Sin gastar dinero</h3><p>Usamos servidores de la capa gratuita de AWS y al terminar cada sesión los borramos con <code>terraform destroy</code>.</p></div>
+  </div>
+</section>
+
+<section id="temario">
+  <h2>Temario</h2>
+  <div class="fase"><h3>Parte 1 · Primeros pasos</h3><p class="muted">Qué vas a aprender, qué vas a construir y cómo preparar tu ordenador.</p><ul class="mod-list"><li><a class="mod-row" href="modulos/00-introduccion.html" data-mod="00"><span class="num">00</span><span><strong>Introducción a la Infraestructura como Código</strong><span class="desc">Qué es la Infraestructura como Código y para qué sirven Terraform y Ansible.</span></span><span class="info">Básico · 1 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/01-entorno.html" data-mod="01"><span class="num">01</span><span><strong>Preparación del entorno</strong><span class="desc">Terminal, Terraform, Ansible, claves SSH, editor, Git y una cuenta de AWS preparada de forma segura.</span></span><span class="info">Básico · 1,5 h<span class="estado"></span></span></a></li></ul></div><div class="fase"><h3>Parte 2 · Terraform</h3><p class="muted">Crear la infraestructura: red, servidores y firewall en AWS.</p><ul class="mod-list"><li><a class="mod-row" href="modulos/02-primer-proyecto.html" data-mod="02"><span class="num">02</span><span><strong>Tu primer proyecto: el flujo de trabajo</strong><span class="desc">init → plan → apply → destroy, sin gastar un céntimo, usando providers locales.</span></span><span class="info">Básico · 1,5 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/03-hcl.html" data-mod="03"><span class="num">03</span><span><strong>El lenguaje HCL</strong><span class="desc">Sintaxis, bloques, tipos de datos, referencias y convenciones de estilo.</span></span><span class="info">Básico · 1,5 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/04-variables-outputs-locals.html" data-mod="04"><span class="num">04</span><span><strong>Variables, outputs y locals</strong><span class="desc">Parametrizar configuraciones, exponer resultados y evitar repetición.</span></span><span class="info">Básico · 2 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/05-providers.html" data-mod="05"><span class="num">05</span><span><strong>Providers y conexión con la nube</strong><span class="desc">Configurar el provider de AWS, versiones, lock file, alias y autenticación segura.</span></span><span class="info">Básico · 1,5 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/06-recursos-dependencias.html" data-mod="06"><span class="num">06</span><span><strong>Recursos, data sources y dependencias</strong><span class="desc">Construir una pequeña red y un servidor en AWS entendiendo el grafo de dependencias.</span></span><span class="info">Básico · 2,5 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/07-meta-argumentos.html" data-mod="07"><span class="num">07</span><span><strong>Meta-argumentos: count, for_each y lifecycle</strong><span class="desc">Crear múltiples recursos y controlar su ciclo de vida.</span></span><span class="info">Intermedio · 2 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/08-expresiones-funciones.html" data-mod="08"><span class="num">08</span><span><strong>Expresiones y funciones</strong><span class="desc">Condicionales, bucles <code>for</code>, splat, bloques dinámicos y funciones integradas.</span></span><span class="info">Intermedio · 2 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/09-estado.html" data-mod="09"><span class="num">09</span><span><strong>El estado (state) en profundidad</strong><span class="desc">Qué guarda el estado, el drift y cómo manipularlo sin romper nada.</span></span><span class="info">Intermedio · 2 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/10-backends-workspaces.html" data-mod="10"><span class="num">10</span><span><strong>Backends remotos, bloqueo y workspaces</strong><span class="desc">Guardar el estado en S3 o HCP Terraform, bloquearlo y gestionar varios entornos.</span></span><span class="info">Intermedio · 2 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/11-modulos.html" data-mod="11"><span class="num">11</span><span><strong>Módulos</strong><span class="desc">Empaquetar y reutilizar infraestructura: crear, versionar y consumir módulos.</span></span><span class="info">Intermedio · 3 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/12-import-refactor.html" data-mod="12"><span class="num">12</span><span><strong>Importar y refactorizar</strong><span class="desc">Traer infraestructura existente a Terraform y reorganizar el código sin destruir nada.</span></span><span class="info">Intermedio · 1,5 h<span class="estado"></span></span></a></li></ul></div><div class="fase"><h3>Parte 3 · Ansible</h3><p class="muted">Configurar los servidores: programas, archivos y servicios.</p><ul class="mod-list"><li><a class="mod-row" href="modulos/13-ansible-introduccion.html" data-mod="13"><span class="num">13</span><span><strong>Introducción a Ansible</strong><span class="desc">Qué es Ansible, cómo se conecta a los servidores, el inventario y los primeros comandos.</span></span><span class="info">Básico · 1,5 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/14-ansible-playbooks.html" data-mod="14"><span class="num">14</span><span><strong>Playbooks</strong><span class="desc">Escribir playbooks en YAML para instalar programas, copiar archivos y arrancar servicios.</span></span><span class="info">Básico · 2 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/15-ansible-variables-plantillas.html" data-mod="15"><span class="num">15</span><span><strong>Variables, facts y plantillas</strong><span class="desc">Personalizar la configuración con variables, datos de cada servidor y plantillas Jinja2.</span></span><span class="info">Básico · 2 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/16-ansible-handlers-bucles.html" data-mod="16"><span class="num">16</span><span><strong>Handlers, condiciones y bucles</strong><span class="desc">Reiniciar servicios solo cuando hace falta, repetir tareas y ejecutarlas solo si se cumple algo.</span></span><span class="info">Intermedio · 1,5 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/17-ansible-roles.html" data-mod="17"><span class="num">17</span><span><strong>Roles y colecciones</strong><span class="desc">Organizar los playbooks en roles reutilizables y usar roles y colecciones de otros.</span></span><span class="info">Intermedio · 2 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/18-ansible-vault.html" data-mod="18"><span class="num">18</span><span><strong>Ansible Vault y buenas prácticas</strong><span class="desc">Guardar contraseñas cifradas y mantener el código de Ansible limpio con ansible-lint.</span></span><span class="info">Intermedio · 1,5 h<span class="estado"></span></span></a></li></ul></div><div class="fase"><h3>Parte 4 · Todo junto</h3><p class="muted">Terraform y Ansible trabajando juntos, calidad, automatización y proyecto final.</p><ul class="mod-list"><li><a class="mod-row" href="modulos/19-terraform-ansible.html" data-mod="19"><span class="num">19</span><span><strong>Terraform y Ansible juntos</strong><span class="desc">Crear servidores con Terraform y configurarlos con Ansible con un solo comando.</span></span><span class="info">Intermedio · 2 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/20-calidad-testing.html" data-mod="20"><span class="num">20</span><span><strong>Calidad, tests y seguridad</strong><span class="desc">Comprobar el código de Terraform y de Ansible antes de desplegar: tests, linters y escáneres.</span></span><span class="info">Avanzado · 2,5 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/21-equipo-cicd.html" data-mod="21"><span class="num">21</span><span><strong>Trabajo en equipo y CI/CD</strong><span class="desc">Flujo con Git y Pull Requests, y GitHub Actions para revisar Terraform y Ansible automáticamente.</span></span><span class="info">Avanzado · 2,5 h<span class="estado"></span></span></a></li><li><a class="mod-row" href="modulos/22-proyecto-final.html" data-mod="22"><span class="num">22</span><span><strong>Proyecto final y siguientes pasos</strong><span class="desc">Desplegar el proyecto completo desde cero, comprobar el resultado y saber cómo seguir.</span></span><span class="info">Avanzado · 3 h<span class="estado"></span></span></a></li></ul></div>
+</section>
+
+<section id="antes">
+  <h2>Antes de empezar</h2>
+  <ul class="check two-col">
+    <li>Sé abrir una terminal y moverme entre carpetas (<a href="comandos.html#terminal">repaso aquí</a>).</li>
+    <li>Tengo Git instalado y una cuenta de GitHub.</li>
+    <li>Tengo un editor de código (recomendado: VS Code).</li>
+    <li>Sé que nunca se suben contraseñas ni archivos <code>.tfstate</code> a GitHub.</li>
+    <li>A partir del módulo 5: cuenta de AWS con alertas de gasto.</li>
+    <li>Reservo 2 a 4 horas por semana.</li>
+  </ul>
+</section>
+
+<section id="recursos">
+  <h2>Material de apoyo</h2>
+  <div class="grid-2">
+    <a class="card" href="comandos.html"><h3>Chuleta de comandos</h3><p>Terraform, Ansible, terminal, Git y AWS, con buscador y botón de copiar.</p></a>
+    <a class="card" href="glosario.html"><h3>Glosario</h3><p>Todas las palabras del curso explicadas en una línea.</p></a>
+    <a class="card" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><h3>Código de las prácticas</h3><p>Cada práctica lista para ejecutar, en la carpeta <code>labs/</code>.</p></a>
+    <a class="card" href="https://github.com/lawas-44/terraform-course/tree/main/proyecto"><h3>Código del proyecto terminado</h3><p>Para comparar con el tuyo si te atascas, en la carpeta <code>proyecto/</code>.</p></a>
+  </div>
+</section>
+
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

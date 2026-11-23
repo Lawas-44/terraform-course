@@ -1,0 +1,8 @@
+---
+- name: Configurar los servidores web
+  hosts: web
+  become: true
+  roles:
+    - comun
+    - nginx
+    - web

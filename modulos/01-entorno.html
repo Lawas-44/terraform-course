@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01 · Preparación del entorno | Terraform y Ansible desde cero</title>
+<meta name="description" content="Terminal, Terraform, Ansible, claves SSH, editor, Git y una cuenta de AWS preparada de forma segura.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 23 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html" aria-current="page"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#la-terminal">La terminal</a></li><li><a href="#instalar-terraform">Instalar Terraform</a></li><li><a href="#el-editor-de-codigo">El editor de código</a></li><li><a href="#git-y-que-archivos-no-subir-nunca">Git y qué archivos no subir nunca</a></li><li><a href="#cuenta-de-aws-a-partir-del-modulo-5">Cuenta de AWS (a partir del módulo 5)</a></li><li><a href="#instalar-ansible">Instalar Ansible</a></li><li><a href="#tu-clave-ssh">Tu clave SSH</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 2</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 01</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 01</p>
+  <h1>Preparación del entorno</h1>
+  <p class="lead">Terminal, Terraform, Ansible, claves SSH, editor, Git y una cuenta de AWS preparada de forma segura.</p>
+  <div class="meta-row"><span>Nivel: Básico</span><span>Duración: 1,5 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 2</span></div>
+</header>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Moverse con soltura por la terminal (Linux/macOS y PowerShell).</li><li>Instalar Terraform y Ansible.</li><li>Crear una clave SSH para entrar en los servidores.</li><li>Configurar VS Code con la extensión oficial de HashiCorp.</li><li>Preparar Git y un repositorio para los ejercicios.</li><li>Crear una cuenta en AWS con un usuario no-root, MFA y alertas de presupuesto.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="la-terminal">La terminal</h3>
+<p>Terraform se usa escribiendo comandos en la <strong>terminal</strong> (también llamada consola). Es una ventana donde escribes órdenes en lugar de hacer clic.</p>
+<ul><li><strong>macOS y Linux</strong>: abre la aplicación «Terminal».</li><li><strong>Windows</strong>: abre <strong>PowerShell</strong>. Si quieres una terminal igual que la de Linux, instala WSL con <code>wsl --install</code>.</li></ul>
+<p>Siempre estás «dentro» de una carpeta. Terraform trabaja con los archivos de la carpeta en la que estás. Estos comandos te bastan para empezar:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="pwd
+mkdir terraform-labs
+cd terraform-labs
+ls
+cd ..">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">pwd</span>
+<span class="out">/home/ana</span>
+<span class="prompt">$ </span><span class="cmdline">mkdir terraform-labs</span>
+<span class="prompt">$ </span><span class="cmdline">cd terraform-labs</span>
+<span class="prompt">$ </span><span class="cmdline">ls</span>
+<span class="prompt">$ </span><span class="cmdline">cd ..</span></code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>Comando</th><th>Qué hace</th></tr></thead><tbody><tr><td><code>pwd</code></td><td>Muestra en qué carpeta estás</td></tr><tr><td><code>ls</code></td><td>Lista los archivos de la carpeta</td></tr><tr><td><code>mkdir nombre</code></td><td>Crea una carpeta</td></tr><tr><td><code>cd nombre</code></td><td>Entra en una carpeta</td></tr><tr><td><code>cd ..</code></td><td>Vuelve a la carpeta anterior</td></tr></tbody></table></div>
+<div class="callout tip"><span class="k">Consejo</span>Pulsa <kbd>Tab</kbd> para autocompletar nombres y la flecha hacia arriba para repetir el último comando.</div>
+<h3 id="instalar-terraform">Instalar Terraform</h3>
+<p>Elige tu sistema operativo:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">macOS</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-bash">brew tap hashicorp/tap
+brew install hashicorp/tap/terraform</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">Windows (PowerShell)</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-bash">winget install HashiCorp.Terraform</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">Ubuntu / Debian / WSL</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-bash">sudo apt-get update &amp;&amp; sudo apt-get install -y gnupg curl lsb-release
+curl -fsSL https://apt.releases.hashicorp.com/gpg | \
+  sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+  sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt-get update &amp;&amp; sudo apt-get install -y terraform</code></pre></figure>
+<p>Cierra la terminal, ábrela de nuevo y comprueba que funciona:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform version">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform version</span>
+<span class="out">Terraform v1.10.5</span>
+<span class="out">on linux_amd64</span></code></pre></figure>
+<div class="callout "><span class="k">Nota</span>Para este curso vale cualquier versión <strong>1.10 o superior</strong>. Si algún día necesitas tener varias versiones instaladas, existe la herramienta <strong>tfenv</strong>, que permite cambiar de una a otra.</div>
+<h3 id="el-editor-de-codigo">El editor de código</h3>
+<p>Te recomendamos <strong>Visual Studio Code</strong> (gratuito) con la extensión <strong>HashiCorp Terraform</strong>. La extensión colorea el código, te sugiere palabras mientras escribes y ordena el código al guardar.</p>
+<ol><li>Descarga VS Code de code.visualstudio.com.</li><li>Abre la sección de extensiones (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd>).</li><li>Busca «HashiCorp Terraform» e instálala.</li></ol>
+<h3 id="git-y-que-archivos-no-subir-nunca">Git y qué archivos no subir nunca</h3>
+<p>Guardaremos el código en Git. Antes de nada, dile a Git quién eres:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="git config --global user.name &quot;Tu Nombre&quot;
+git config --global user.email &quot;tu@email.com&quot;">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">git config --global user.name "Tu Nombre"</span>
+<span class="prompt">$ </span><span class="cmdline">git config --global user.email "tu@email.com"</span></code></pre></figure>
+<p>Terraform crea algunos archivos que <strong>no</strong> deben subirse a GitHub porque pesan mucho o tienen datos secretos. Para evitarlo, crea un archivo <code>.gitignore</code> en tu carpeta con este contenido:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">.gitignore</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars</code></pre></figure>
+<div class="table-wrap"><table><thead><tr><th>Archivo</th><th>¿Se sube a Git?</th><th>Motivo</th></tr></thead><tbody><tr><td><code>*.tf</code></td><td>Sí</td><td>Es tu código</td></tr><tr><td><code>.terraform.lock.hcl</code></td><td>Sí</td><td>Guarda las versiones exactas de los providers</td></tr><tr><td><code>.terraform/</code></td><td>No</td><td>Son programas descargados; se pueden volver a descargar</td></tr><tr><td><code>*.tfstate</code></td><td>No</td><td>Puede contener contraseñas</td></tr></tbody></table></div>
+<div class="callout aviso"><span class="k">Importante</span>Antes de subir cambios, ejecuta <code>git status</code> y mira la lista de archivos. Si ves un <code>.tfstate</code>, no lo subas.</div>
+<h3 id="cuenta-de-aws-a-partir-del-modulo-5">Cuenta de AWS (a partir del módulo 5)</h3>
+<p>Los módulos 0 a 4 no necesitan nube. Para los siguientes usaremos AWS. Configúrala con cuidado:</p>
+<ol><li>Crea la cuenta en aws.amazon.com. El email con el que te registras es el usuario principal (llamado <strong>root</strong>).</li><li>Activa la <strong>verificación en dos pasos (MFA)</strong> en ese usuario.</li><li>Crea un usuario para trabajar a diario. No uses root para el día a día.</li><li>Crea una <strong>alerta de gasto</strong> en <em>Billing → Budgets</em>, por ejemplo de 5 dólares. Así AWS te avisará si gastas dinero.</li></ol>
+<p>Instala la herramienta de AWS para la terminal (<strong>AWS CLI</strong>) y guarda tus credenciales:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="aws configure --profile curso-terraform">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">aws configure --profile curso-terraform</span>
+<span class="out">AWS Access Key ID [None]: AKIA...</span>
+<span class="out">AWS Secret Access Key [None]: ****</span>
+<span class="out">Default region name [None]: eu-west-1</span>
+<span class="out">Default output format [None]: json</span></code></pre></figure>
+<p>Comprueba que funciona. Si ves tu número de cuenta, todo está bien:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="aws sts get-caller-identity --profile curso-terraform">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">aws sts get-caller-identity --profile curso-terraform</span>
+<span class="out">{</span>
+<span class="out">    "Account": "123456789012",</span>
+<span class="out">    "Arn": "arn:aws:iam::123456789012:user/alumno"</span>
+<span class="out">}</span></code></pre></figure>
+<div class="callout aviso"><span class="k">Importante</span>Nunca escribas tus claves de AWS dentro de los archivos <code>.tf</code>. Terraform las lee solas de la configuración que acabas de crear.</div>
+<h3 id="instalar-ansible">Instalar Ansible</h3>
+<p>Ansible se usa a partir del módulo 13, pero puedes instalarlo ya. Funciona en Linux y macOS; en <strong>Windows se usa dentro de WSL</strong>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">macOS</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-bash">brew install ansible</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">Ubuntu / Debian / WSL</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-bash">sudo apt update
+sudo apt install -y pipx
+pipx install --include-deps ansible
+pipx ensurepath</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible --version">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible --version</span>
+<span class="out">ansible [core 2.18.1]</span></code></pre></figure>
+<h3 id="tu-clave-ssh">Tu clave SSH</h3>
+<p>Para entrar en los servidores (tú y Ansible) se usa <strong>SSH</strong> con una <strong>clave</strong>: un par de archivos. La <strong>clave pública</strong> se pone en los servidores; la <strong>clave privada</strong> se queda en tu ordenador y nunca se comparte.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ssh-keygen -t ed25519 -C &quot;tu@email.com&quot;
+ls ~/.ssh">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ssh-keygen -t ed25519 -C "tu@email.com"</span>
+<span class="out">Generating public/private ed25519 key pair.</span>
+<span class="out">Enter file in which to save the key (/home/ana/.ssh/id_ed25519):</span>
+<span class="out">Enter passphrase (empty for no passphrase):</span>
+<span class="prompt">$ </span><span class="cmdline">ls ~/.ssh</span>
+<span class="out">id_ed25519  id_ed25519.pub</span></code></pre></figure>
+<ul><li><code>id_ed25519</code>: clave privada. No la compartas nunca.</li><li><code>id_ed25519.pub</code>: clave pública. Terraform la subirá a AWS.</li></ul>
+<div class="callout aviso"><span class="k">Importante</span>Si ya tenías una clave en <code>~/.ssh/id_ed25519</code>, no la sobrescribas: pulsa Enter con cuidado o usa la que ya tienes.</div></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 2 de 22</p><h3 class="paso-titulo">Prepara el repositorio del proyecto</h3><p>Crea la carpeta del proyecto con su estructura y su <code>.gitignore</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="mkdir mi-web-en-la-nube
+cd mi-web-en-la-nube
+mkdir terraform ansible scripts
+git init">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">mkdir mi-web-en-la-nube</span>
+<span class="prompt">$ </span><span class="cmdline">cd mi-web-en-la-nube</span>
+<span class="prompt">$ </span><span class="cmdline">mkdir terraform ansible scripts</span>
+<span class="prompt">$ </span><span class="cmdline">git init</span></code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">.gitignore</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain"># Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+terraform/terraform.tfvars
+terraform/backend.hcl
+
+# Generado por Terraform
+ansible/inventario/hosts.ini</code></pre></figure>
+<p>Averigua tu IP pública. Solo esa IP podrá entrar por SSH a tus servidores:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="curl -s https://checkip.amazonaws.com">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">curl -s https://checkip.amazonaws.com</span>
+<span class="out">81.45.10.20</span></code></pre></figure>
+<p>Comprueba que tienes todo lo necesario:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="terraform version
+ansible --version
+aws sts get-caller-identity
+ls ~/.ssh/id_ed25519.pub">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">terraform version</span>
+<span class="prompt">$ </span><span class="cmdline">ansible --version</span>
+<span class="prompt">$ </span><span class="cmdline">aws sts get-caller-identity</span>
+<span class="prompt">$ </span><span class="cmdline">ls ~/.ssh/id_ed25519.pub</span></code></pre></figure>
+<p>Haz el primer commit y súbelo a un repositorio nuevo de GitHub llamado <code>mi-web-en-la-nube</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="git add .gitignore
+git commit -m &quot;Estructura inicial&quot;
+git remote add origin https://github.com/tu-usuario/mi-web-en-la-nube.git
+git push -u origin main">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">git add .gitignore</span>
+<span class="prompt">$ </span><span class="cmdline">git commit -m "Estructura inicial"</span>
+<span class="prompt">$ </span><span class="cmdline">git remote add origin https://github.com/tu-usuario/mi-web-en-la-nube.git</span>
+<span class="prompt">$ </span><span class="cmdline">git push -u origin main</span></code></pre></figure>
+<p>Resultado de este paso: un repositorio vacío y ordenado, listo para empezar.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Entorno listo</strong></p><ol class="pasos"><li>Instala Terraform y comprueba la versión con <code>terraform version</code>.</li><li>Activa el autocompletado: <code>terraform -install-autocomplete</code>.</li><li>Instala la AWS CLI y ejecuta <code>aws configure</code> (o <code>aws configure sso</code>).</li><li>Verifica la identidad con <code>aws sts get-caller-identity</code>.</li><li>Crea un presupuesto de 5 USD con alerta por email en AWS Budgets.</li><li>Crea un repositorio <code>terraform-labs</code> con el <code>.gitignore</code> anterior.</li></ol></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">terraform version</code></td><td>Muestra la versión de Terraform y de los providers.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform version" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">terraform -install-autocomplete</code></td><td>Instala el autocompletado en bash/zsh.</td><td class="copy-cell"><button class="copy" type="button" data-copy="terraform -install-autocomplete" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">aws sts get-caller-identity</code></td><td>Comprueba con qué cuenta y usuario estás autenticado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="aws sts get-caller-identity" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">tfenv install 1.9.8 &amp;&amp; tfenv use 1.9.8</code></td><td>Instala y activa una versión concreta (ejemplo).</td><td class="copy-cell"><button class="copy" type="button" data-copy="tfenv install 1.9.8 &amp;&amp; tfenv use 1.9.8" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>terraform: command not found</code></dt><dd>El binario no está en el <code>PATH</code>. Reabre la terminal o añade la carpeta al <code>PATH</code>.</dd></div><div><dt>Usar la cuenta root de AWS con access keys</dt><dd>Nunca. Crea un usuario/rol con permisos y activa MFA en root.</dd></div><div><dt>Subir <code>terraform.tfstate</code> o claves a GitHub</dt><dd>Configura el <code>.gitignore</code> antes del primer commit y usa <code>git status</code> antes de cada <code>git add</code>.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="01" data-total="6"><fieldset class="q" data-ok="2"><legend><span class="qn">01</span><span class="txt">¿Qué comando muestra la carpeta en la que estás trabajando en Bash?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">cd</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">ls</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">pwd</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">whoami</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>pwd</code> = <em>print working directory</em>.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">02</span><span class="txt">¿Cuál de estos archivos SÍ debe subirse a Git?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform.tfstate</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">secretos.tfvars</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">.terraform/</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">.terraform.lock.hcl</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El lock file fija las versiones exactas de los providers para todo el equipo; el resto contiene binarios o datos sensibles.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">03</span><span class="txt">¿Por qué no se sube el archivo terraform.tfstate a un repositorio?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Porque puede contener datos sensibles en texto plano</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Porque es muy pequeño</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Porque se borra solo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Porque Git no admite JSON</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El estado guarda atributos de los recursos, incluidas contraseñas o claves generadas.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">04</span><span class="txt">¿Qué comando te dice con qué cuenta y usuario de AWS estás autenticado?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">aws sts get-caller-identity</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">aws configure list-users</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform login</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">aws whoami</span></button></div><p class="exp" hidden><strong class="verdict"></strong> STS (<em>Security Token Service</em>) devuelve la cuenta, el usuario/rol y su ARN.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">05</span><span class="txt">¿Qué deberías hacer con el usuario root de AWS?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Protegerlo con MFA y no usarlo para el trabajo diario</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Borrarlo</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Compartirlo con el equipo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Usarlo a diario con access keys</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Root tiene poder ilimitado. Se protege con MFA y se trabaja con usuarios o roles con permisos acotados.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">06</span><span class="txt">¿Para qué sirve tfenv?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Para formatear el código</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para crear cuentas de AWS</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para cifrar el estado</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para gestionar varias versiones de Terraform</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Permite instalar varias versiones y elegir cuál usar en cada proyecto con <code>.terraform-version</code>.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Repositorio de prácticas listo</h3><p>Crea una carpeta <code>terraform-labs</code>, inicializa Git, añade el <code>.gitignore</code> de la lección y un <code>README.md</code>. Haz el primer commit y súbelo a un repositorio nuevo de GitHub.</p><details><summary>Ver pista</summary><p>Crea primero el repositorio vacío en GitHub y copia la URL que te da.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-bash">mkdir terraform-labs &amp;&amp; cd terraform-labs
+git init
+# crea .gitignore y README.md con tu editor
+git status                 # comprueba que no hay nada raro
+git add .gitignore README.md
+git commit -m "Primer commit"
+git remote add origin https://github.com/TU_USUARIO/terraform-labs.git
+git push -u origin main</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2. Perfil de AWS por defecto</h3><p>Haz que la terminal use tu perfil <code>curso-terraform</code> sin tener que escribir <code>--profile</code> en cada comando.</p><details><summary>Ver pista</summary><p>Hay una variable de entorno que la AWS CLI y Terraform leen.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-bash"># Bash/Zsh (añádelo a ~/.bashrc o ~/.zshrc para que sea permanente)
+export AWS_PROFILE=curso-terraform
+
+# PowerShell
+$env:AWS_PROFILE = "curso-terraform"
+
+aws sts get-caller-identity   # ya no hace falta --profile</code></pre></figure></details></article></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="01"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="00-introduccion.html"><small>Anterior</small>Introducción a la Infraestructura como Código</a><a class="next" href="02-primer-proyecto.html"><small>Siguiente</small>Tu primer proyecto: el flujo de trabajo</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

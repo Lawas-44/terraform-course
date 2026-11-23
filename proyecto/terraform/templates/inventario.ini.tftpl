@@ -1,0 +1,8 @@
+# Archivo generado por Terraform. No lo edites a mano.
+[web]
+%{ for nombre, ip in servidores ~}
+${nombre} ansible_host=${ip}
+%{ endfor ~}
+
+[web:vars]
+ansible_user=ubuntu

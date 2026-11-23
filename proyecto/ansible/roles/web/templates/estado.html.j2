@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estado de {{ inventory_hostname }}</title>
+  <link rel="stylesheet" href="/estilo.css">
+</head>
+<body>
+<main>
+  <h1>Estado del servidor</h1>
+  <p>Datos recogidos por Ansible la última vez que configuró este servidor.</p>
+  <table>
+    <tr><th>Nombre en el inventario</th><td>{{ inventory_hostname }}</td></tr>
+    <tr><th>Nombre de la máquina</th><td>{{ ansible_facts['hostname'] }}</td></tr>
+    <tr><th>Sistema operativo</th><td>{{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}</td></tr>
+    <tr><th>IP privada</th><td>{{ ansible_facts['default_ipv4']['address'] | default('desconocida') }}</td></tr>
+    <tr><th>Procesadores</th><td>{{ ansible_facts['processor_vcpus'] | default('?') }}</td></tr>
+    <tr><th>Memoria</th><td>{{ ansible_facts['memtotal_mb'] }} MB</td></tr>
+  </table>
+  <footer><a href="/">Volver</a></footer>
+</main>
+</body>
+</html>

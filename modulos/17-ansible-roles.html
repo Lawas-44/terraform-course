@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>17 · Roles y colecciones | Terraform y Ansible desde cero</title>
+<meta name="description" content="Organizar los playbooks en roles reutilizables y usar roles y colecciones de otros.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 23 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html" aria-current="page"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#que-es-un-rol">Qué es un rol</a></li><li><a href="#estructura-de-un-rol">Estructura de un rol</a></li><li><a href="#dentro-de-un-rol">Dentro de un rol</a></li><li><a href="#usar-roles-en-un-playbook">Usar roles en un playbook</a></li><li><a href="#roles-y-colecciones-de-otros-ansible-galaxy">Roles y colecciones de otros: Ansible Galaxy</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 17</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 17</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 17</p>
+  <h1>Roles y colecciones</h1>
+  <p class="lead">Organizar los playbooks en roles reutilizables y usar roles y colecciones de otros.</p>
+  <div class="meta-row"><span>Nivel: Intermedio</span><span>Duración: 2 h</span><span>Test: 6 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 17</span></div>
+</header>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Conocer la estructura de carpetas de un rol.</li><li>Convertir un playbook largo en roles.</li><li>Usar valores por defecto (<code>defaults</code>) en un rol.</li><li>Instalar roles y colecciones de Ansible Galaxy.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="que-es-un-rol">Qué es un rol</h3>
+<p>Cuando un playbook crece, se vuelve difícil de leer. Un <strong>rol</strong> es una forma de ordenar tareas, plantillas, archivos y handlers en carpetas, para reutilizarlos. Es el equivalente a los <strong>módulos de Terraform</strong>.</p>
+<p>Por ejemplo, un rol <code>nginx</code> instala y configura nginx. Lo puedes usar en todos tus proyectos.</p>
+<h3 id="estructura-de-un-rol">Estructura de un rol</h3>
+<p>Un rol es una carpeta dentro de <code>roles/</code> con subcarpetas de nombres fijos. Ansible sabe qué hay en cada una:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">roles/nginx/</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">roles/
+└── nginx/
+    ├── tasks/
+    │   └── main.yml       # las tareas
+    ├── handlers/
+    │   └── main.yml       # los handlers
+    ├── templates/
+    │   └── sitio.conf.j2  # plantillas
+    ├── files/             # archivos que se copian tal cual
+    └── defaults/
+        └── main.yml       # valores por defecto de las variables</code></pre></figure>
+<p>Puedes crear esta estructura con un comando:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-galaxy role init roles/nginx">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-galaxy role init roles/nginx</span>
+<span class="out">- Role roles/nginx was created successfully</span></code></pre></figure>
+<div class="callout "><span class="k">Nota</span>Solo hace falta crear las carpetas que vayas a usar. Las vacías se pueden borrar.</div>
+<h3 id="dentro-de-un-rol">Dentro de un rol</h3>
+<p><code>tasks/main.yml</code> contiene solo la lista de tareas, sin <code>hosts</code> ni <code>become</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">roles/nginx/tasks/main.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Instalar nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: Configurar el sitio
+  ansible.builtin.template:
+    src: sitio.conf.j2
+    dest: /etc/nginx/sites-available/miweb
+    mode: "0644"
+  notify: Recargar nginx</code></pre></figure>
+<p>Fíjate en <code>src: sitio.conf.j2</code>: dentro de un rol no hace falta poner la ruta <code>templates/</code>, Ansible la busca sola en la carpeta del rol.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">roles/nginx/defaults/main.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+nginx_raiz: /var/www/miweb</code></pre></figure>
+<p>En <code>defaults/</code> van las variables que quien use el rol puede cambiar. Tienen la prioridad más baja, así que cualquier otra variable las sustituye.</p>
+<div class="callout tip"><span class="k">Consejo</span>Es buena costumbre que las variables de un rol empiecen por el nombre del rol (<code>nginx_raiz</code>, <code>nginx_puerto</code>). Así no se mezclan con las de otros roles.</div>
+<h3 id="usar-roles-en-un-playbook">Usar roles en un playbook</h3>
+<p>El playbook queda muy corto: solo dice qué roles aplicar y en qué servidores:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">site.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Configurar los servidores web
+  hosts: web
+  become: true
+  roles:
+    - comun
+    - nginx
+    - web</code></pre></figure>
+<p>Los roles se ejecutan en orden. Ansible los busca en la carpeta <code>roles/</code> junto al playbook (o en <code>roles_path</code> de <code>ansible.cfg</code>).</p>
+<h3 id="roles-y-colecciones-de-otros-ansible-galaxy">Roles y colecciones de otros: Ansible Galaxy</h3>
+<p><strong>Ansible Galaxy</strong> (galaxy.ansible.com) es como el Registry de Terraform: hay miles de roles y <strong>colecciones</strong> hechos por otros.</p>
+<ul><li>Una <strong>colección</strong> es un paquete de módulos y roles. Por ejemplo, <code>community.general</code> añade cientos de módulos, y <code>amazon.aws</code> añade módulos para AWS.</li><li>Los módulos que has usado (<code>ansible.builtin.apt</code>...) vienen en la colección <code>ansible.builtin</code>, que ya está instalada.</li></ul>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-galaxy collection install community.general
+ansible-galaxy collection list | grep community.general">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-galaxy collection install community.general</span>
+<span class="prompt">$ </span><span class="cmdline">ansible-galaxy collection list | grep community.general</span>
+<span class="out">community.general    10.1.0</span></code></pre></figure>
+<p>Para que todo el equipo instale lo mismo, se listan en un archivo <code>requirements.yml</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">requirements.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+collections:
+  - name: community.general
+    version: "&gt;=10.0.0"
+  - name: amazon.aws</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-galaxy install -r requirements.yml">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-galaxy install -r requirements.yml</span></code></pre></figure>
+<div class="callout aviso"><span class="k">Importante</span>Como con los módulos de Terraform, lee el código de un rol antes de usarlo y fija la versión.</div></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 17 de 22</p><h3 class="paso-titulo">Ordena el proyecto en roles</h3><p>Vas a dividir tu <code>site.yml</code> en tres roles. El resultado hace exactamente lo mismo, pero ordenado y reutilizable:</p>
+<div class="table-wrap"><table><thead><tr><th>Rol</th><th>Qué hace</th></tr></thead><tbody><tr><td><code>comun</code></td><td>Actualiza la lista de paquetes, instala herramientas básicas y pone un mensaje de bienvenida</td></tr><tr><td><code>nginx</code></td><td>Instala y configura nginx (con su handler)</td></tr><tr><td><code>web</code></td><td>Publica tu web: hoja de estilos, página principal y página de estado</td></tr></tbody></table></div>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain">ansible/
+├── ansible.cfg
+├── site.yml
+├── inventario/
+│   ├── hosts.ini
+│   └── group_vars/all/web.yml
+└── roles/
+    ├── comun/
+    │   ├── tasks/main.yml
+    │   └── templates/motd.j2
+    ├── nginx/
+    │   ├── defaults/main.yml
+    │   ├── handlers/main.yml
+    │   ├── tasks/main.yml
+    │   └── templates/sitio.conf.j2
+    └── web/
+        ├── defaults/main.yml
+        ├── files/estilo.css
+        ├── tasks/main.yml
+        └── templates/
+            ├── index.html.j2
+            └── estado.html.j2</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="cd ansible
+ansible-galaxy role init roles/comun
+ansible-galaxy role init roles/nginx
+ansible-galaxy role init roles/web">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">cd ansible</span>
+<span class="prompt">$ </span><span class="cmdline">ansible-galaxy role init roles/comun</span>
+<span class="prompt">$ </span><span class="cmdline">ansible-galaxy role init roles/nginx</span>
+<span class="prompt">$ </span><span class="cmdline">ansible-galaxy role init roles/web</span></code></pre></figure>
+<p>Mueve las tareas a cada rol. Así queda el rol <code>nginx</code>:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/roles/nginx/tasks/main.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Instalar nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+
+- name: Crear la carpeta de la web
+  ansible.builtin.file:
+    path: "{{ nginx_raiz }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Configurar el sitio
+  ansible.builtin.template:
+    src: sitio.conf.j2
+    dest: /etc/nginx/sites-available/miweb
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Recargar nginx
+
+- name: Activar el sitio
+  ansible.builtin.file:
+    src: /etc/nginx/sites-available/miweb
+    dest: /etc/nginx/sites-enabled/miweb
+    state: link
+  notify: Recargar nginx
+
+- name: Desactivar el sitio por defecto
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: Recargar nginx
+
+- name: Arrancar nginx y activarlo al inicio
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/roles/nginx/defaults/main.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+nginx_raiz: /var/www/miweb</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/roles/nginx/handlers/main.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Recargar nginx
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded</code></pre></figure>
+<p>En la plantilla <code>sitio.conf.j2</code> cambia <code>{{ web_raiz }}</code> por <code>{{ nginx_raiz }}</code>. El rol <code>web</code> usa su propia variable <code>web_raiz</code> con el mismo valor (<code>/var/www/miweb</code>) en su <code>defaults/main.yml</code>.</p>
+<p>Los archivos completos de los tres roles (incluida una hoja de estilos para que la web se vea bien) están en la carpeta <code>proyecto/ansible/roles</code> del repositorio del curso. Cópialos o compáralos con los tuyos.</p>
+<p>El playbook principal queda así de corto:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">ansible/site.yml</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">---
+- name: Configurar los servidores web
+  hosts: web
+  become: true
+  roles:
+    - comun
+    - nginx
+    - web</code></pre></figure>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="ansible-playbook site.yml">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">ansible-playbook site.yml</span>
+<span class="out">...</span>
+<span class="out">web1 : ok=14  changed=3  unreachable=0  failed=0</span>
+<span class="out">web2 : ok=14  changed=3  unreachable=0  failed=0</span></code></pre></figure>
+<p>Resultado de este paso: el mismo resultado de antes, con estilos, y el código ordenado en tres roles reutilizables.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>De playbook a roles (carpeta <code>labs/17-ansible-roles</code>)</strong></p><ol class="pasos"><li>Crea un rol vacío con <code>ansible-galaxy role init</code>.</li><li>Mueve las tareas, plantillas y handlers a su carpeta.</li><li>Usa el rol desde un playbook corto.</li><li>Instala una colección con <code>ansible-galaxy collection install</code>.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">ansible-galaxy role init roles/nginx</code></td><td>Crea la estructura de un rol.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-galaxy role init roles/nginx" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-galaxy collection install community.general</code></td><td>Instala una colección.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-galaxy collection install community.general" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-galaxy install -r requirements.yml</code></td><td>Instala los roles y colecciones de un archivo.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-galaxy install -r requirements.yml" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">ansible-galaxy collection list</code></td><td>Lista las colecciones instaladas.</td><td class="copy-cell"><button class="copy" type="button" data-copy="ansible-galaxy collection list" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt><code>the role 'nginx' was not found</code></dt><dd>Ansible no encuentra la carpeta del rol. Revisa <code>roles_path</code> en <code>ansible.cfg</code> o que la carpeta <code>roles/</code> está junto al playbook.</dd></div><div><dt>Poner variables que el usuario debe cambiar en <code>vars/</code></dt><dd>Lo que se puede personalizar va en <code>defaults/</code>; <code>vars/</code> tiene más prioridad y es difícil de cambiar desde fuera.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="17" data-total="6"><fieldset class="q" data-ok="0"><legend><span class="qn">01</span><span class="txt">¿A qué se parece un rol de Ansible en Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">A un módulo</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Al estado</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">A un provider</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">A un output</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Ambos agrupan código para reutilizarlo.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">02</span><span class="txt">¿En qué archivo van las tareas de un rol?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">roles/tasks/nginx.yml</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">roles/nginx/site.yml</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">roles/nginx/main.yml</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">roles/nginx/tasks/main.yml</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Cada tipo de contenido va en su carpeta, siempre con main.yml.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">03</span><span class="txt">¿Para qué sirve la carpeta <code>defaults/</code> de un rol?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Para los handlers</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para las plantillas</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para los valores por defecto de las variables, que se pueden cambiar desde fuera</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para los tests</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Tienen la prioridad más baja de todas.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">04</span><span class="txt">Dentro de un rol, ¿cómo indicas la plantilla <code>templates/sitio.conf.j2</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">src: sitio.conf.j2</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">src: templates/sitio.conf.j2</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">template: sitio</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">src: roles/nginx/templates/sitio.conf.j2</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Ansible busca sola en la carpeta templates del rol.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">05</span><span class="txt">¿Qué comando crea la estructura de un rol?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">mkdir role</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">ansible-playbook --init</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">ansible-galaxy role init roles/nginx</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">ansible-role new nginx</span></button></div><p class="exp" hidden><strong class="verdict"></strong> </p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">06</span><span class="txt">¿Para qué sirve <code>requirements.yml</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Para guardar contraseñas</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Para configurar SSH</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Para listar los servidores</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Para listar los roles y colecciones que hay que instalar</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Se instalan con <code>ansible-galaxy install -r requirements.yml</code>.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Crea tu rol</h3><p>Convierte el playbook del reto del módulo 14 (carpeta <code>/tmp/miweb</code> con <code>index.html</code>) en un rol <code>miweb</code> con una variable <code>miweb_carpeta</code> en <code>defaults/</code>. Úsalo desde un playbook de tres líneas.</p><details><summary>Ver pista</summary><p>Necesitas <code>roles/miweb/tasks/main.yml</code> y <code>roles/miweb/defaults/main.yml</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml"># roles/miweb/defaults/main.yml
+---
+miweb_carpeta: /tmp/miweb
+
+# roles/miweb/tasks/main.yml
+---
+- name: Crear la carpeta
+  ansible.builtin.file:
+    path: "{{ miweb_carpeta }}"
+    state: directory
+    mode: "0755"
+
+- name: Crear la página
+  ansible.builtin.copy:
+    content: "&lt;h1&gt;Hola&lt;/h1&gt;"
+    dest: "{{ miweb_carpeta }}/index.html"
+    mode: "0644"
+
+# site.yml
+---
+- name: Mi web
+  hosts: local
+  roles:
+    - miweb</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2. Cambiar el valor por defecto</h3><p>Usa el rol anterior pero haz que cree la web en <code>/tmp/otraweb</code> sin tocar el rol.</p><details><summary>Ver pista</summary><p>Cualquier variable del playbook tiene más prioridad que <code>defaults/</code>.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml">- name: Mi web en otra carpeta
+  hosts: local
+  vars:
+    miweb_carpeta: /tmp/otraweb
+  roles:
+    - miweb</code></pre></figure></details></article></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="17"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="16-ansible-handlers-bucles.html"><small>Anterior</small>Handlers, condiciones y bucles</a><a class="next" href="18-ansible-vault.html"><small>Siguiente</small>Ansible Vault y buenas prácticas</a></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

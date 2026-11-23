@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>22 · Proyecto final y siguientes pasos | Terraform y Ansible desde cero</title>
+<meta name="description" content="Desplegar el proyecto completo desde cero, comprobar el resultado y saber cómo seguir.">
+<link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/styles.css">
+<script>try{var t=localStorage.getItem('tema');if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<header class="topbar">
+  <button class="icon-btn menu-toggle" type="button" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></button>
+  <a class="brand" href="../index.html"><span class="logo" aria-hidden="true">tf</span><span class="brand-text">Terraform y Ansible desde cero</span></a>
+  <span class="spacer"></span>
+  <div class="top-progress" title="Progreso del curso" aria-hidden="true"><span class="js-pct">0 %</span><div class="bar"><span class="fill js-fill"></span></div></div>
+  <button class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema claro u oscuro" title="Cambiar tema"><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor"/></svg></button>
+</header>
+<div class="layout">
+<aside class="sidebar" id="sidebar">
+<div class="progress-box" aria-live="polite">
+  <div class="label"><span>Progreso del curso</span><span class="js-pct">0 %</span></div>
+  <div class="bar"><span class="fill js-fill"></span></div>
+  <small class="js-count">0 de 23 módulos completados</small>
+</div>
+<nav aria-label="Contenido del curso">
+<ul class="sb-list"><li><a class="sb-link" href="../index.html"><span class="num"></span><span class="t">Inicio</span></a></li>
+<li><a class="sb-link" href="../proyecto.html"><span class="num"></span><span class="t">El proyecto del curso</span></a></li></ul>
+<p class="sb-group">Parte 1 · Primeros pasos</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="00" href="../modulos/00-introduccion.html"><span class="num">00</span><span class="t">Introducción a la Infraestructura como Código</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="01" href="../modulos/01-entorno.html"><span class="num">01</span><span class="t">Preparación del entorno</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 2 · Terraform</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="02" href="../modulos/02-primer-proyecto.html"><span class="num">02</span><span class="t">Tu primer proyecto: el flujo de trabajo</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="03" href="../modulos/03-hcl.html"><span class="num">03</span><span class="t">El lenguaje HCL</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="04" href="../modulos/04-variables-outputs-locals.html"><span class="num">04</span><span class="t">Variables, outputs y locals</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="05" href="../modulos/05-providers.html"><span class="num">05</span><span class="t">Providers y conexión con la nube</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="06" href="../modulos/06-recursos-dependencias.html"><span class="num">06</span><span class="t">Recursos, data sources y dependencias</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="07" href="../modulos/07-meta-argumentos.html"><span class="num">07</span><span class="t">Meta-argumentos: count, for_each y lifecycle</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="08" href="../modulos/08-expresiones-funciones.html"><span class="num">08</span><span class="t">Expresiones y funciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="09" href="../modulos/09-estado.html"><span class="num">09</span><span class="t">El estado (state) en profundidad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="10" href="../modulos/10-backends-workspaces.html"><span class="num">10</span><span class="t">Backends remotos, bloqueo y workspaces</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="11" href="../modulos/11-modulos.html"><span class="num">11</span><span class="t">Módulos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="12" href="../modulos/12-import-refactor.html"><span class="num">12</span><span class="t">Importar y refactorizar</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 3 · Ansible</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="13" href="../modulos/13-ansible-introduccion.html"><span class="num">13</span><span class="t">Introducción a Ansible</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="14" href="../modulos/14-ansible-playbooks.html"><span class="num">14</span><span class="t">Playbooks</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="15" href="../modulos/15-ansible-variables-plantillas.html"><span class="num">15</span><span class="t">Variables, facts y plantillas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="16" href="../modulos/16-ansible-handlers-bucles.html"><span class="num">16</span><span class="t">Handlers, condiciones y bucles</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="17" href="../modulos/17-ansible-roles.html"><span class="num">17</span><span class="t">Roles y colecciones</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="18" href="../modulos/18-ansible-vault.html"><span class="num">18</span><span class="t">Ansible Vault y buenas prácticas</span><span class="st" aria-hidden="true"></span></a>
+</li>
+</ul>
+<p class="sb-group">Parte 4 · Todo junto</p><ul class="sb-list">
+<li><a class="sb-link" data-mod="19" href="../modulos/19-terraform-ansible.html"><span class="num">19</span><span class="t">Terraform y Ansible juntos</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="20" href="../modulos/20-calidad-testing.html"><span class="num">20</span><span class="t">Calidad, tests y seguridad</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="21" href="../modulos/21-equipo-cicd.html"><span class="num">21</span><span class="t">Trabajo en equipo y CI/CD</span><span class="st" aria-hidden="true"></span></a>
+</li>
+<li><a class="sb-link" data-mod="22" href="../modulos/22-proyecto-final.html" aria-current="page"><span class="num">22</span><span class="t">Proyecto final y siguientes pasos</span><span class="st" aria-hidden="true"></span></a>
+<ul class="sb-toc"><li><a href="#objetivos">Objetivos</a></li><li><a href="#leccion">Lección</a><ul class="sb-toc"><li><a href="#lo-que-has-construido">Lo que has construido</a></li><li><a href="#la-prueba-final-desde-cero">La prueba final: desde cero</a></li><li><a href="#escribe-el-readme">Escribe el README</a></li><li><a href="#no-olvides-destruir">No olvides destruir</a></li><li><a href="#como-mejorar-el-proyecto">Cómo mejorar el proyecto</a></li><li><a href="#certificaciones">Certificaciones</a></li><li><a href="#que-aprender-despues">Qué aprender después</a></li></ul></li><li><a href="#proyecto">Proyecto: paso 22</a></li><li><a href="#practica">Práctica guiada</a></li><li><a href="#comandos">Comandos clave</a></li><li><a href="#errores">Errores frecuentes</a></li><li><a href="#test">Test</a></li><li><a href="#retos">Retos</a></li></ul>
+</li>
+</ul>
+<p class="sb-group">Referencia</p><ul class="sb-list">
+<li><a class="sb-link" href="../comandos.html"><span class="num"></span><span class="t">Chuleta de comandos</span></a>
+</li>
+<li><a class="sb-link" href="../glosario.html"><span class="num"></span><span class="t">Glosario</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course/tree/main/labs"><span class="num"></span><span class="t">Código de las prácticas</span></a>
+</li>
+<li><a class="sb-link" href="https://github.com/lawas-44/terraform-course"><span class="num"></span><span class="t">Repositorio en GitHub</span></a>
+</li>
+</ul></nav>
+</aside>
+<div class="overlay" aria-hidden="true"></div>
+<main class="content" id="contenido">
+<div class="content-inner">
+<nav class="breadcrumb" aria-label="Ruta"><a href="../index.html#temario">Temario</a> / Módulo 22</nav>
+<header class="mod-head">
+  <p class="eyebrow">Módulo 22</p>
+  <h1>Proyecto final y siguientes pasos</h1>
+  <p class="lead">Desplegar el proyecto completo desde cero, comprobar el resultado y saber cómo seguir.</p>
+  <div class="meta-row"><span>Nivel: Avanzado</span><span>Duración: 3 h</span><span>Test: 14 preguntas</span><span>Retos: 2</span><span>Proyecto: paso 22</span></div>
+</header>
+<section id="objetivos"><h2>Objetivos</h2><p>Al terminar este módulo sabrás:</p><ul class="check"><li>Desplegar desde cero toda la infraestructura y la configuración del proyecto.</li><li>Comprobar que el resultado funciona y documentarlo.</li><li>Conocer las certificaciones de Terraform y Ansible.</li><li>Saber qué aprender después.</li></ul></section>
+<section id="leccion"><h2>Lección</h2><h3 id="lo-que-has-construido">Lo que has construido</h3>
+<p>Si has seguido los pasos del proyecto, tienes un repositorio que crea y configura una web real en AWS con un solo comando. Repasemos todas las piezas:</p>
+<div class="table-wrap"><table><thead><tr><th>Pieza</th><th>Herramienta</th><th>Dónde está</th></tr></thead><tbody><tr><td>Red propia (VPC, subred, internet gateway)</td><td>Terraform</td><td><code>terraform/modules/red</code></td></tr><tr><td>Firewall: SSH solo desde tu IP, HTTP abierto</td><td>Terraform</td><td><code>terraform/modules/servidores</code></td></tr><tr><td>Dos servidores Ubuntu con disco cifrado</td><td>Terraform</td><td><code>terraform/modules/servidores</code></td></tr><tr><td>Clave SSH en AWS</td><td>Terraform</td><td><code>terraform/main.tf</code></td></tr><tr><td>Estado guardado en S3 con bloqueo</td><td>Terraform</td><td><code>terraform/versions.tf</code></td></tr><tr><td>Inventario de Ansible generado</td><td>Terraform</td><td><code>terraform/templates/inventario.ini.tftpl</code></td></tr><tr><td>Paquetes básicos y mensaje de bienvenida</td><td>Ansible</td><td><code>ansible/roles/comun</code></td></tr><tr><td>nginx configurado con handler</td><td>Ansible</td><td><code>ansible/roles/nginx</code></td></tr><tr><td>Tu web, página de estado y zona privada</td><td>Ansible</td><td><code>ansible/roles/web</code></td></tr><tr><td>Contraseña cifrada</td><td>Ansible Vault</td><td><code>ansible/inventario/group_vars/all/vault.yml</code></td></tr><tr><td>Tests y revisiones automáticas</td><td>Terraform test, ansible-lint, GitHub Actions</td><td><code>terraform/tests</code>, <code>.github/workflows</code></td></tr><tr><td>Despliegue con un comando</td><td>Bash</td><td><code>scripts/</code></td></tr></tbody></table></div>
+<h3 id="la-prueba-final-desde-cero">La prueba final: desde cero</h3>
+<p>Un proyecto de infraestructura está bien hecho cuando <strong>otra persona</strong> puede desplegarlo solo leyendo el README. Haz la prueba: clona tu repositorio en otra carpeta y sigue tus propias instrucciones.</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="git clone https://github.com/tu-usuario/mi-web-en-la-nube.git prueba
+cd prueba
+cp terraform/terraform.tfvars.example terraform/terraform.tfvars
+terraform -chdir=terraform init -backend-config=backend.hcl
+./scripts/desplegar.sh">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">git clone https://github.com/tu-usuario/mi-web-en-la-nube.git prueba</span>
+<span class="prompt">$ </span><span class="cmdline">cd prueba</span>
+<span class="prompt">$ </span><span class="cmdline">cp terraform/terraform.tfvars.example terraform/terraform.tfvars</span>
+<span class="prompt">$ </span><span class="cmdline">terraform -chdir=terraform init -backend-config=backend.hcl</span>
+<span class="prompt">$ </span><span class="cmdline">./scripts/desplegar.sh</span></code></pre></figure>
+<p>Comprueba el resultado en los dos servidores:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="curl -s http://34.245.71.12 | grep h1
+curl -s http://52.48.199.30/estado.html | grep &quot;Nombre en&quot;
+curl -s -o /dev/null -w &quot;%{http_code}">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">curl -s http://34.245.71.12 | grep h1</span>
+<span class="out">  &lt;h1&gt;Ana García&lt;/h1&gt;</span>
+<span class="prompt">$ </span><span class="cmdline">curl -s http://52.48.199.30/estado.html | grep "Nombre en"</span>
+<span class="out">    &lt;tr&gt;&lt;th&gt;Nombre en el inventario&lt;/th&gt;&lt;td&gt;web2&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="prompt">$ </span><span class="cmdline">curl -s -o /dev/null -w "%{http_code}</span>
+<span class="out">" http://34.245.71.12/privado/</span>
+<span class="out">401</span></code></pre></figure>
+<h3 id="escribe-el-readme">Escribe el README</h3>
+<p>El README es lo primero que ve alguien en tu repositorio. Debe explicar qué es, qué necesita y cómo se usa. Una plantilla:</p>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">README.md</span><button class="copy" type="button">Copiar</button></div><pre><code class="plain"># Mi web en la nube
+
+Web personal desplegada en AWS con Terraform y Ansible.
+
+## Qué crea
+- Una VPC con una subred pública.
+- Dos servidores Ubuntu con nginx.
+- Mi web, una página de estado y una zona privada.
+
+## Requisitos
+- Terraform 1.10 o superior y Ansible.
+- Una cuenta de AWS configurada (`aws sts get-caller-identity`).
+- Una clave SSH en ~/.ssh/id_ed25519.pub.
+
+## Uso
+1. Copia `terraform/terraform.tfvars.example` como `terraform.tfvars` y pon tu IP.
+2. `./scripts/desplegar.sh`
+3. Abre las URLs que aparecen al final.
+4. Al terminar: `./scripts/destruir.sh`
+
+## Coste
+Dentro de la capa gratuita de AWS. Fuera de ella, unos céntimos por hora.</code></pre></figure>
+<h3 id="no-olvides-destruir">No olvides destruir</h3>
+<figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">terminal</span><button class="copy" type="button" data-copy="./scripts/destruir.sh">Copiar</button></div><pre><code class="plain"><span class="prompt">$ </span><span class="cmdline">./scripts/destruir.sh</span>
+<span class="out">...</span>
+<span class="out">Destroy complete! Resources: 13 destroyed.</span></code></pre></figure>
+<p>Al día siguiente, entra en la web de AWS (sección EC2) y comprueba que no quedan servidores encendidos. El bucket del estado (del paso del módulo 10) cuesta prácticamente cero y puedes dejarlo.</p>
+<h3 id="como-mejorar-el-proyecto">Cómo mejorar el proyecto</h3>
+<p>Si quieres seguir practicando, estas mejoras usan lo que ya sabes y añaden algo nuevo:</p>
+<div class="table-wrap"><table><thead><tr><th>Mejora</th><th>Qué aprenderás</th></tr></thead><tbody><tr><td>Un balanceador de carga delante de los dos servidores</td><td>Recursos <code>aws_lb</code> en Terraform</td></tr><tr><td>HTTPS con un dominio y certificado gratuito (Let's Encrypt)</td><td>Route 53 y un rol de Ansible para certbot</td></tr><tr><td>Un entorno <code>prod</code> además de <code>dev</code></td><td>Workspaces o carpetas por entorno</td></tr><tr><td>Una base de datos para un formulario de contacto</td><td>RDS y contraseñas gestionadas por AWS</td></tr><tr><td>Imagen de servidor ya configurada</td><td>Packer con Ansible</td></tr><tr><td>Monitorización y alertas</td><td>CloudWatch con Terraform</td></tr></tbody></table></div>
+<h3 id="certificaciones">Certificaciones</h3>
+<ul><li><strong>HashiCorp Certified: Terraform Associate</strong>: examen online de unos 60 minutos con preguntas tipo test. Este curso cubre su temario.</li><li><strong>Red Hat Certified Engineer (RHCE)</strong>: la certificación más conocida de Ansible. Es práctica (resuelves tareas en servidores reales) y más exigente: requiere conocer bien Linux.</li></ul>
+<p>Consulta siempre los detalles actualizados en las webs oficiales. Para prepararte, repite los tests de todos los módulos y el simulacro de abajo.</p>
+<h3 id="que-aprender-despues">Qué aprender después</h3>
+<ul><li><strong>Linux</strong>: cuanto mejor lo conozcas, más fácil te será Ansible.</li><li><strong>Docker y Kubernetes</strong>: Terraform crea los clústeres y hay providers y módulos de Ansible para gestionarlos.</li><li><strong>Otra nube</strong> (Azure o Google Cloud): el flujo de Terraform y Ansible es el mismo; solo cambian los recursos.</li><li><strong>Terragrunt</strong>, <strong>OpenTofu</strong> y <strong>Packer</strong>: herramientas del mismo ecosistema.</li></ul></section>
+<section id="proyecto" class="proyecto"><h2>Proyecto guiado</h2><p class="paso-label">Paso 22 de 22</p><h3 class="paso-titulo">Despliegue final y entrega</h3><p>Último paso: comprueba que todo funciona desde cero, documenta el proyecto y destrúyelo.</p>
+<ol><li>Clona tu repositorio en una carpeta nueva y despliega siguiendo solo tu README.</li><li>Abre la web en los dos servidores y comprueba que se ve tu nombre y tus proyectos.</li><li>Abre <code>/estado.html</code> en cada uno: cada servidor muestra sus propios datos.</li><li>Entra en <code>/privado/</code> con tu usuario y contraseña.</li><li>Comprueba que GitHub Actions está en verde.</li><li>Haz una captura de la web y añádela al README: es tu proyecto de portfolio.</li><li>Destruye todo con <code>./scripts/destruir.sh</code>.</li></ol>
+<p>Lista de comprobación final:</p>
+<div class="table-wrap"><table><thead><tr><th>Comprobación</th><th>Cómo verlo</th></tr></thead><tbody><tr><td>Se despliega desde cero con un comando</td><td><code>./scripts/desplegar.sh</code> termina sin errores</td></tr><tr><td>El playbook es idempotente</td><td>La segunda ejecución da <code>changed=0</code></td></tr><tr><td>No hay secretos en Git</td><td><code>git log -p</code> no muestra contraseñas ni <code>.tfstate</code></td></tr><tr><td>Los tests pasan</td><td><code>terraform test</code> y <code>ansible-lint</code> sin errores</td></tr><tr><td>Todo se borra</td><td><code>./scripts/destruir.sh</code> y la consola de EC2 vacía</td></tr></tbody></table></div>
+<p>Enhorabuena: has construido infraestructura real con Terraform, la has configurado con Ansible y lo has automatizado todo. El código completo de referencia está en la carpeta <code>proyecto/</code> del repositorio del curso.</p><p class="paso-nav"><a href="../proyecto.html">Ver todos los pasos del proyecto</a></p></section>
+<section id="practica"><h2>Práctica guiada</h2><p><strong>Tu web en la nube, de principio a fin</strong></p><ol class="pasos"><li>Clona tu repositorio en una carpeta nueva, como si fueras otra persona.</li><li>Sigue solo el README para desplegar todo.</li><li>Comprueba la web, la página de estado y la zona privada en los dos servidores.</li><li>Destruye todo y comprueba en la web de AWS que no queda nada.</li></ol><div class="callout aviso"><span class="k">Importante</span>Si has creado recursos en la nube, ejecuta <code>terraform destroy</code> al terminar para no pagar por ellos.</div></section>
+<section id="comandos"><h2>Comandos clave</h2><div class="table-wrap"><table class="cmds"><thead><tr><th>Comando</th><th>Qué hace</th><th><span class="sr-only">Copiar</span></th></tr></thead><tbody><tr><td><code class="cmd">./scripts/desplegar.sh</code></td><td>Crea y configura todo.</td><td class="copy-cell"><button class="copy" type="button" data-copy="./scripts/desplegar.sh" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">curl -s http://IP/estado.html</code></td><td>Comprueba la página de estado.</td><td class="copy-cell"><button class="copy" type="button" data-copy="curl -s http://IP/estado.html" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">curl -u admin:CONTRASEÑA http://IP/privado/</code></td><td>Entra en la zona privada desde la terminal.</td><td class="copy-cell"><button class="copy" type="button" data-copy="curl -u admin:CONTRASEÑA http://IP/privado/" aria-label="Copiar comando">Copiar</button></td></tr><tr><td><code class="cmd">./scripts/destruir.sh</code></td><td>Borra todo al terminar.</td><td class="copy-cell"><button class="copy" type="button" data-copy="./scripts/destruir.sh" aria-label="Copiar comando">Copiar</button></td></tr></tbody></table></div></section>
+<section id="errores"><h2>Errores frecuentes</h2><dl class="errores"><div><dt>La web no carga después de desplegar</dt><dd>Comprueba que el playbook terminó sin <code>failed</code> y que el firewall permite el puerto 80.</dd></div><div><dt>Olvidar destruir los servidores</dt><dd>Revisa la sección EC2 de la web de AWS al día siguiente.</dd></div></dl></section>
+<section id="test"><h2>Test</h2><p class="muted">Elige una respuesta en cada pregunta. Verás la explicación al momento. Con un 80 % o más, el módulo está superado.</p><div class="quiz" data-mod="22" data-total="14"><fieldset class="q" data-ok="0"><legend><span class="qn">01</span><span class="txt">Simulacro · ¿Qué comando debes ejecutar tras añadir un nuevo provider al código?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">terraform init</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">terraform plan</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">terraform providers</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">terraform refresh</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Cualquier provider o módulo nuevo requiere init.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">02</span><span class="txt">Simulacro · ¿Qué afirmación sobre el estado es FALSA?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Puede contener secretos</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Es seguro subirlo a un repositorio público si se marca sensitive</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Terraform lo necesita para funcionar</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Debe guardarse en un backend remoto en equipos</span></button></div><p class="exp" hidden><strong class="verdict"></strong> <code>sensitive</code> no cifra nada en el estado.</p></fieldset><fieldset class="q" data-ok="1"><legend><span class="qn">03</span><span class="txt">Simulacro · ¿Qué hace <code>terraform apply -refresh-only</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Recrea todos los recursos</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Actualiza el estado para que refleje la realidad sin modificar la infraestructura</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Destruye el drift</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Actualiza los providers</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Sincroniza estado ← realidad, previa confirmación.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">04</span><span class="txt">Simulacro · Tienes <code>variable "x" { default = 1 }</code>, <code>TF_VAR_x=2</code> y <code>x = 3</code> en terraform.tfvars. ¿Valor de var.x?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">3</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">1</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Error</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">2</span></button></div><p class="exp" hidden><strong class="verdict"></strong> terraform.tfvars tiene prioridad sobre las variables de entorno.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">05</span><span class="txt">Simulacro · ¿Qué meta-argumento evita recrear recursos al quitar un elemento intermedio de una colección?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">provider</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">depends_on</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">count</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">for_each</span></button></div><p class="exp" hidden><strong class="verdict"></strong> for_each identifica cada copia por clave, no por posición.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">06</span><span class="txt">Simulacro · ¿Dónde se guardan los providers descargados por init?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">En ~/.aws</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">En el lock file</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">En la carpeta .terraform del proyecto</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">En el estado</span></button></div><p class="exp" hidden><strong class="verdict"></strong> El lock file solo guarda versiones y hashes; los binarios van a .terraform/.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">07</span><span class="txt">Simulacro · ¿Qué variable de entorno activa los logs detallados de Terraform?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">TERRAFORM_VERBOSE</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">TF_VAR_log</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">TF_DEBUG</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">TF_LOG</span></button></div><p class="exp" hidden><strong class="verdict"></strong> TF_LOG=TRACE|DEBUG|INFO|WARN|ERROR; TF_LOG_PATH para guardarlos.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">08</span><span class="txt">Simulacro · ¿Cómo referencias el output <code>vpc_id</code> del módulo <code>network</code>?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">module.network.vpc_id</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">network.vpc_id</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">data.network.vpc_id</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">output.network.vpc_id</span></button></div><p class="exp" hidden><strong class="verdict"></strong> module.NOMBRE.OUTPUT.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">09</span><span class="txt">Simulacro · ¿Qué bloque permite renombrar un recurso sin destruirlo y queda registrado en el código?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">import</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">rename</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">moved</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">removed</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Disponible desde Terraform 1.1.</p></fieldset><fieldset class="q" data-ok="0"><legend><span class="qn">10</span><span class="txt">Simulacro · ¿Qué es cierto sobre los workspaces CLI?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Cada uno tiene su propio estado con el mismo código</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Sustituyen al backend</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Solo existen en HCP Terraform</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Cada uno tiene su propio código</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Mismo código, estados separados; <code>terraform.workspace</code> da el nombre actual.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">11</span><span class="txt">Simulacro · ¿Cómo se conecta Ansible a servidores Linux?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Por HTTP</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Con un agente instalado</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Por la API de la nube</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Por SSH</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Ansible no necesita agentes: entra por SSH.</p></fieldset><fieldset class="q" data-ok="2"><legend><span class="qn">12</span><span class="txt">Simulacro · ¿Cuándo se ejecuta un handler de Ansible?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">Solo si hay errores</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">Al principio</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">Cuando una tarea con notify ha cambiado algo</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Siempre</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Y se ejecuta una sola vez, al final.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">13</span><span class="txt">Simulacro · ¿Qué carpeta de un rol tiene la prioridad de variables más baja?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">tasks/</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">vars/</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">handlers/</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">defaults/</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Por eso es la adecuada para valores que el usuario puede cambiar.</p></fieldset><fieldset class="q" data-ok="3"><legend><span class="qn">14</span><span class="txt">Simulacro · En el proyecto, ¿quién escribe el inventario de Ansible?</span></legend><div class="opts"><button type="button" class="opt" data-i="0"><span class="letra">A</span><span class="txt">AWS</span></button><button type="button" class="opt" data-i="1"><span class="letra">B</span><span class="txt">La persona a mano</span></button><button type="button" class="opt" data-i="2"><span class="letra">C</span><span class="txt">GitHub Actions</span></button><button type="button" class="opt" data-i="3"><span class="letra">D</span><span class="txt">Terraform, con templatefile y local_file</span></button></div><p class="exp" hidden><strong class="verdict"></strong> Así las IPs siempre están al día.</p></fieldset><div class="quiz-foot"><p class="quiz-result" aria-live="polite">Responde todas las preguntas para ver tu nota.</p><button type="button" class="btn small quiz-reset">Reintentar</button></div></div></section>
+<section id="retos"><h2>Retos</h2><p class="muted">Ejercicios para practicar por tu cuenta. Intenta resolverlos antes de mirar la solución.</p><article class="reto"><h3>Reto 1. Un tercer servidor</h3><p>Añade un servidor <code>web3</code> al proyecto. ¿Qué archivos tienes que tocar? ¿Hay que cambiar algo en Ansible?</p><details><summary>Ver pista</summary><p>Piensa en la variable <code>servidores</code> y en cómo se genera el inventario.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-hcl"># Solo hay que cambiar terraform/terraform.tfvars:
+servidores = {
+  web1 = "t3.micro"
+  web2 = "t3.micro"
+  web3 = "t3.micro"
+}
+# ./scripts/desplegar.sh
+# Terraform crea web3 y lo añade al inventario.
+# Ansible no cambia: el playbook se aplica a todo el grupo web.</code></pre></figure></details></article>
+<article class="reto"><h3>Reto 2. Cambia tu web sin tocar los servidores a mano</h3><p>Añade un cuarto proyecto a tu web y publícalo. ¿Qué comando ejecutas? ¿Qué tareas aparecen como changed?</p><details><summary>Ver pista</summary><p>Los datos de la web están en group_vars.</p></details><details><summary>Ver solución</summary><figure class="term-win"><div class="term-bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span class="term-title">solución</span><button class="copy" type="button">Copiar</button></div><pre><code class="language-yaml"># ansible/inventario/group_vars/all/web.yml
+web_proyectos:
+  # ... los tres anteriores ...
+  - nombre: "Mi cuarto proyecto"
+    descripcion: "Añadido con Ansible."
+
+# cd ansible &amp;&amp; ansible-playbook site.yml --ask-vault-pass
+# Solo cambia "Generar la página principal" en web1 y web2.</code></pre></figure></details></article></section>
+<div class="complete-box"><label><input type="checkbox" class="mark-done" data-mod="22"> He completado este módulo</label></div>
+<nav class="pager" aria-label="Módulos"><a class="prev" href="21-equipo-cicd.html"><small>Anterior</small>Trabajo en equipo y CI/CD</a><span></span></nav>
+<footer class="site-footer">Curso abierto de Terraform para principiantes. Código en <a href="https://github.com/lawas-44/terraform-course">GitHub</a>. Terraform es una marca de HashiCorp; este curso no está afiliado.</footer>
+</div>
+</main>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-hcl.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

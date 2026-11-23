@@ -1,0 +1,57 @@
+---
+- name: Copiar la hoja de estilos
+  ansible.builtin.copy:
+    src: estilo.css
+    dest: "{{ web_raiz }}/estilo.css"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Generar la página principal
+  ansible.builtin.template:
+    src: index.html.j2
+    dest: "{{ web_raiz }}/index.html"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Generar la página de estado del servidor
+  ansible.builtin.template:
+    src: estado.html.j2
+    dest: "{{ web_raiz }}/estado.html"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Crear la carpeta privada
+  ansible.builtin.file:
+    path: "{{ web_raiz }}/privado"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Generar la página privada
+  ansible.builtin.template:
+    src: privado.html.j2
+    dest: "{{ web_raiz }}/privado/index.html"
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Calcular la contraseña cifrada de la zona privada
+  ansible.builtin.command:
+    cmd: "openssl passwd -6 -salt {{ (inventory_hostname | hash('sha1'))[:16] }} -stdin"
+    stdin: "{{ web_privado_password }}"
+  register: web_hash
+  changed_when: false
+  no_log: true
+
+- name: Guardar usuario y contraseña de la zona privada
+  ansible.builtin.copy:
+    content: "{{ web_privado_usuario }}:{{ web_hash.stdout }}\n"
+    dest: /etc/nginx/.htpasswd
+    owner: root
+    group: www-data
+    mode: "0640"
+  no_log: true

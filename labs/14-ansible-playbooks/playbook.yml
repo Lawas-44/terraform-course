@@ -1,0 +1,24 @@
+---
+- name: Mi primer playbook
+  hosts: local
+  vars:
+    carpeta: /tmp/lab14
+
+  tasks:
+    - name: Crear la carpeta
+      ansible.builtin.file:
+        path: "{{ carpeta }}"
+        state: directory
+        mode: "0755"
+
+    - name: Crear una página
+      ansible.builtin.copy:
+        content: "<h1>Hola desde Ansible</h1>\n"
+        dest: "{{ carpeta }}/index.html"
+        mode: "0644"
+
+    - name: Crear un archivo de notas
+      ansible.builtin.copy:
+        content: "Creado con Ansible\n"
+        dest: "{{ carpeta }}/LEEME.txt"
+        mode: "0644"
