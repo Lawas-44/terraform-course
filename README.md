@@ -53,3 +53,8 @@ Las páginas se generan a partir de `src/` (ver [`src/README.md`](src/README.md)
 ## Laboratorios
 
 El código de las prácticas está en [`labs/`](labs/). Un workflow de GitHub Actions comprueba en cada push el código de Terraform (`fmt`, `validate`, `test`) y el de Ansible (`ansible-lint`, idempotencia y una ejecución real del playbook del proyecto).
+
+## Licencia
+
+- **Código** (`labs/`, `proyecto/`, `src/`, `.github/`): [MIT](LICENSE).
+- **Contenido del curso** (lecciones, tests, retos, glosario y documentación): [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es). Puedes usarlo y adaptarlo citando a Luis Cornejo Cobos.
